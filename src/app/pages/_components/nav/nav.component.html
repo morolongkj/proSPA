@@ -1,0 +1,202 @@
+<nav class="navbar navbar-expand-lg bg-white">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <img src="../../../../assets/img/NDSO-3.png" alt="logo" height="40" />
+      eProcurement
+    </a>
+    @if(isLoggedIn) {
+    <nav class="navbar-nav ms-auto top-nav">
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link" aria-current="page" routerLink="/notifications">
+          <i class="fa fa-bell me-2"></i>Notifications</a
+        >
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" aria-current="page" href="#">
+          <i class="fa fa-gear me-2"></i>Settings</a
+        >
+      </li>
+    </nav>
+    }
+  </div>
+</nav>
+@if(isLoggedIn) {
+<nav class="navbar navbar-expand-lg navbar-dark bg-brown">
+  <div class="container-fluid">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNavDropdown"
+      aria-controls="navbarNavDropdown"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item" routerLinkActive="active">
+          <a
+            class="nav-link"
+            aria-current="page"
+            routerLink="/dashboard"
+            *appHasRole="['admin', 'user']"
+            >Dashboard</a
+          >
+        </li>
+
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Pre-Qualifications
+          </a>
+          <ul class="dropdown-menu">
+            <li *appHasRole="['admin']">
+              <a
+                class="dropdown-item"
+                routerLink="/admin/prequalifications/create"
+                >Call for Pre-qualifications</a
+              >
+            </li>
+            <li *appHasRole="['user']">
+              <a class="dropdown-item" routerLink="/prequalifications"
+                >Open Calls</a
+              >
+            </li>
+            <li *appHasRole="['admin']">
+              <a class="dropdown-item" routerLink="/admin/prequalifications"
+                >List</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Questionnaires
+          </a>
+          <ul class="dropdown-menu">
+            <li *appHasRole="['user']">
+              <a class="dropdown-item" routerLink="/questionnaires">List</a>
+            </li>
+          </ul>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Tenders
+          </a>
+          <ul class="dropdown-menu">
+            <li *appHasRole="['admin']">
+              <a class="dropdown-item" routerLink="/admin/tenders/create"
+                >Create</a
+              >
+            </li>
+            <li *appHasRole="['admin']">
+              <a class="dropdown-item" routerLink="/admin/tenders/verification"
+                >Verification</a
+              >
+            </li>
+            <li *appHasRole="['admin']">
+              <a class="dropdown-item" routerLink="/admin/tenders/approve"
+                >Approve Publish</a
+              >
+            </li>
+            <li *appHasRole="['admin']">
+              <a class="dropdown-item" routerLink="/admin/tenders/publish"
+                >Publish</a
+              >
+            </li>
+            <li *appHasRole="['admin']">
+              <a class="dropdown-item" routerLink="/admin/tenders">List</a>
+            </li>
+            <li *appHasRole="['user']">
+              <a class="dropdown-item" routerLink="/tenders">Open Tenders</a>
+            </li>
+          </ul>
+        </li>
+
+        <li class="nav-item" *appHasRole="['user']">
+          <a class="nav-link" routerLink="/bids" role="button"> Bids </a>
+        </li>
+
+        <li class="nav-item" *appHasRole="['admin']">
+          <a class="nav-link" routerLink="/admin/tenders/boxes" role="button">
+            Tender Boxes
+          </a>
+        </li>
+
+        <li class="nav-item dropdown" *appHasRole="['admin']">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Companies
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a class="dropdown-item" routerLink="/admin/companies"
+                >Company List</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <li class="nav-item dropdown" *appHasRole="['admin']">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Administration
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a class="dropdown-item" routerLink="/admin/categories"
+                >Categories</a
+              >
+            </li>
+            <li>
+              <a class="dropdown-item" routerLink="/admin/products">Products</a>
+            </li>
+            <li>
+              <a class="dropdown-item" routerLink="/admin/documents"
+                >Document Identification</a
+              >
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <nav class="navbar-nav ms-auto">
+      <li class="nav-item">
+        <a class="nav-link"> <i class="fa fa-power-off me-2"></i>Logout</a>
+      </li>
+    </nav>
+  </div>
+</nav>
+}

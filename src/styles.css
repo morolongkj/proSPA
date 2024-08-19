@@ -1,1 +1,74 @@
 /* You can add global styles to this file, and also import other style files */
+@import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+/* @import "../node_modules/bootswatch/dist/materia/bootstrap.min.css"; */
+@import "../node_modules/bootstrap-icons/font/bootstrap-icons.css";
+@import "../node_modules/@fortawesome/fontawesome-free/css/all.min.css";
+@import "../node_modules/aos/dist/aos.css";
+
+@import "../node_modules/ckeditor5/dist/ckeditor5.css";
+/* @import 'ngx-toastr/toastr'; */
+@import "../node_modules/ngx-toastr/toastr.css";
+@import "../node_modules/ngx-spinner/animations/line-scale-party.css";
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap");
+
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+.bg-brown {
+  background-color: #8c3b0b !important;
+}
+
+.gradient-button {
+  /* Base styles */
+  background-image: linear-gradient(
+    to right,
+    #8c3b0b 0%,
+    #b96c38 50%,
+    #8c3b0b 100%
+  );
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: inline-block;
+  /* Optional box-shadow for a subtle 3D effect */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.gradient-button:hover {
+  /* Apply a lighter variation of the gradient on hover */
+  background-image: linear-gradient(
+    to right,
+    #a04813 0%,
+    #d28a52 50%,
+    #a04813 100%
+  );
+}
+
+.navbar-bottom {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.card {
+  border-radius: 0px;
+}
+
+.custom-hr {
+  width: 90px;
+  height: 6px;
+  background-color: #8c3b0b;
+  border: none;
+}
+
+.ck-editor__editable {
+  min-height: 200px;
+  max-height: 400px;
+  overflow-y: auto;
+}

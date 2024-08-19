@@ -1,0 +1,67 @@
+<div class="container min-vh-100 ps-md-0 py-3">
+  <div class="row g-0">
+    <div class="col-md-8 col-lg-6 login-col">
+      <div class="login d-flex align-items-center py-5">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-9 col-lg-8 mx-auto">
+              <h3
+                class="login-heading mb-4"
+                data-aos="fade-down"
+                data-aos-duration="2000"
+              >
+                Welcome back!
+              </h3>
+              <hr
+                class="custom-hr"
+                data-aos="fade-right"
+                data-aos-duration="2000"
+              />
+              <!-- Sign In Form -->
+              <app-dynamic-form
+                [questions]="questions$ | async"
+                [btnText]="'Login'"
+                [perPage]="2"
+                (submitEvent)="handleFormSubmit($event)"
+              ></app-dynamic-form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4 col-lg-6">
+      <div class="login d-flex align-items-center py-5">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-9 col-lg-8 mx-auto">
+              <h3
+                class="login-heading mb-4"
+                data-aos="fade-left"
+                data-aos-duration="2000"
+              >
+                Don't have an Account?
+              </h3>
+              <h6
+                class="text-muted mb-4"
+                data-aos="fade-left"
+                data-aos-duration="2000"
+              >
+                We've got you covered. Join us and be part of our thriving
+                network.
+              </h6>
+
+              <a
+                class="btn btn-outline-dark btn-lg"
+                routerLink="/auth/register"
+                data-aos="fade-up"
+                data-aos-duration="2000"
+                >Register as a Supplier</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

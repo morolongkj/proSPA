@@ -1,0 +1,75 @@
+<div [formGroup]="form" class="form-group my-2">
+  <label [attr.for]="question.key" class="label fw-bold">{{
+    question.label
+  }}</label>
+  <div>
+    @switch (question.controlType) { @case ('textbox') {
+    <input
+      [formControlName]="question.key"
+      [id]="question.key"
+      [type]="question.type"
+      class="form-control"
+      [required]="question.required"
+    />
+    } @case ('dropdown') {
+    <select
+      [id]="question.key"
+      [formControlName]="question.key"
+      class="form-select"
+    >
+      @for (opt of question.options; track opt) {
+      <option [value]="opt.key">{{ opt.value }}</option>
+      }
+    </select>
+    } @case ('textarea') { @if (!question.richText) {
+    <textarea
+      [formControlName]="question.key"
+      [id]="question.key"
+      class="form-control"
+      [required]="question.required"
+      rows="3"
+    ></textarea>
+    } @else {
+    <ckeditor
+      [formControlName]="question.key"
+      [id]="question.key"
+      [editor]="Editor"
+      [config]="config"
+      data="<p>Hello, world!</p>"
+    ></ckeditor>
+    } } @case ('radio') {
+    <div *ngFor="let opt of question.options; let i = index">
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="radio"
+          [formControlName]="question.key"
+          [value]="opt.key"
+          [id]="question.key + '_' + i"
+        />
+        <label class="form-check-label" for="{{ question.key + '_' + i }}">
+          {{ opt.value }}
+        </label>
+      </div>
+    </div>
+    } @case('checkbox') {
+    <div *ngFor="let opt of question.options; let i = index">
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          [formControlName]="question.key"
+          [value]="opt.value"
+          [id]="question.key + '_' + i"
+        />
+        <label class="form-check-label" for="{{ question.key + '_' + i }}">
+          {{ opt.value }}
+        </label>
+      </div>
+    </div>
+    } }
+  </div>
+  @if (isInValid) {
+  <div class="errorMessage text-danger">{{ question.label }} is required</div>
+  }
+</div>

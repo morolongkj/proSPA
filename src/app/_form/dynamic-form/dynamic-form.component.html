@@ -1,0 +1,54 @@
+<div>
+  <form (ngSubmit)="onSubmit()" [formGroup]="form">
+    @for (question of currentQuestions; track question) {
+    <div class="form-row">
+      <app-question [question]="question" [form]="form"></app-question>
+    </div>
+    }
+    <div class="form-row mt-4">
+      <!-- <div class="col-lg-4 ms-auto">
+        <button
+          type="submit"
+          class="btn btn-primary p-2 w-100"
+          [disabled]="!form.valid"
+        >
+          {{ btnText }}
+        </button>
+      </div> -->
+      <div class="col-lg-6 ms-auto text-end">
+        @if(!isFirstPage()) {
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="onPrevious()"
+          [disabled]="isFirstPage()"
+        >
+          <i class="bi bi-arrow-left-square me-2"></i> Back
+        </button>
+        } @if(isLastPage()) {
+        <button
+          type="submit"
+          class="btn btn-primary btn-login gradient-button mb-2 ms-1"
+          [disabled]="!form.valid || !isLastPage()"
+        >
+          {{ btnText }} <i class="bi bi-send ms-2"></i>
+        </button>
+        } @if(!isLastPage()) {
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="onNext()"
+          [disabled]="isLastPage()"
+        >
+          Next <i class="bi bi-arrow-right-square ms-2"></i>
+        </button>
+        }
+      </div>
+    </div>
+  </form>
+  <!-- @if (payLoad) {
+  <div class="form-row">
+    <strong>Saved the following values</strong><br />{{ payLoad }}
+  </div>
+  } -->
+</div>
