@@ -36,6 +36,24 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'questionnaires',
+    loadComponent: () =>
+      import(
+        './pages/questionnaire/questionnaire-list/questionnaire-list.component'
+      ).then((c) => c.QuestionnaireListComponent),
+    runGuardsAndResolvers: 'always',
+    // canActivate: [authGuard, adminGuard],
+  },
+  {
+    path: 'questionnaires/create',
+    loadComponent: () =>
+      import(
+        './pages/questionnaire/questionnaire-create/questionnaire-create.component'
+      ).then((c) => c.QuestionnaireCreateComponent),
+    runGuardsAndResolvers: 'always',
+    // canActivate: [authGuard, adminGuard],
+  },
+  {
     path: 'admin/prequalifications',
     loadComponent: () =>
       import(
