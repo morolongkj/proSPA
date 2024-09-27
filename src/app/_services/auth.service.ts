@@ -64,16 +64,16 @@ export class AuthService {
   }
 
   isAuthenticatedUser(): boolean {
-    // const token = localStorage.getItem('authToken');
-    // this.isAuthenticated = !this.jwtHelper.isTokenExpired(token);
+    const token = localStorage.getItem('authToken');
+    this.isAuthenticated = !this.jwtHelper.isTokenExpired(token);
     return this.isAuthenticated;
   }
 
   getUserRoles(): string[] {
-    // if (localStorage.getItem('roles')) {
-    //   this.userRoles = JSON.parse(localStorage.getItem('roles') ?? '');
-    //   // console.log(this.userRoles);
-    // }
+    if (localStorage.getItem('roles')) {
+      this.userRoles = JSON.parse(localStorage.getItem('roles') ?? '');
+      // console.log(this.userRoles);
+    }
     return this.userRoles;
   }
 

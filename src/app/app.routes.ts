@@ -36,6 +36,38 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'auth/forgot-password',
+    loadComponent: () =>
+      import('./pages/auth/forgot-password/forgot-password.component').then(
+        (c) => c.ForgotPasswordComponent
+      ),
+  },
+  {
+    path: 'auth/reset-password/:token',
+    loadComponent: () =>
+      import('./pages/auth/reset-password/reset-password.component').then(
+        (c) => c.ResetPasswordComponent
+      ),
+  },
+  {
+    path: 'users',
+    loadComponent: () =>
+      import('./pages/admin/user/user-list/user-list.component').then(
+        (c) => c.UserListComponent
+      ),
+    runGuardsAndResolvers: 'always',
+    canActivate: [authGuard, adminGuard],
+  },
+  {
+    path: 'users/create',
+    loadComponent: () =>
+      import('./pages/admin/user/user-create/user-create.component').then(
+        (c) => c.UserCreateComponent
+      ),
+    runGuardsAndResolvers: 'always',
+    canActivate: [authGuard, adminGuard],
+  },
+  {
     path: 'questionnaires',
     loadComponent: () =>
       import(

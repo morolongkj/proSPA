@@ -1,0 +1,8 @@
+.user-avatar {
+  height: 40px;
+  width: 40px;
+}
+
+.min-250 {
+  min-width: 250px;
+}

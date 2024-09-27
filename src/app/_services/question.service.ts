@@ -42,10 +42,16 @@ export class QuestionService {
   getRegistrationQuestions() {
     const questions: QuestionBase<string>[] = [
       new TextboxQuestion({
-        key: 'companyName',
-        label: 'Company Name',
+        key: 'firstName',
+        label: 'First Name',
         required: true,
         order: 1,
+      }),
+      new TextboxQuestion({
+        key: 'lastName',
+        label: 'Last Name',
+        required: true,
+        order: 2,
       }),
       new TextboxQuestion({
         key: 'emailAddress',
@@ -84,6 +90,39 @@ export class QuestionService {
       new TextboxQuestion({
         key: 'password',
         label: 'Password',
+        type: 'password',
+        required: true,
+        order: 2,
+      }),
+    ];
+    return of(questions.sort((a, b) => a.order - b.order));
+  }
+
+  getForgotPasswordQuestions() {
+    const questions: QuestionBase<string>[] = [
+      new TextboxQuestion({
+        key: 'emailAddress',
+        label: 'Email',
+        type: 'email',
+        required: true,
+        order: 1,
+      }),
+    ];
+    return of(questions.sort((a, b) => a.order - b.order));
+  }
+
+  getChangePasswordQuestions() {
+    const questions: QuestionBase<string>[] = [
+      new TextboxQuestion({
+        key: 'password',
+        label: 'Password',
+        type: 'password',
+        required: true,
+        order: 1,
+      }),
+      new TextboxQuestion({
+        key: 'confirmPassword',
+        label: 'Confirm Password',
         type: 'password',
         required: true,
         order: 2,

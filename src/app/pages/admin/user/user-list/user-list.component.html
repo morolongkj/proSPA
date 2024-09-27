@@ -1,0 +1,197 @@
+<div class="container min-vh-100 py-4">
+  <div class="card">
+    <div class="card-header d-flex align-items-center">
+      <nav aria-label="breadcrumb" class="w-100">
+        <ol class="breadcrumb my-auto">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active">Administration</li>
+          <li class="breadcrumb-item active" aria-current="page">Users</li>
+        </ol>
+      </nav>
+    </div>
+    <div class="card-body">
+      <div class="row mb-3">
+        <div class="col-md-3 my-auto">
+          Per Page:
+          <select (change)="handlePageSizeChange($event)" class="p-1">
+            @for(pageSize of pageSizes; track pageSize) {
+            <option [value]="pageSize">
+              {{ pageSize }}
+            </option>
+            }
+          </select>
+        </div>
+        <div class="col-md-9 text-end">
+          <div class="btn-group" role="group" aria-label="Basic example">
+            <button
+              type="button"
+              class="btn btn-light"
+              [ngbPopover]="popContent"
+              [popoverTitle]="'Filter Users'"
+              [autoClose]="'outside'"
+            >
+              <i class="bi bi-filter me-2"></i>Filter
+            </button>
+            <a class="btn btn-light" routerLink="/users/create">
+              <i class="bi bi-person-add me-2"></i>Add
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr class="bg-primary">
+                  <th scope="col">First Name</th>
+                  <th scope="col">Last Name</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Roles</th>
+                  <th scope="col">Status</th>
+                  <th scope="col" class="text-end">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (user of users | paginate : { id: 'users-pagination',
+                itemsPerPage: perPage, currentPage: page, totalItems: total };
+                track user.id; let i = $index) {
+                <tr>
+                  <td>
+                    <span *ngIf="!user.isEditing">{{ user.first_name }}</span>
+                    <input
+                      *ngIf="user.isEditing"
+                      type="text"
+                      class="form-control"
+                      [(ngModel)]="user.first_name"
+                      [readonly]="!user.isEditing"
+                      required="true"
+                    />
+                  </td>
+                  <td>
+                    <span *ngIf="!user.isEditing">{{ user.last_name }}</span>
+                    <input
+                      *ngIf="user.isEditing"
+                      type="text"
+                      class="form-control"
+                      [(ngModel)]="user.last_name"
+                      [readonly]="!user.isEditing"
+                      required="true"
+                    />
+                  </td>
+                  <td>{{ user.username }}</td>
+                  <td>
+                    <ul class="list-group list-group-flush list-group-numbered">
+                      @for(role of user.roles; track role) {
+                      <li
+                        class="list-group-item d-flex justify-content-between align-items-start"
+                      >
+                        {{ role }}
+                        <button
+                          class="btn btn-warning btn-sm"
+                          (click)="selectedUser = user; removeRole(role)"
+                          placement="top"
+                          ngbTooltip="Remove Role"
+                        >
+                          <i class="bi bi-person-dash"></i>
+                        </button>
+                      </li>
+                      }
+                    </ul>
+                    <button
+                      class="btn btn-success btn-sm"
+                      [ngbPopover]="addRole"
+                      [popoverTitle]="'Add Role'"
+                      [autoClose]="'outside'"
+                      (click)="selectedUser = user"
+                    >
+                      <i class="bi bi-person-fill-up me-2"></i> Add Role
+                    </button>
+                  </td>
+                  <td>
+                    @if(user.status === null) {
+                    <span class="badge bg-success">Active</span>
+                    <br />
+                    <button
+                      class="btn btn-danger btn-sm m-1"
+                      (click)="banUser(user)"
+                    >
+                      <i class="bi bi-person-lock me-2"></i> Ban User
+                    </button>
+                    } @if(user.status === 'banned') {
+                    <span class="badge bg-danger">Banned</span>
+                    <br />
+                    <button
+                      class="btn btn-info btn-sm m-1"
+                      (click)="unBanUser(user)"
+                    >
+                      <i class="bi bi-person-check me-2"></i> Unlock User
+                    </button>
+                    }
+                  </td>
+                  <td class="text-end">
+                    <div
+                      class="btn-group"
+                      role="group"
+                      aria-label="Edit and Delete Button Group"
+                    >
+                      <button
+                        *ngIf="!user.isEditing"
+                        type="button"
+                        class="btn btn-primary"
+                        (click)="toggleEdit(user)"
+                      >
+                        <i class="bi bi-pencil-square"></i>
+                      </button>
+                      <button
+                        *ngIf="user.isEditing"
+                        type="button"
+                        class="btn btn-success"
+                        (click)="saveUser(user)"
+                      >
+                        <i class="bi bi-check-lg"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="row my-3">
+        <div class="col-lg-10 text-center mx-auto">
+          <pagination-controls
+            id="users-pagination"
+            previousLabel="Prev"
+            nextLabel="Next"
+            [responsive]="true"
+            (pageChange)="handlePageChange($event)"
+            class="bg-success"
+          ></pagination-controls>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #popContent>
+  <app-dynamic-form
+    [questions]="questions$ | async"
+    [btnText]="'Filter'"
+    [perPage]="4"
+    (submitEvent)="handleFormSubmit($event)"
+  ></app-dynamic-form>
+</ng-template>
+
+<ng-template #addRole let-modal>
+  <div class="min-250">
+    <app-dynamic-form
+      [questions]="roleQuestions$ | async"
+      [btnText]="'Add'"
+      (submitEvent)="submitRole($event)"
+    ></app-dynamic-form>
+  </div>
+</ng-template>
+

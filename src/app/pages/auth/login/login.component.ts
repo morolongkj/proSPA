@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
     AOS.init();
     const isLoggedIn = this.authService.isAuthenticatedUser();
     if (isLoggedIn) {
-      this.router.navigate(['/']);
+      this.router.navigate(['/dashboard']);
     }
   }
 
@@ -41,30 +41,20 @@ export class LoginComponent implements OnInit {
       email: event.formData.emailAddress,
       password: event.formData.password,
     };
-
-    // const checkedOptions = this.optionsFormArray.controls
-    //   .filter((control) => control.value)
-    //   .map((control) => control.value);
-
-    const selectedOptions = event.formData.checkTest.controls
-      .filter((c: any) => c.value)
-      .map((m: any) => m.value);
-
-    console.log(selectedOptions);
-    // this.authService.login(model).subscribe({
-    //   next: (res: any) => {
-    //     console.log(res);
-    //     if (res['status']) {
-    //       // login successful
-    //       this.toastService.success('Logged in successfully!');
-    //       this.dynamicFormComponent.resetForm();
-    //     } else {
-    //       this.toastService.error('Wrong username and/or password');
-    //     }
-    //   },
-    //   error: (err: any) => {
-    //     console.log(err);
-    //   },
-    // });
+    this.authService.login(model).subscribe({
+      next: (res: any) => {
+        console.log(res);
+        if (res['status']) {
+          // login successful
+          this.toastService.success('Logged in successfully!');
+          this.dynamicFormComponent.resetForm();
+        } else {
+          this.toastService.error('Wrong username and/or password');
+        }
+      },
+      error: (err: any) => {
+        console.log(err);
+      },
+    });
   }
 }

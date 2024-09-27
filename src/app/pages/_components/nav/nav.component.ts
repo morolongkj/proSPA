@@ -1,22 +1,57 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { AuthService } from '../../../_services/auth.service';
 import AOS from 'aos';
 import { HasRoleDirective } from '../../../_directives/has-role.directive';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { NgbOffcanvas, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmService } from '../../../_services/confirm.service';
+import { ToastService } from '../../../_services/toast.service';
 
 @Component({
   selector: 'app-nav',
   standalone: true,
-  imports: [HasRoleDirective, RouterLink],
+  imports: [
+    HasRoleDirective,
+    RouterLink,
+    RouterLinkActive,
+    NgbPopoverModule,
+    CommonModule,
+  ],
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.css',
 })
 export class NavComponent implements OnInit {
+  private offcanvasService = inject(NgbOffcanvas);
+  private confirmService = inject(ConfirmService);
+  private toastService = inject(ToastService);
+  private router = inject(Router);
   isLoggedIn: boolean = false;
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
     AOS.init();
     this.isLoggedIn = this.authService.isAuthenticatedUser();
+  }
+
+  isDropdownLinkActive(routes: string[]): boolean {
+    return routes.some((route) => this.router.url.includes(route));
+  }
+
+  logout() {
+    this.authService.logout();
+    this.isLoggedIn = this.authService.isAuthenticatedUser();
+    this.toastService.success('Successfully logged out!');
+    this.router.navigateByUrl('/auth/login');
+  }
+
+  confirmLogout() {
+    this.confirmService
+      .confirm('Confirm Logout', `Are you sure you want to logout?`)
+      .then((confirmed: any) => {
+        if (confirmed) {
+          this.logout();
+        }
+      });
   }
 }

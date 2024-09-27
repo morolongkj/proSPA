@@ -22,7 +22,7 @@
 </nav>
 @if(isLoggedIn) {
 <nav class="navbar navbar-expand-lg navbar-dark bg-brown">
-  <div class="container-fluid">
+  <div class="container">
     <button
       class="navbar-toggler"
       type="button"
@@ -54,42 +54,23 @@
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            Pre-Qualifications
+            Quality Assurance
           </a>
           <ul class="dropdown-menu">
             <li *appHasRole="['admin']">
-              <a
-                class="dropdown-item"
-                routerLink="/admin/prequalifications/create"
-                >Call for Pre-qualifications</a
-              >
-            </li>
-            <li *appHasRole="['user']">
-              <a class="dropdown-item" routerLink="/prequalifications"
-                >Open Calls</a
+              <a class="dropdown-item" routerLink="/questionnaires"
+                >Questionnaires</a
               >
             </li>
             <li *appHasRole="['admin']">
-              <a class="dropdown-item" routerLink="/admin/prequalifications"
-                >List</a
+              <a class="dropdown-item" routerLink="/questionnaires"
+                >Prequalification Stages</a
               >
             </li>
-          </ul>
-        </li>
-
-        <li class="nav-item dropdown">
-          <a
-            class="nav-link dropdown-toggle"
-            href="#"
-            role="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            Questionnaires
-          </a>
-          <ul class="dropdown-menu">
-            <li *appHasRole="['user']">
-              <a class="dropdown-item" routerLink="/questionnaires">List</a>
+            <li *appHasRole="['admin']">
+              <a class="dropdown-item" routerLink="/questionnaires"
+                >Prequalification</a
+              >
             </li>
           </ul>
         </li>
@@ -131,16 +112,17 @@
             <li *appHasRole="['user']">
               <a class="dropdown-item" routerLink="/tenders">Open Tenders</a>
             </li>
+            <li *appHasRole="['user']">
+              <a class="dropdown-item" routerLink="/tender-boxes"
+                >Tender Boxes</a
+              >
+            </li>
           </ul>
-        </li>
-
-        <li class="nav-item" *appHasRole="['user']">
-          <a class="nav-link" routerLink="/bids" role="button"> Bids </a>
         </li>
 
         <li class="nav-item" *appHasRole="['admin']">
-          <a class="nav-link" routerLink="/admin/tenders/boxes" role="button">
-            Tender Boxes
+          <a class="nav-link" routerLink="/admin/evaluation" role="button">
+            Evaluation
           </a>
         </li>
 
@@ -152,51 +134,72 @@
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            Companies
+            Administrator
           </a>
-          <ul class="dropdown-menu">
-            <li>
-              <a class="dropdown-item" routerLink="/admin/companies"
-                >Company List</a
-              >
-            </li>
-          </ul>
-        </li>
+         <ul class="dropdown-menu">
+  <li>
+    <a class="dropdown-item" routerLink="/users">
+      <i class="bi bi-people me-2"></i>Manage Users
+    </a>
+  </li>
+  <li>
+    <a class="dropdown-item" routerLink="/categories">
+      <i class="bi bi-list-check me-2"></i>Manage Categories
+    </a>
+  </li>
+  <li>
+    <a class="dropdown-item" routerLink="/products">
+      <i class="bi bi-box-seam me-2"></i>Manage Products
+    </a>
+  </li>
+  <li>
+    <a class="dropdown-item" routerLink="/documents">
+      <i class="bi bi-file-earmark-text me-2"></i>Document Identification
+    </a>
+  </li>
+</ul>
 
-        <li class="nav-item dropdown" *appHasRole="['admin']">
-          <a
-            class="nav-link dropdown-toggle"
-            href="#"
-            role="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            Administration
-          </a>
-          <ul class="dropdown-menu">
-            <li>
-              <a class="dropdown-item" routerLink="/admin/categories"
-                >Categories</a
-              >
-            </li>
-            <li>
-              <a class="dropdown-item" routerLink="/admin/products">Products</a>
-            </li>
-            <li>
-              <a class="dropdown-item" routerLink="/admin/documents"
-                >Document Identification</a
-              >
-            </li>
-          </ul>
         </li>
       </ul>
     </div>
 
-    <nav class="navbar-nav ms-auto">
-      <li class="nav-item">
+    <ul class="navbar-nav ms-auto">
+     <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="navbarDropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            [ngClass]="{
+              active: isDropdownLinkActive(['/profile'])
+            }"
+          >
+            <i class="bi bi-person-circle me-2"></i>Account
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a
+                class="dropdown-item"
+                routerLink="/profile"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }"
+              >
+                <i class="bi bi-person me-2"></i> Profile
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" (click)="confirmLogout()">
+                <i class="bi bi-box-arrow-right me-2"></i> Logout
+              </a>
+            </li>
+          </ul>
+        </li>
+      <!-- <li class="nav-item">
         <a class="nav-link"> <i class="fa fa-power-off me-2"></i>Logout</a>
-      </li>
-    </nav>
+      </li> -->
+    </ul>
   </div>
 </nav>
 }

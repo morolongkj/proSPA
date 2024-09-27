@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { AuthService } from './auth.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +9,6 @@ import { AuthService } from './auth.service';
 export class UserService {
   baseUrl = environment.apiUrl;
   private http = inject(HttpClient);
-  private authService = inject(AuthService);
 
   constructor() {}
 
@@ -27,6 +26,20 @@ export class UserService {
     return this.http.get<any>(this.baseUrl + 'users', { params });
   }
 
+  addUser(user: any) {
+    return this.http.post(this.baseUrl + 'register', user);
+  }
+
+  updateUser(id: string, updatedData: any): Observable<any> {
+    const url = `${this.baseUrl}users/${id}`;
+    return this.http.put(url, updatedData);
+  }
+
+  deleteUser(id: string): Observable<any> {
+    const url = `${this.baseUrl}users/${id}`;
+    return this.http.delete(url);
+  }
+
   banUser(id: Number) {
     return this.http.post(this.baseUrl + 'users/ban/' + id, {});
   }
@@ -35,10 +48,20 @@ export class UserService {
     return this.http.post(this.baseUrl + 'users/unban/' + id, {});
   }
 
-
   updateUserRoles(action: string, model: any, id: Number) {
     return this.http.post<any>(
       this.baseUrl + 'users/' + action + '/' + id,
+      model
+    );
+  }
+
+  getUsersCount() {
+    return this.http.get<any>(this.baseUrl + 'users/count');
+  }
+
+  changePassword(model: any, id: Number) {
+    return this.http.post<any>(
+      this.baseUrl + 'users/change-password/' + id,
       model
     );
   }
