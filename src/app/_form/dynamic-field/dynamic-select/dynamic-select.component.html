@@ -1,0 +1,41 @@
+<form [formGroup]="formName">
+  <label>{{ field.label }}:</label>
+
+  <select
+    #dynamicSelect
+    [formControlName]="field.fieldName"
+    (change)="changedValue(dynamicSelect.value)"
+    class="form-select"
+  >
+    <option *ngFor="let option of field.options" [value]="option.value">
+      {{ option.label }}
+    </option>
+  </select>
+
+</form>
+
+<!-- <ng-select
+class="form-control"
+[formControlName]="field.fieldName"
+[items]="field.options"
+bindLabel="label"
+bindValue="value"
+[searchable]="true"
+placeholder="Select option"
+>
+</ng-select> -->
+<!-- <form [formGroup]="formName">
+  <label>{{ field.label }}:</label>
+
+  <ng-select
+    [items]="field.options"
+    [formControlName]="field.fieldName"
+    bindLabel="label"
+    bindValue="value"
+    [searchable]="true"
+    placeholder="Select an option"
+    (change)="changedValue($event)"
+  >
+  </ng-select>
+
+</form> -->

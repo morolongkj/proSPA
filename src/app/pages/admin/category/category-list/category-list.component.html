@@ -1,1 +1,151 @@
-<p>category-list works!</p>
+<div class="container py-4">
+  <div class="card">
+    <div class="card-header d-flex align-items-center">
+      <nav aria-label="breadcrumb" class="w-100">
+        <ol class="breadcrumb my-auto">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active">Administration</li>
+          <li class="breadcrumb-item active" aria-current="page">Categories</li>
+        </ol>
+      </nav>
+    </div>
+    <div class="card-body">
+      <div class="row mb-3">
+        <div class="col-md-3 my-auto">
+          Per Page:
+          <select (change)="handlePageSizeChange($event)" class="p-1">
+            @for(pageSize of pageSizes; track pageSize) {
+            <option [value]="pageSize">
+              {{ pageSize }}
+            </option>
+            }
+          </select>
+        </div>
+        <div class="col-md-9 text-end">
+          <div class="btn-group" role="group" aria-label="Basic example">
+            <button
+              type="button"
+              class="btn btn-light"
+              [ngbPopover]="popContent"
+              [popoverTitle]="'Filter Categories'"
+              [autoClose]="'outside'"
+            >
+              <i class="bi bi-filter me-2"></i>Filter
+            </button>
+            <a class="btn btn-light" routerLink="/categories/export">
+              <i class="bi bi-cloud-download me-2"></i>Export
+            </a>
+
+            <a class="btn btn-light" routerLink="/categories/import">
+              <i class="bi bi-cloud-upload me-2"></i>Import
+            </a>
+            <a class="btn btn-light" routerLink="/categories/create">
+              <i class="bi bi-database-add me-2"></i>Add
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr class="bg-primary">
+                  <th scope="col">Title</th>
+                  <th scope="col">Description</th>
+                  <th scope="col" class="text-end">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (category of categories | paginate : { id:
+                'categories-pagination', itemsPerPage: perPage, currentPage:
+                page, totalItems: total }; track category.id; let i = $index) {
+                <tr>
+                  <td>
+                    <span *ngIf="!category.isEditing">{{ category.title }}</span>
+                    <input
+                      *ngIf="category.isEditing"
+                      type="text"
+                      class="form-control"
+                      [(ngModel)]="category.title"
+                      [readonly]="!category.isEditing"
+                      required="true"
+                    />
+                  </td>
+                  <td>
+                    <div
+                    *ngIf="!category.isEditing"
+                    [innerHTML]="category.description"
+                  ></div>
+                  <ckeditor
+                    *ngIf="category.isEditing"
+                    [(ngModel)]="category.description"
+                    [editor]="Editor"
+                    [config]="config"
+                    data="<p>Hello, world!</p>"
+                  ></ckeditor>
+                  </td>
+
+                  <td class="text-end">
+                    <div
+                      class="btn-group"
+                      role="group"
+                      aria-label="Edit and Delete Button Group"
+                    >
+                      <button
+                        *ngIf="!category.isEditing"
+                        type="button"
+                        class="btn btn-primary btn-sm"
+                        (click)="toggleEdit(category)"
+                      >
+                        <i class="bi bi-pencil-square"></i>
+                      </button>
+                      <button
+                        *ngIf="category.isEditing"
+                        type="button"
+                        class="btn btn-success btn-sm"
+                        (click)="saveCategory(category)"
+                      >
+                        <i class="bi bi-check-lg"></i>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-danger btn-sm"
+                        (click)="deleteCategory(category)"
+                      >
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="row my-3">
+        <div class="col-lg-10 text-center mx-auto">
+          <pagination-controls
+            id="categories-pagination"
+            previousLabel="Prev"
+            nextLabel="Next"
+            [responsive]="true"
+            (pageChange)="handlePageChange($event)"
+            class="bg-success"
+          ></pagination-controls>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #popContent>
+  <app-dynamic-form
+    [questions]="questions$ | async"
+    [btnText]="'Filter'"
+    [perPage]="2"
+    (submitEvent)="handleFormSubmit($event)"
+  ></app-dynamic-form>
+</ng-template>
+

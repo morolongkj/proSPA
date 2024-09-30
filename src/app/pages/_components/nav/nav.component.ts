@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { NgbOffcanvas, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmService } from '../../../_services/confirm.service';
 import { ToastService } from '../../../_services/toast.service';
+import { TenderService } from '../../../_services/tender.service';
 
 @Component({
   selector: 'app-nav',
@@ -26,12 +27,19 @@ export class NavComponent implements OnInit {
   private confirmService = inject(ConfirmService);
   private toastService = inject(ToastService);
   private router = inject(Router);
+  private tenderService = inject(TenderService);
   isLoggedIn: boolean = false;
+  tenderStatusList: any[] = [];
+  submittedId: string = '';
+  verifiedId: string = '';
+  approvedId: string = '';
+  publishedId: string = '';
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
     AOS.init();
     this.isLoggedIn = this.authService.isAuthenticatedUser();
+    this.getTenderStatusList();
   }
 
   isDropdownLinkActive(routes: string[]): boolean {
@@ -53,5 +61,28 @@ export class NavComponent implements OnInit {
           this.logout();
         }
       });
+  }
+
+  getTenderStatusList() {
+    this.tenderService.getTenderStatusList().subscribe({
+      next: (res: any) => {
+        this.tenderStatusList = res.data.tenderStatuses;
+        // console.log(this.tenderStatusList);
+        this.tenderStatusList.forEach((status) => {
+          if (status.status === 'Submitted') {
+            this.submittedId = status.id;
+          }
+          if (status.status === 'Verified') {
+            this.verifiedId = status.id;
+          }
+          if (status.status === 'Approved') {
+            this.approvedId = status.id;
+          }
+          if (status.status === 'Published') {
+            this.publishedId = status.id;
+          }
+        });
+      },
+    });
   }
 }

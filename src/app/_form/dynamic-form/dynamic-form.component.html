@@ -15,34 +15,39 @@
           {{ btnText }}
         </button>
       </div> -->
-      <div class="col-lg-6 ms-auto text-end">
-        @if(!isFirstPage()) {
-        <button
-          type="button"
-          class="btn btn-secondary"
-          (click)="onPrevious()"
-          [disabled]="isFirstPage()"
-        >
-          <i class="bi bi-arrow-left-square me-2"></i> Back
-        </button>
-        } @if(isLastPage()) {
-        <button
-          type="submit"
-          class="btn btn-primary btn-login gradient-button mb-2 ms-1"
-          [disabled]="!form.valid || !isLastPage()"
-        >
-          {{ btnText }} <i class="bi bi-send ms-2"></i>
-        </button>
-        } @if(!isLastPage()) {
-        <button
-          type="button"
-          class="btn btn-secondary"
-          (click)="onNext()"
-          [disabled]="isLastPage()"
-        >
-          Next <i class="bi bi-arrow-right-square ms-2"></i>
-        </button>
-        }
+      <div class="row">
+        <div class="col-lg-6 text-start">
+          @if(!isFirstPage()) {
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="onPrevious()"
+            [disabled]="isFirstPage()"
+          >
+            <i class="bi bi-arrow-left-square me-2"></i> Back
+          </button>
+          }
+        </div>
+        <div class="col-lg-6 text-end">
+          @if(isLastPage()) {
+          <button
+            type="submit"
+            class="btn btn-primary btn-login gradient-button mb-2 ms-1"
+            [disabled]="!form.valid || !isLastPage()"
+          >
+            {{ btnText }} <i class="bi bi-send ms-2"></i>
+          </button>
+          } @else {
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="onNext()"
+            [disabled]="isLastPage()"
+          >
+            Next <i class="bi bi-arrow-right-square ms-2"></i>
+          </button>
+          }
+        </div>
       </div>
     </div>
   </form>

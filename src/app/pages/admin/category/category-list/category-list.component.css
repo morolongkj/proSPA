@@ -1,0 +1,7 @@
+.category-image {
+  height: 40px;
+}
+
+.image-container:hover {
+  cursor: pointer;
+}

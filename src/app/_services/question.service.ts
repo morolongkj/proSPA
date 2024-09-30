@@ -139,14 +139,6 @@ export class QuestionService {
         required: true,
         order: 1,
       }),
-      new TextboxQuestion({
-        key: 'categoryDisplayOrder',
-        label: 'Category Display Order',
-        value: '0',
-        type: 'number',
-        required: true,
-        order: 2,
-      }),
       new TextareaQuestion({
         key: 'categoryDescription',
         label: 'Category Description',
@@ -190,6 +182,19 @@ export class QuestionService {
       //   ],
       //   order: 6,
       // }),
+    ];
+    return of(questions.sort((a, b) => a.order - b.order));
+  }
+
+  getCategoryFiltersQuestions() {
+    const questions: QuestionBase<string>[] = [
+      new TextboxQuestion({
+        key: 'title',
+        label: 'Title',
+        type: 'text',
+        required: false,
+        order: 1,
+      }),
     ];
     return of(questions.sort((a, b) => a.order - b.order));
   }
@@ -307,6 +312,107 @@ export class QuestionService {
         type: 'time',
         required: true,
         order: 6,
+      }),
+    ];
+    return of(questions.sort((a, b) => a.order - b.order));
+  }
+
+  getExportQuestions() {
+    const questions: QuestionBase<string>[] = [
+      new TextboxQuestion({
+        key: 'fileName',
+        label: 'Filename',
+        type: 'text',
+        required: true,
+        order: 1,
+      }),
+    ];
+    return of(questions.sort((a, b) => a.order - b.order));
+  }
+
+  getTenderQuestions() {
+    const questions: QuestionBase<string>[] = [
+      new TextboxQuestion({
+        key: 'referenceNumber',
+        label: 'Reference Number',
+        required: true,
+        order: 1,
+      }),
+      new TextboxQuestion({
+        key: 'title',
+        label: 'Title',
+        required: true,
+        order: 2,
+      }),
+      new TextareaQuestion({
+        key: 'description',
+        label: 'Description',
+        type: 'textarea',
+        richText: true,
+        required: true,
+        order: 3,
+      }),
+      new TextboxQuestion({
+        key: 'openingDate',
+        label: 'Opening Date',
+        type: 'date',
+        required: true,
+        order: 4,
+      }),
+      new TextboxQuestion({
+        key: 'openingTime',
+        label: 'Opening Time',
+        type: 'time',
+        required: true,
+        order: 5,
+      }),
+      new TextboxQuestion({
+        key: 'closingDate',
+        label: 'Closing Date',
+        type: 'date',
+        required: true,
+        order: 6,
+      }),
+      new TextboxQuestion({
+        key: 'closingTime',
+        label: 'Closing Time',
+        type: 'time',
+        required: true,
+        order: 7,
+      }),
+    ];
+    return of(questions.sort((a, b) => a.order - b.order));
+  }
+
+  getQuestionnaireQuestions() {
+    const questions: QuestionBase<string>[] = [
+      new TextboxQuestion({
+        key: 'title',
+        label: 'Title',
+        required: true,
+        order: 1,
+      }),
+      new TextareaQuestion({
+        key: 'description',
+        label: 'Description',
+        type: 'textarea',
+        richText: true,
+        required: true,
+        order: 2,
+      }),
+      new TextboxQuestion({
+        key: 'openFrom',
+        label: 'Open From',
+        type: 'date',
+        required: false,
+        order: 3,
+      }),
+      new TextboxQuestion({
+        key: 'openUntil',
+        label: 'Open Until',
+        type: 'date',
+        required: false,
+        order: 4,
       }),
     ];
     return of(questions.sort((a, b) => a.order - b.order));

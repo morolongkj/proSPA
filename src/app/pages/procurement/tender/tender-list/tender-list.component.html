@@ -1,0 +1,485 @@
+<div class="container min-vh-100 py-5">
+  <div class="row">
+    <div class="col-lg-12 mx-auto">
+      <div class="card main-card">
+        <div class="card-header d-flex align-items-center">
+          <nav aria-label="breadcrumb" class="w-100">
+            <ol class="breadcrumb my-auto">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Procurement</li>
+              <li class="breadcrumb-item active" aria-current="page">
+                Tenders
+              </li>
+            </ol>
+          </nav>
+        </div>
+        <div class="card-body">
+          <div class="row mb-3">
+            <div class="col-md-3 my-auto">
+              Per Page:
+              <select (change)="handlePageSizeChange($event)" class="p-1">
+                @for(pageSize of pageSizes; track pageSize) {
+                <option [value]="pageSize">
+                  {{ pageSize }}
+                </option>
+                }
+              </select>
+            </div>
+            <div class="col-md-9 text-end">
+              <div class="btn-group" role="group" aria-label="Basic example">
+                <button
+                  type="button"
+                  class="btn btn-light"
+                  [ngbPopover]="popContent"
+                  [popoverTitle]="'Filter Tenders'"
+                  [autoClose]="'outside'"
+                >
+                  <i class="bi bi-filter me-2"></i>Filter
+                </button>
+                <a [routerLink]="['/tenders/create']" class="btn btn-light">
+                  <i class="bi bi-database-add me-2"></i>Add
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr class="bg-primary">
+                      <th scope="col">Reference Number</th>
+                      <th scope="col">Title</th>
+                      <th scope="col">Description</th>
+                      <th scope="col">Opening Date</th>
+                      <th scope="col">Opening Time</th>
+                      <th scope="col">Closing Date</th>
+
+                      <th scope="col">Closing Date</th>
+                      <th scope="col">Current Status</th>
+                      <th scope="col">Created By</th>
+                      <!-- <th scope="col" class="text-end">Action</th> -->
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngIf="tenders.length > 0; else noData">
+                      @for (tender of tenders | paginate : { id:
+                      'Tenders-pagination', itemsPerPage: perPage, currentPage:
+                      page, totalItems: total }; track tender.id; let i =
+                      $index) {
+                      <tr>
+                        <td>
+                          <span *ngIf="!tender.isEditing">{{
+                            tender.reference_number
+                          }}</span>
+                          <input
+                            *ngIf="tender.isEditing"
+                            type="text"
+                            class="form-control"
+                            [(ngModel)]="tender.reference_number"
+                            [readonly]="!tender.isEditing"
+                            required="true"
+                          />
+                        </td>
+                        <td>
+                          <span *ngIf="!tender.isEditing">{{
+                            tender.title
+                          }}</span>
+                          <input
+                            *ngIf="tender.isEditing"
+                            type="text"
+                            class="form-control"
+                            [(ngModel)]="tender.title"
+                            [readonly]="!tender.isEditing"
+                            required="true"
+                          />
+                        </td>
+
+                        <td>
+                          <div
+                            *ngIf="!tender.isEditing"
+                            [innerHTML]="tender.description"
+                          ></div>
+                          <ckeditor
+                            *ngIf="tender.isEditing"
+                            [(ngModel)]="tender.description"
+                            [editor]="Editor"
+                            [config]="config"
+                            data="<p>Hello, world!</p>"
+                          ></ckeditor>
+                        </td>
+                        <td>
+                          <span *ngIf="!tender.isEditing">{{
+                            tender.opening_date
+                          }}</span>
+                          <input
+                            *ngIf="tender.isEditing"
+                            type="date"
+                            class="form-control"
+                            [(ngModel)]="tender.opening_date"
+                            [readonly]="!tender.isEditing"
+                            required="true"
+                          />
+                        </td>
+                        <td>
+                          <span *ngIf="!tender.isEditing">{{
+                            tender.opening_time
+                          }}</span>
+                          <input
+                            *ngIf="tender.isEditing"
+                            type="time"
+                            class="form-control"
+                            [(ngModel)]="tender.opening_time"
+                            [readonly]="!tender.isEditing"
+                            required="true"
+                          />
+                        </td>
+                        <td>
+                          <span *ngIf="!tender.isEditing">{{
+                            tender.closing_date
+                          }}</span>
+                          <input
+                            *ngIf="tender.isEditing"
+                            type="date"
+                            class="form-control"
+                            [(ngModel)]="tender.closing_date"
+                            [readonly]="!tender.isEditing"
+                            required="true"
+                          />
+                        </td>
+                        <td>
+                          <span *ngIf="!tender.isEditing">{{
+                            tender.closing_time
+                          }}</span>
+                          <input
+                            *ngIf="tender.isEditing"
+                            type="time"
+                            class="form-control"
+                            [(ngModel)]="tender.closing_time"
+                            [readonly]="!tender.isEditing"
+                            required="true"
+                          />
+                        </td>
+                        <td>
+                          <span class="badge bg-primary">{{
+                            tender.current_status
+                          }}</span>
+                        </td>
+                        <td>
+                          <span>{{ tender.created_by_name }}</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td [colSpan]="3">
+                          <app-tender-attachments
+                            [tender]="tender"
+                          ></app-tender-attachments>
+                        </td>
+                        <td [colSpan]="5">
+                          <app-tender-products
+                            [tender]="tender"
+                          ></app-tender-products>
+                        </td>
+                        <td class="text-end">
+                          <div
+                            class="btn-group"
+                            role="group"
+                            aria-label="View, Edit, and Delete Dropdown"
+                            *ngIf="
+                              (!tender.isEditing &&
+                                tender.current_status === 'Draft') ||
+                              tender.current_status === 'Initiated' ||
+                              tender.current_status === 'Submitted'
+                            "
+                          >
+                            <button
+                              type="button"
+                              class="btn btn-primary dropdown-toggle"
+                              data-bs-toggle="dropdown"
+                              aria-expanded="false"
+                            >
+                              Action
+                            </button>
+                            <ul class="dropdown-menu">
+                              <!-- Edit Button -->
+                              <li *ngIf="!tender.isEditing">
+                                <a
+                                  class="dropdown-item"
+                                  (click)="toggleEdit(tender)"
+                                >
+                                  <i class="bi bi-pencil-square"></i> Edit
+                                </a>
+                              </li>
+
+                              <li>
+                                <hr class="dropdown-divider" />
+                              </li>
+                              <!-- Delete Button -->
+                              <li>
+                                <a
+                                  class="dropdown-item text-danger"
+                                  (click)="deleteTender(tender)"
+                                >
+                                  <i class="bi bi-trash"></i> Delete
+                                </a>
+                              </li>
+                            </ul>
+                          </div>
+                          <button
+                            *ngIf="tender.isEditing"
+                            type="button"
+                            class="btn btn-success btn-sm"
+                            (click)="saveTender(tender)"
+                          >
+                            <i class="bi bi-check-lg me-2"></i> Save
+                          </button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="bg-brown text-white">
+                          {{ tender.reference_number }}
+                        </td>
+                        <td colspan="8" class="bg-light text-end">
+                          <div class="d-flex justify-content-end gap-2">
+                            <button
+                              type="button"
+                              class="btn btn-primary"
+                              (click)="updateStatus(tender.id, 'Submitted')"
+                              *ngIf="tender.current_status === 'Draft'"
+                            >
+                              Submit for Verification
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-primary"
+                              (click)="reCreateTender(tender)"
+                              *ngIf="tender.current_status === 'Rejected'"
+                            >
+                              Modify and Re-submit Tender
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-danger"
+                              *ngIf="
+                                tender.current_status === 'Submitted' &&
+                                !showRemarksInput
+                              "
+                              (click)="showRemarksInput = !showRemarksInput"
+                            >
+                              Reject for Modifications
+                            </button>
+                            <div
+                              *ngIf="showRemarksInput"
+                              class="d-flex flex-column"
+                            >
+                              <input
+                                type="text"
+                                class="form-control mb-2"
+                                placeholder="Enter remarks"
+                                [(ngModel)]="remarks"
+                                required
+                              />
+                              <button
+                                type="button"
+                                class="btn btn-danger"
+                                (click)="rejectTender(tender.id, remarks)"
+                                [disabled]="!remarks"
+                              >
+                                Confirm Reject
+                              </button>
+                            </div>
+                            <button
+                              type="button"
+                              class="btn btn-warning"
+                              (click)="updateStatus(tender.id, 'Verified')"
+                              *ngIf="
+                                tender.current_status === 'Submitted' &&
+                                !showRemarksInput
+                              "
+                            >
+                              Verify Tender
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-danger"
+                              (click)="submitApproval(tender.id, 'rejected')"
+                              *ngIf="tender.current_status === 'Verified'"
+                            >
+                              <span class="badge bg-light text-dark me-2">{{
+                                tender.total_rejections
+                              }}</span
+                              >Reject Tender
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-success"
+                              (click)="submitApproval(tender.id, 'approved')"
+                              *ngIf="tender.current_status === 'Verified'"
+                            >
+                              <span class="badge bg-light text-dark me-2">{{
+                                tender.total_approvals
+                              }}</span
+                              >Approve Tender
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-info"
+                              *ngIf="tender.current_status === 'Approved'"
+                              (click)="publishTender(publish, tender)"
+                            >
+                              Publish Tender
+                            </button>
+
+                                    <button
+                              type="button"
+                              class="btn btn-primary"
+                              *ngIf="tender.current_status === 'Published'"
+                            >
+                              Prepare a Bid
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                      }
+                    </ng-container>
+                    <ng-template #noData>
+                      <tr>
+                        <td colspan="9" class="text-center text-muted py-4">
+                          <i
+                            class="bi bi-emoji-frown"
+                            style="font-size: 2rem"
+                          ></i>
+                          <div>No tenders available</div>
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="row my-3">
+            <div class="col-lg-10 text-center mx-auto">
+              <pagination-controls
+                id="Tenders-pagination"
+                previousLabel="Prev"
+                nextLabel="Next"
+                [responsive]="true"
+                (pageChange)="handlePageChange($event)"
+                class="bg-success"
+              ></pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #popContent>
+      <app-dynamic-form
+        [questions]="questions$ | async"
+        [btnText]="'Filter'"
+        [perPage]="2"
+        (submitEvent)="handleFormSubmit($event)"
+      ></app-dynamic-form>
+    </ng-template>
+  </div>
+</div>
+
+<ng-template #publish let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Publish: {{ selectedTender.reference_number }}</h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <form #tenderForm="ngForm" (ngSubmit)="onSubmit(tenderForm)" novalidate>
+      <div class="row mb-3">
+        <div class="col-lg-6">
+          <label for="openingDate">Opening Date</label>
+          <input
+            type="date"
+            id="openingDate"
+            name="openingDate"
+            class="form-control"
+            [(ngModel)]="selectedTender.opening_date"
+            #openingDate="ngModel"
+            required
+          />
+          <div *ngIf="openingDate.invalid && openingDate.touched" class="error">
+            Opening Date is required
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <label for="openingTime">Opening Time</label>
+          <input
+            type="time"
+            id="openingTime"
+            name="openingTime"
+            class="form-control"
+            [(ngModel)]="selectedTender.opening_time"
+            #openingTime="ngModel"
+            required
+          />
+          <div *ngIf="openingTime.invalid && openingTime.touched" class="error">
+            Opening Time is required
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-lg-6">
+          <label for="closingDate">Closing Date</label>
+          <input
+            type="date"
+            id="closingDate"
+            name="closingDate"
+            class="form-control"
+            [(ngModel)]="selectedTender.closing_date"
+            #closingDate="ngModel"
+            required
+          />
+          <div *ngIf="closingDate.invalid && closingDate.touched" class="error">
+            Closing Date is required
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <label for="closingTime">Closing Time</label>
+          <input
+            type="time"
+            id="closingTime"
+            name="closingTime"
+            class="form-control"
+            [(ngModel)]="selectedTender.closing_time"
+            #closingTime="ngModel"
+            required
+          />
+          <div *ngIf="closingTime.invalid && closingTime.touched" class="error">
+            Closing Time is required
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="tenderForm.invalid && tenderForm.touched" class="error">
+        Ensure that the closing date/time is after the opening date/time.
+      </div>
+
+      <div class="row my-3">
+        <div class="col-lg-12 text-end">
+          <button
+            type="submit"
+            [disabled]="!tenderForm.valid || !isClosingAfterOpening()"
+            class="btn btn-primary"
+          >
+            Publish Tender
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>

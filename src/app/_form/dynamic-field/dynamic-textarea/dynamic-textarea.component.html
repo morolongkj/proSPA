@@ -1,0 +1,14 @@
+<form [formGroup]="formName">
+  <label>{{field.label}} : </label>
+  @if (!field.richText) {
+  <textarea [formControlName]="field.fieldName"></textarea>
+  } @else {
+    <ckeditor
+    [formControlName]="field.fieldName"
+    [id]="field.fieldName"
+    [editor]="Editor"
+    [config]="config"
+    data="<p>Hello, world!</p>"
+  ></ckeditor>
+  }
+</form>

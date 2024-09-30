@@ -1,1 +1,32 @@
-<p>product-create works!</p>
+<div class="container min-vh-100 py-5">
+  <div class="row">
+    <div class="col-lg-12 mx-auto">
+      <div class="card main-card">
+        <div class="card-header d-flex align-items-center">
+          <nav aria-label="breadcrumb" class="w-100">
+            <ol class="breadcrumb my-auto">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Administration</li>
+              <li class="breadcrumb-item">
+                <a
+                  [routerLink]="['/products']"
+                  routerLinkActive="router-link-active"
+                  >Products</a
+                >
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">Create</li>
+            </ol>
+          </nav>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-6">
+              <app-custom-form [model]="model"   [btnText]="'Save Product'"
+              (submitEvent)="handleFormSubmit($event)"></app-custom-form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

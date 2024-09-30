@@ -86,31 +86,31 @@
             Tenders
           </a>
           <ul class="dropdown-menu">
-            <li *appHasRole="['admin']">
-              <a class="dropdown-item" routerLink="/admin/tenders/create"
+            <li>
+              <a class="dropdown-item" routerLink="/tenders/create"
                 >Create</a
               >
             </li>
             <li *appHasRole="['admin']">
-              <a class="dropdown-item" routerLink="/admin/tenders/verification"
+              <a class="dropdown-item" routerLink="/tenders" [queryParams]="{ status: submittedId }"
                 >Verification</a
               >
             </li>
             <li *appHasRole="['admin']">
-              <a class="dropdown-item" routerLink="/admin/tenders/approve"
+              <a class="dropdown-item" routerLink="/tenders" [queryParams]="{ status: verifiedId }"
                 >Approve Publish</a
               >
             </li>
             <li *appHasRole="['admin']">
-              <a class="dropdown-item" routerLink="/admin/tenders/publish"
+              <a class="dropdown-item" routerLink="/tenders" [queryParams]="{ status: approvedId }"
                 >Publish</a
               >
             </li>
             <li *appHasRole="['admin']">
-              <a class="dropdown-item" routerLink="/admin/tenders">List</a>
+              <a class="dropdown-item" routerLink="/tenders" [queryParams]="{ status: '' }">List</a>
             </li>
             <li *appHasRole="['user']">
-              <a class="dropdown-item" routerLink="/tenders">Open Tenders</a>
+              <a class="dropdown-item" routerLink="/tenders" [queryParams]="{ status: publishedId }">Open Tenders</a>
             </li>
             <li *appHasRole="['user']">
               <a class="dropdown-item" routerLink="/tender-boxes"
@@ -134,7 +134,7 @@
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            Administrator
+            Administration
           </a>
          <ul class="dropdown-menu">
   <li>
