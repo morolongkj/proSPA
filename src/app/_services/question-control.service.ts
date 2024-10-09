@@ -21,6 +21,20 @@ export class QuestionControlService {
     };
   }
 
+  // Additional validators for other field types (min, max, length)
+  minMaxValidator(minValue?: number, maxValue?: number): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value;
+      if (minValue !== undefined && value < minValue) {
+        return { minError: true };
+      }
+      if (maxValue !== undefined && value > maxValue) {
+        return { maxError: true };
+      }
+      return null;
+    };
+  }
+
   toFormGroup(questions: QuestionBase<string>[]) {
     const group: any = {};
     questions.forEach((question) => {
@@ -36,6 +50,15 @@ export class QuestionControlService {
 
       if (question.key === 'confirmPassword') {
         validators.push(this.confirmPasswordValidator('password')); // Assuming 'password' is the key for the password field
+      }
+
+      // Add min/max validators if applicable
+      if (question.min !== undefined || question.max !== undefined) {
+        validators.push(this.minMaxValidator(question.min, question.max));
+      }
+
+      if (question.type === 'text' && question.maxLength) {
+        validators.push(Validators.maxLength(question.maxLength));
       }
 
       group[question.key] = new FormControl(question.value || '', validators);

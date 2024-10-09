@@ -1,1 +1,92 @@
-<p>dashboard works!</p>
+<div class="container min-vh-100 my-5">
+  <div class="row">
+    <div class="col-lg-5">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title" data-aos="fade-down" data-aos-duration="2000">
+            Company Details
+          </h5>
+          <hr
+            class="custom-hr"
+            data-aos="fade-right"
+            data-aos-duration="2000"
+          />
+          <div *ngIf="company?.id; else noCompany">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <span class="fw-bold">ID:</span> {{ company.id }}
+              </li>
+              <li class="list-group-item">
+                <span class="fw-bold">Company Name:</span>
+                {{ company.company_name }}
+              </li>
+              <li class="list-group-item">
+                <span class="fw-bold">Year Established:</span>
+                {{ company.year_established }}
+              </li>
+              <li class="list-group-item">
+                <span class="fw-bold">Trade Registration Number:</span>
+                {{ company.trade_registration_number }}
+              </li>
+              <li class="list-group-item">
+                <span class="fw-bold">VAT Number:</span>
+                {{ company.vat_number }}
+              </li>
+              <li class="list-group-item">
+                <span class="fw-bold">Address:</span> {{ company.address }}
+              </li>
+              <li class="list-group-item">
+                <span class="fw-bold">Country:</span> {{ company.country }}
+              </li>
+              <li class="list-group-item">
+                <span class="fw-bold">Telephone:</span> {{ company.telephone }}
+              </li>
+              <li class="list-group-item">
+                <span class="fw-bold">Email:</span> {{ company.email }}
+              </li>
+              <li class="list-group-item">
+                <span class="fw-bold">Extra Data:</span>
+                <ul>
+                  <li *ngFor="let item of company.final_extra_data | keyvalue">
+                    {{ item.key }}: {{ item.value }}
+                  </li>
+                </ul>
+              </li>
+              <li class="list-group-item">
+                <span class="fw-bold">Created At:</span>
+                {{ company.created_at }}
+              </li>
+              <li class="list-group-item">
+                <span class="fw-bold">Updated At:</span>
+                {{ company.updated_at }}
+              </li>
+            </ul>
+          </div>
+          <ng-template #noCompany>
+            <!-- <div class="row">
+              <div class="col-lg-12 text-center">
+                <button class="btn btn-primary">Add Company</button>
+              </div>
+            </div> -->
+            <div class="row">
+              <div class="col-lg-12 text-center">
+                <div class="alert alert-warning" role="alert">
+                  <i class="fas fa-exclamation-triangle"></i>
+                  <!-- Font Awesome warning icon -->
+                  <strong>Company not found!</strong> You are not currently
+                  linked to any company. Please contact your administrator or
+                  add a company to proceed.
+                </div>
+                <a
+                  routerLink="/supplier/companies/create"
+                  class="btn btn-primary mt-3"
+                  >Add Company</a
+                >
+              </div>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -5,6 +5,7 @@ import { UnauthorisedComponent } from './pages/errors/unauthorised/unauthorised.
 import { adminGuard } from './_guards/admin.guard';
 import { categoryListResolver } from './_resolvers/category-list.resolver';
 import { productListResolver } from './_resolvers/product-list.resolver';
+import { companyDetailsResolver } from './_resolvers/company-details.resolver';
 
 export const routes: Routes = [
   {
@@ -21,6 +22,7 @@ export const routes: Routes = [
         (c) => c.DashboardComponent
       ),
     runGuardsAndResolvers: 'always',
+    resolve: { company: companyDetailsResolver },
     canActivate: [authGuard],
   },
   {
@@ -196,6 +198,43 @@ export const routes: Routes = [
       ).then((c) => c.PreQualificationCreateComponent),
     runGuardsAndResolvers: 'always',
     // canActivate: [authGuard, adminGuard],
+  },
+
+  {
+    path: 'supplier/tenders',
+    loadComponent: () =>
+      import(
+        './pages/supplier/tender/open-tender-list/open-tender-list.component'
+      ).then((c) => c.OpenTenderListComponent),
+    runGuardsAndResolvers: 'always',
+    canActivate: [authGuard],
+  },
+  {
+    path: 'supplier/bids',
+    loadComponent: () =>
+      import('./pages/supplier/bid/bid-list/bid-list.component').then(
+        (c) => c.BidListComponent
+      ),
+    runGuardsAndResolvers: 'always',
+    canActivate: [authGuard],
+  },
+  {
+    path: 'supplier/bids/create',
+    loadComponent: () =>
+      import('./pages/supplier/bid/bid-create/bid-create.component').then(
+        (c) => c.BidCreateComponent
+      ),
+    runGuardsAndResolvers: 'always',
+    canActivate: [authGuard],
+  },
+  {
+    path: 'supplier/companies/create',
+    loadComponent: () =>
+      import(
+        './pages/supplier/company/company-create/company-create.component'
+      ).then((c) => c.CompanyCreateComponent),
+    runGuardsAndResolvers: 'always',
+    canActivate: [authGuard],
   },
   { path: 'unauthorised', component: UnauthorisedComponent },
   {

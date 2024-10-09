@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { of } from 'rxjs';
 import { QuestionBase } from '../_models/question-base';
 import { DropdownQuestion } from '../_models/question-dropdown';
@@ -6,8 +6,10 @@ import { TextboxQuestion } from '../_models/question-textbox';
 import { TextareaQuestion } from '../_models/question-textarea';
 import { RadioQuestion } from '../_models/question-radio';
 import { CheckboxQuestion } from '../_models/question-checkbox';
+import { TimeService } from './time.service';
 @Injectable()
 export class QuestionService {
+  private timeService = inject(TimeService);
   // TODO: get from a remote source of question metadata
   getQuestions() {
     const questions: QuestionBase<string>[] = [
@@ -412,6 +414,46 @@ export class QuestionService {
         label: 'Open Until',
         type: 'date',
         required: false,
+        order: 4,
+      }),
+    ];
+    return of(questions.sort((a, b) => a.order - b.order));
+  }
+
+  getCompanyQuestions() {
+    const questions: QuestionBase<string>[] = [
+      new TextboxQuestion({
+        key: 'companyName',
+        label: 'Company Name',
+        required: true,
+        type: 'text',
+        maxLength: 100,
+        order: 1,
+      }),
+      new DropdownQuestion({
+        key: 'yearEstablished',
+        label: 'Year Established',
+        options: this.timeService.generateYearsArray(
+          new Date().getFullYear(),
+          1900
+        ),
+        order: 2,
+      }),
+      new DropdownQuestion({
+        key: 'companyForm',
+        label: 'Form of the Company',
+        options: [
+          { key: 'form1', value: 'Form 1' },
+          { key: 'form2', value: 'Form 2' },
+          { key: 'other', value: 'Other' },
+        ],
+        order: 3,
+      }),
+      new TextboxQuestion({
+        key: 'specifyCompanyForm',
+        label: 'Specify',
+        required: false,
+        type: 'text',
         order: 4,
       }),
     ];

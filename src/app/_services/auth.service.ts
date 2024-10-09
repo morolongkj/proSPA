@@ -106,4 +106,17 @@ export class AuthService {
     });
     return isMatch && this.isAuthenticatedUser();
   }
+
+  getCompanyId(): string | null {
+    let user: any = null;
+
+    // Check if the 'user' key exists in localStorage
+    if (localStorage.getItem('user')) {
+      // Parse the user object from localStorage
+      user = JSON.parse(localStorage.getItem('user') ?? '');
+    }
+
+    // Return the company_id if it exists in the user object, otherwise return null
+    return user?.company_id ?? null;
+  }
 }

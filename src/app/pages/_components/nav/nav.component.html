@@ -72,6 +72,16 @@
                 >Prequalification</a
               >
             </li>
+            <li *appHasRole="['user']">
+              <a class="dropdown-item" routerLink="/questionnaires"
+                >Questionnaires</a
+              >
+            </li>
+            <li *appHasRole="['user']">
+              <a class="dropdown-item" routerLink="/questionnaires"
+                >Prequalification</a
+              >
+            </li>
           </ul>
         </li>
 
@@ -86,33 +96,52 @@
             Tenders
           </a>
           <ul class="dropdown-menu">
-            <li>
-              <a class="dropdown-item" routerLink="/tenders/create"
-                >Create</a
-              >
+            <li *appHasRole="['admin']">
+              <a class="dropdown-item" routerLink="/tenders/create">Create</a>
             </li>
             <li *appHasRole="['admin']">
-              <a class="dropdown-item" routerLink="/tenders" [queryParams]="{ status: submittedId }"
+              <a
+                class="dropdown-item"
+                routerLink="/tenders"
+                [queryParams]="{ status: submittedId }"
                 >Verification</a
               >
             </li>
             <li *appHasRole="['admin']">
-              <a class="dropdown-item" routerLink="/tenders" [queryParams]="{ status: verifiedId }"
+              <a
+                class="dropdown-item"
+                routerLink="/tenders"
+                [queryParams]="{ status: verifiedId }"
                 >Approve Publish</a
               >
             </li>
             <li *appHasRole="['admin']">
-              <a class="dropdown-item" routerLink="/tenders" [queryParams]="{ status: approvedId }"
+              <a
+                class="dropdown-item"
+                routerLink="/tenders"
+                [queryParams]="{ status: approvedId }"
                 >Publish</a
               >
             </li>
             <li *appHasRole="['admin']">
-              <a class="dropdown-item" routerLink="/tenders" [queryParams]="{ status: '' }">List</a>
+              <a
+                class="dropdown-item"
+                routerLink="/tenders"
+                [queryParams]="{ status: '' }"
+                >List</a
+              >
             </li>
             <li *appHasRole="['user']">
-              <a class="dropdown-item" routerLink="/tenders" [queryParams]="{ status: publishedId }">Open Tenders</a>
+              <a
+                class="dropdown-item"
+                routerLink="/supplier/tenders"
+                >Open Tenders</a
+              >
             </li>
             <li *appHasRole="['user']">
+              <a class="dropdown-item" routerLink="/supplier/bids">Bids</a>
+            </li>
+            <li *appHasRole="['admin']">
               <a class="dropdown-item" routerLink="/tender-boxes"
                 >Tender Boxes</a
               >
@@ -136,66 +165,66 @@
           >
             Administration
           </a>
-         <ul class="dropdown-menu">
-  <li>
-    <a class="dropdown-item" routerLink="/users">
-      <i class="bi bi-people me-2"></i>Manage Users
-    </a>
-  </li>
-  <li>
-    <a class="dropdown-item" routerLink="/categories">
-      <i class="bi bi-list-check me-2"></i>Manage Categories
-    </a>
-  </li>
-  <li>
-    <a class="dropdown-item" routerLink="/products">
-      <i class="bi bi-box-seam me-2"></i>Manage Products
-    </a>
-  </li>
-  <li>
-    <a class="dropdown-item" routerLink="/documents">
-      <i class="bi bi-file-earmark-text me-2"></i>Document Identification
-    </a>
-  </li>
-</ul>
-
+          <ul class="dropdown-menu">
+            <li>
+              <a class="dropdown-item" routerLink="/users">
+                <i class="bi bi-people me-2"></i>Manage Users
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" routerLink="/categories">
+                <i class="bi bi-list-check me-2"></i>Manage Categories
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" routerLink="/products">
+                <i class="bi bi-box-seam me-2"></i>Manage Products
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" routerLink="/documents">
+                <i class="bi bi-file-earmark-text me-2"></i>Document
+                Identification
+              </a>
+            </li>
+          </ul>
         </li>
       </ul>
     </div>
 
     <ul class="navbar-nav ms-auto">
-     <li class="nav-item dropdown">
-          <a
-            class="nav-link dropdown-toggle"
-            href="#"
-            id="navbarDropdown"
-            role="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-            [ngClass]="{
-              active: isDropdownLinkActive(['/profile'])
-            }"
-          >
-            <i class="bi bi-person-circle me-2"></i>Account
-          </a>
-          <ul class="dropdown-menu">
-            <li>
-              <a
-                class="dropdown-item"
-                routerLink="/profile"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-              >
-                <i class="bi bi-person me-2"></i> Profile
-              </a>
-            </li>
-            <li>
-              <a class="dropdown-item" (click)="confirmLogout()">
-                <i class="bi bi-box-arrow-right me-2"></i> Logout
-              </a>
-            </li>
-          </ul>
-        </li>
+      <li class="nav-item dropdown">
+        <a
+          class="nav-link dropdown-toggle"
+          href="#"
+          id="navbarDropdown"
+          role="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+          [ngClass]="{
+            active: isDropdownLinkActive(['/profile'])
+          }"
+        >
+          <i class="bi bi-person-circle me-2"></i>Account
+        </a>
+        <ul class="dropdown-menu">
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="/profile"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+            >
+              <i class="bi bi-person me-2"></i> Profile
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" (click)="confirmLogout()">
+              <i class="bi bi-box-arrow-right me-2"></i> Logout
+            </a>
+          </li>
+        </ul>
+      </li>
       <!-- <li class="nav-item">
         <a class="nav-link"> <i class="fa fa-power-off me-2"></i>Logout</a>
       </li> -->

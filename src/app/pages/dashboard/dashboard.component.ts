@@ -1,12 +1,80 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import AOS from 'aos';
+import { AuthService } from '../../_services/auth.service';
+import { CompanyService } from '../../_services/company.service';
+import { tap, finalize, takeUntil, Subject } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, RouterLink],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css'
+  styleUrl: './dashboard.component.css',
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
+  private authService = inject(AuthService);
+  private companyService = inject(CompanyService);
 
+  company: any = {};
+  isLoadingCompany: boolean = true;
+  private unsubscribe$ = new Subject<void>();
+
+  constructor() {}
+
+  ngOnInit(): void {
+    AOS.init();
+    if (this.authService.getCompanyId() !== null) {
+      const companyId: string = this.authService.getCompanyId() ?? '';
+      this.loadCompany(companyId);
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
+  loadCompany(id: string) {
+    this.companyService
+      .getCompany(id)
+      .pipe(
+        tap({
+          next: (res: any) => {
+            if (res) {
+              this.company = res;
+              console.log(this.company);
+              this.company['final_extra_data'] = this.parseExtraData(
+                this.company['extra_data']
+              );
+              console.log(this.parseExtraData(this.company['extra_data']));
+              console.log(this.company);
+            }
+          },
+          error: (error) => alert(error),
+        }),
+        finalize(() => (this.isLoadingCompany = false)),
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe();
+  }
+
+  parseExtraData(data: string): any[] {
+    try {
+      return JSON.parse(data);
+    } catch (error) {
+      console.error('Error parsing extra data:', error);
+      return [];
+    }
+  }
+
+  // parseExtraData(data: string) {
+  //   try {
+  //     console.log(data);
+  //     return JSON.parse(data);
+  //   } catch (error) {
+  //     return {};
+  //   }
+  // }
 }

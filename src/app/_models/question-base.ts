@@ -10,6 +10,12 @@ export class QuestionBase<T> {
   richText?: boolean;
   isRadioGroup?: boolean;
   isCheckbox?: boolean;
+  hidden?: boolean;
+  readonly?: boolean;
+  min?: number;
+  max?: number;
+  maxLength?: number;
+
   constructor(
     options: {
       value?: T;
@@ -23,6 +29,11 @@ export class QuestionBase<T> {
       richText?: boolean;
       isRadioGroup?: boolean;
       isCheckbox?: boolean;
+      hidden?: boolean;
+      readonly?: boolean;
+      min?: number;
+      max?: number;
+      maxLength?: number;
     } = {}
   ) {
     this.value = options.value;
@@ -36,5 +47,10 @@ export class QuestionBase<T> {
     this.richText = !!options.richText;
     this.isRadioGroup = !!options.isRadioGroup;
     this.isCheckbox = !!options.isCheckbox;
+    this.hidden = !!options.hidden;
+    this.readonly = !!options.readonly;
+    this.min = options.min;
+    this.max = options.max;
+    this.maxLength = options.maxLength;
   }
 }
