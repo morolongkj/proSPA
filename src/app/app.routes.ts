@@ -236,6 +236,15 @@ export const routes: Routes = [
     runGuardsAndResolvers: 'always',
     canActivate: [authGuard],
   },
+  {
+    path: 'supplier/questionnaires',
+    loadComponent: () =>
+      import(
+        './pages/supplier/questionnaire/open-questionnaire-list/open-questionnaire-list.component'
+      ).then((c) => c.OpenQuestionnaireListComponent),
+    runGuardsAndResolvers: 'always',
+    canActivate: [authGuard],
+  },
   { path: 'unauthorised', component: UnauthorisedComponent },
   {
     path: '**',

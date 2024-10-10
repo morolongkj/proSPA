@@ -456,6 +456,59 @@ export class QuestionService {
         type: 'text',
         order: 4,
       }),
+      new TextboxQuestion({
+        key: 'legalStatus',
+        label: 'Legal Status',
+        required: false,
+        type: 'text',
+        order: 5,
+      }),
+      new TextboxQuestion({
+        key: 'tradeRegistrationNumber',
+        label: 'Trade Registration Number',
+        required: true,
+        type: 'text',
+        order: 6,
+      }),
+      new TextboxQuestion({
+        key: 'vatNumber',
+        label: 'VAT Number',
+        required: true,
+        type: 'text',
+        order: 7,
+      }),
+      new TextareaQuestion({
+        key: 'address',
+        label: 'Address',
+        type: 'textarea',
+        richText: true,
+        required: true,
+        order: 8,
+      }),
+      new DropdownQuestion({
+        key: 'country',
+        label: 'Country',
+        options: [
+          { key: 'form1', value: 'Form 1' },
+          { key: 'form2', value: 'Form 2' },
+          { key: 'other', value: 'Other' },
+        ],
+        order: 9,
+      }),
+      new TextboxQuestion({
+        key: 'telephone',
+        label: 'Telephone',
+        required: true,
+        type: 'text',
+        order: 10,
+      }),
+      new TextboxQuestion({
+        key: 'email',
+        label: 'Email',
+        required: true,
+        type: 'text',
+        order: 11,
+      }),
     ];
     return of(questions.sort((a, b) => a.order - b.order));
   }
