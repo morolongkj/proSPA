@@ -32,42 +32,57 @@
                     <tr class="bg-primary">
                       <th scope="col">Title</th>
                       <th scope="col">Description</th>
-                      <th scope="col">Status</th>
+                      <th scope="col">Products</th>
                       <th scope="col">Attachments</th>
                       <th scope="col" class="text-end">Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <ng-container *ngIf="questionnaires.length > 0; else noData">
-                    @for (questionnaire of questionnaires | paginate : { id:
-                    'Questionnaires-pagination', itemsPerPage: perPage,
-                    currentPage: page, totalItems: total }; track
-                    questionnaire.id; let i = $index) {
-                    <tr>
-                      <td>
-                        <span>{{ questionnaire.title }}</span>
-                      </td>
+                    <ng-container
+                      *ngIf="questionnaires.length > 0; else noData"
+                    >
+                      @for (questionnaire of questionnaires | paginate : { id:
+                      'Questionnaires-pagination', itemsPerPage: perPage,
+                      currentPage: page, totalItems: total }; track
+                      questionnaire.id; let i = $index) {
+                      <tr>
+                        <td>
+                          <span>{{ questionnaire.title }}</span>
+                        </td>
 
-                      <td>
-                        <div [innerHTML]="questionnaire.description"></div>
-                      </td>
-                      <td>
-                        <span>{{ questionnaire.status }}</span>
-                      </td>
-                      <td>
-                       <ul>
-                        @for(document of questionnaire.documents; track document) {
-                        <li class="text-wrap">
-                          <a href="">{{document.file_name}}</a>
-                        </li>
-                        }
-                       </ul>
-                      </td>
-                      <td class="text-end">
-                        <button class="btn btn-primary btn-sm" (click)="openModal(content,questionnaire)">Submit Questionnaire</button>
-                      </td>
-                    </tr>
-                    }
+                        <td>
+                          <div [innerHTML]="questionnaire.description"></div>
+                        </td>
+                        <td>
+                          <ul>
+                            @for(product of questionnaire.products; track
+                            product) {
+                            <li class="text-wrap">
+                              {{ product.title }}
+                            </li>
+                            }
+                          </ul>
+                        </td>
+                        <td>
+                          <ul>
+                            @for(document of questionnaire.documents; track
+                            document) {
+                            <li class="text-wrap">
+                              <a href="">{{ document.file_name }}</a>
+                            </li>
+                            }
+                          </ul>
+                        </td>
+                        <td class="text-end">
+                          <button
+                            class="btn btn-primary btn-sm"
+                            (click)="openModal(content, questionnaire)"
+                          >
+                            Submit Questionnaire
+                          </button>
+                        </td>
+                      </tr>
+                      }
                     </ng-container>
                     <ng-template #noData>
                       <tr>
@@ -105,14 +120,23 @@
 </div>
 
 <ng-template #content let-modal>
-	<div class="modal-header">
-		<h5 class="modal-title">{{currentQuestionnaire.title}}</h5>
-		<button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-	</div>
-	<div class="modal-body">
-		<app-submit-questionnaire [questionnaire]="currentQuestionnaire"></app-submit-questionnaire>
-	</div>
-	<div class="modal-footer">
+  <div class="modal-header">
+    <h5 class="modal-title">
+      Submit Questionnaire: {{ currentQuestionnaire.title }}
+    </h5>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <app-submit-questionnaire
+      [questionnaire]="currentQuestionnaire"
+    ></app-submit-questionnaire>
+  </div>
+  <!-- <div class="modal-footer">
 		<button type="button" class="btn btn-secondary" (click)="modal.close('Close click')">Close</button>
-	</div>
+	</div> -->
 </ng-template>

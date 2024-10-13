@@ -170,7 +170,7 @@ export const routes: Routes = [
         './pages/questionnaire/questionnaire-list/questionnaire-list.component'
       ).then((c) => c.QuestionnaireListComponent),
     runGuardsAndResolvers: 'always',
-    // canActivate: [authGuard, adminGuard],
+    canActivate: [authGuard, adminGuard],
   },
   {
     path: 'questionnaires/create',
@@ -179,7 +179,7 @@ export const routes: Routes = [
         './pages/questionnaire/questionnaire-create/questionnaire-create.component'
       ).then((c) => c.QuestionnaireCreateComponent),
     runGuardsAndResolvers: 'always',
-    // canActivate: [authGuard, adminGuard],
+    canActivate: [authGuard, adminGuard],
   },
   {
     path: 'admin/prequalifications',

@@ -181,9 +181,15 @@
                   </td>
                 </tr>
                 <tr>
-                  <td>Documents</td>
-                  <td [colSpan]="6">
-                    <app-questionnaire-documents [questionnaire]="questionnaire"></app-questionnaire-documents>
+                  <td [colSpan]="4">
+                    <app-questionnaire-documents
+                      [questionnaire]="questionnaire"
+                    ></app-questionnaire-documents>
+                  </td>
+                  <td [colSpan]="3">
+                    <app-questionnaire-products
+                      [questionnaire]="questionnaire"
+                    ></app-questionnaire-products>
                   </td>
                 </tr>
                 }

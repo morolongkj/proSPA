@@ -1,28 +1,71 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { ClassicEditor, Heading, Bold, Essentials, Italic, Mention, Paragraph, Undo, Link, List } from 'ckeditor5';
+import { QuestionnaireService } from '../../../../../_services/questionnaire.service';
 
 @Component({
   selector: 'app-submit-questionnaire',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, CKEditorModule],
   templateUrl: './submit-questionnaire.component.html',
   styleUrl: './submit-questionnaire.component.css',
 })
 export class SubmitQuestionnaireComponent implements OnInit {
+  private questionnaireService = inject(QuestionnaireService)
   @Input() questionnaire: any = {};
   form: FormGroup;
 
+  public Editor = ClassicEditor;
+  public config = {
+    height: '400px',
+    toolbar: [
+      'undo',
+      'redo',
+      '|',
+      'bold',
+      'italic',
+      'link',
+      '|',
+      'heading',
+      '|',
+      'bulletedList',
+      'numberedList',
+    ],
+    plugins: [
+      Heading,
+      Bold,
+      Essentials,
+      Italic,
+      Mention,
+      Paragraph,
+      Undo,
+      Link,
+      List,
+    ],
+
+    // licenseKey: '<YOUR_LICENSE_KEY>',
+    mention: {
+      // Mention configuration
+      feeds: [
+        {
+          marker: '@',
+          feed: ['@user', '@jane', '@foo', '@bar'],
+          minimumCharacters: 1,
+        },
+      ],
+    },
+  };
+
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
-      description: ['', Validators.required], // Textarea input
+      message: ['', Validators.required], // Textarea input
       attachments: this.fb.array([]), // FormArray for attachments
     });
   }
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 
   // Getter for attachments FormArray
   get attachments() {

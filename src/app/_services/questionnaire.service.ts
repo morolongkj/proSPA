@@ -57,4 +57,13 @@ export class QuestionnaireService {
     const url = `${this.baseUrl}/questionnaire-documents/${id}`;
     return this.http.delete(url);
   }
+
+  addQuestionnaireProduct(model: any) {
+    return this.http.post(this.baseUrl + 'questionnaire-products', model);
+  }
+
+  deleteQuestionnaireProduct(id: string): Observable<any> {
+    const url = `${this.baseUrl}/questionnaire-products/${id}`;
+    return this.http.delete(url);
+  }
 }

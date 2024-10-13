@@ -18,6 +18,7 @@ import { QuestionnaireService } from "../../../_services/questionnaire.service";
 import { ToastService } from "../../../_services/toast.service";
 import { ImageUploadComponent } from "../../../_shared/image-upload/image-upload.component";
 import { QuestionnaireDocumentsComponent } from "../questionnaire-documents/questionnaire-documents.component";
+import { QuestionnaireProductsComponent } from "../questionnaire-products/questionnaire-products.component";
 
 @Component({
   selector: 'app-admin-questionnaire-list',
@@ -37,7 +38,8 @@ import { QuestionnaireDocumentsComponent } from "../questionnaire-documents/ques
     CKEditorModule,
     ImageUploadComponent,
     NgbModule,
-    QuestionnaireDocumentsComponent
+    QuestionnaireDocumentsComponent,
+    QuestionnaireProductsComponent
 ],
   templateUrl: './questionnaire-list.component.html',
   styleUrl: './questionnaire-list.component.css',
