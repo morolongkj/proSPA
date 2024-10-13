@@ -12,7 +12,11 @@ export class QuestionnaireService {
 
   constructor() {}
 
-  getQuestionnaires(page: number = 1, perPage: number = 0, filters: any = {}): any {
+  getQuestionnaires(
+    page: number = 1,
+    perPage: number = 0,
+    filters: any = {}
+  ): any {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('perPage', perPage.toString());
@@ -39,6 +43,18 @@ export class QuestionnaireService {
 
   deleteQuestionnaire(id: string): Observable<any> {
     const url = `${this.baseUrl}/questionnaires/${id}`;
+    return this.http.delete(url);
+  }
+
+  addQuestionnaireDocument(formData: FormData) {
+    const url = `${this.baseUrl}/questionnaire-documents`;
+    return this.http.post(url, formData, {
+      reportProgress: true,
+      observe: 'events',
+    });
+  }
+  deleteQuestionnaireDocument(id: string): Observable<any> {
+    const url = `${this.baseUrl}/questionnaire-documents/${id}`;
     return this.http.delete(url);
   }
 }

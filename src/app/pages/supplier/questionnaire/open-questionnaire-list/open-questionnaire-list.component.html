@@ -38,6 +38,7 @@
                     </tr>
                   </thead>
                   <tbody>
+                    <ng-container *ngIf="questionnaires.length > 0; else noData">
                     @for (questionnaire of questionnaires | paginate : { id:
                     'Questionnaires-pagination', itemsPerPage: perPage,
                     currentPage: page, totalItems: total }; track
@@ -54,13 +55,31 @@
                         <span>{{ questionnaire.status }}</span>
                       </td>
                       <td>
-                        <span>test</span>
+                       <ul>
+                        @for(document of questionnaire.documents; track document) {
+                        <li class="text-wrap">
+                          <a href="">{{document.file_name}}</a>
+                        </li>
+                        }
+                       </ul>
                       </td>
                       <td class="text-end">
                         <button class="btn btn-primary btn-sm" (click)="openModal(content,questionnaire)">Submit Questionnaire</button>
                       </td>
                     </tr>
                     }
+                    </ng-container>
+                    <ng-template #noData>
+                      <tr>
+                        <td colspan="9" class="text-center text-muted py-4">
+                          <i
+                            class="bi bi-emoji-frown"
+                            style="font-size: 2rem"
+                          ></i>
+                          <div>No questionnaires available</div>
+                        </td>
+                      </tr>
+                    </ng-template>
                   </tbody>
                 </table>
               </div>
@@ -91,7 +110,7 @@
 		<button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
 	</div>
 	<div class="modal-body">
-		<p>One fine body&hellip;</p>
+		<app-submit-questionnaire [questionnaire]="currentQuestionnaire"></app-submit-questionnaire>
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-secondary" (click)="modal.close('Close click')">Close</button>

@@ -1,0 +1,27 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <!-- Textarea for description -->
+  <div>
+    <label for="description">Description</label>
+    <textarea id="description" formControlName="description" rows="4"></textarea>
+  </div>
+
+  <!-- Attachments section -->
+  <div formArrayName="attachments">
+    <div *ngFor="let attachment of attachments.controls; let i = index" [formGroupName]="i">
+      <label for="name-{{ i }}">Attachment Name</label>
+      <input id="name-{{ i }}" type="text" class="form-control" formControlName="name" placeholder="Enter attachment name" />
+
+      <label for="file-{{ i }}">Attachment File</label>
+      <input id="file-{{ i }}" type="file" class="form-control" (change)="onFileChange($event, i)" />
+
+      <!-- Remove attachment button -->
+      <button type="button" (click)="removeAttachment(i)">Remove</button>
+    </div>
+  </div>
+
+  <!-- Add new attachment button -->
+  <button type="button" (click)="addAttachment()">Add Attachment</button>
+
+  <!-- Submit button -->
+  <button type="submit" [disabled]="form.invalid">Submit</button>
+</form>

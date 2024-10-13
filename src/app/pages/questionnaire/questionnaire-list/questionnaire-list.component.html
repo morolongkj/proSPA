@@ -141,7 +141,7 @@
                         for="{{ questionnaire.id }}"
                       >
                         {{
-                          questionnaire.is_open_forever === "0"
+                          questionnaire.is_open_forever === "1"
                             ? "Always Open"
                             : "Open Until " + questionnaire.open_until
                         }}
@@ -178,6 +178,12 @@
                         <i class="bi bi-trash"></i>
                       </button>
                     </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Documents</td>
+                  <td [colSpan]="6">
+                    <app-questionnaire-documents [questionnaire]="questionnaire"></app-questionnaire-documents>
                   </td>
                 </tr>
                 }

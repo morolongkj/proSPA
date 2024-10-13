@@ -4,11 +4,13 @@ import { ToastService } from '../../../../_services/toast.service';
 import { tap, finalize, takeUntil, Subject } from 'rxjs';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { CommonModule } from '@angular/common';
+import { SubmitQuestionnaireComponent } from "./submit-questionnaire/submit-questionnaire.component";
 
 @Component({
   selector: 'app-open-questionnaire-list',
   standalone: true,
-  imports: [NgxPaginationModule],
+  imports: [NgxPaginationModule, CommonModule, SubmitQuestionnaireComponent],
   templateUrl: './open-questionnaire-list.component.html',
   styleUrl: './open-questionnaire-list.component.css',
 })

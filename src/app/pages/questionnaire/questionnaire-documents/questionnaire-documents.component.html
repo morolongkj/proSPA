@@ -1,0 +1,106 @@
+<div class="card h-100">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="card-title mb-0">Attachments</h5>
+      <button
+        class="btn btn-primary btn-sm"
+        (click)="attachFile(content)"
+      >
+        <i class="bi bi-file-earmark-plus"></i>
+      </button>
+    </div>
+
+    <div class="row my-3">
+      <div class="col-lg-12">
+        <ul class="list-group list-group-flush">
+          <!-- Display list items if there are documents -->
+          <ng-container
+            *ngIf="questionnaire.documents.length > 0; else noAttachments"
+          >
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center"
+              *ngFor="let document of questionnaire.documents; let i = index"
+            >
+              <span
+                ><i class="bi bi-paperclip me-2"></i
+                >{{ document.file_name }}</span
+              >
+              <button
+                type="button"
+                class="btn btn-danger btn-sm"
+                (click)="deleteQuestionnaireDocument(document)"
+              >
+                <i class="bi bi-trash"></i>
+              </button>
+            </li>
+          </ng-container>
+
+          <!-- Template for no data display -->
+          <ng-template #noAttachments>
+            <li class="list-group-item text-center text-muted py-4">
+              <i class="bi bi-folder-x" style="font-size: 2rem"></i>
+              <div>No documents available</div>
+            </li>
+          </ng-template>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="modal-basic-title">Attach a File</h5>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <form #fileUploadForm="ngForm" (ngSubmit)="onSubmit()" class="mt-3">
+      <div class="mb-3">
+        <label for="file" class="form-label">Upload File</label>
+        <input
+          type="file"
+          id="file"
+          class="form-control"
+          name="file"
+          required
+          (change)="onFileSelected($event)"
+        />
+        <div
+          *ngIf="!selectedFile && fileUploadForm.submitted"
+          class="text-danger"
+        >
+          Please select a file to upload.
+        </div>
+      </div>
+
+      <div class="mb-3" *ngIf="selectedFile">
+        <label for="filename" class="form-label">File Name</label>
+        <input
+          type="text"
+          id="filename"
+          class="form-control"
+          name="filename"
+          [(ngModel)]="fileName"
+          placeholder="Enter a file name"
+          required
+        />
+        <div *ngIf="!fileName && fileUploadForm.submitted" class="text-danger">
+          Please provide a filename.
+        </div>
+      </div>
+
+      <div class="mb-3" *ngIf="selectedFile">
+        <strong>Selected File:</strong> {{ selectedFile.name }}
+      </div>
+
+      <button type="submit" class="btn btn-primary" [disabled]="!selectedFile">
+        Upload
+      </button>
+    </form>
+  </div>
+</ng-template>

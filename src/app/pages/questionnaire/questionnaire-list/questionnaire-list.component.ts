@@ -17,6 +17,7 @@ import { QuestionService } from "../../../_services/question.service";
 import { QuestionnaireService } from "../../../_services/questionnaire.service";
 import { ToastService } from "../../../_services/toast.service";
 import { ImageUploadComponent } from "../../../_shared/image-upload/image-upload.component";
+import { QuestionnaireDocumentsComponent } from "../questionnaire-documents/questionnaire-documents.component";
 
 @Component({
   selector: 'app-admin-questionnaire-list',
@@ -36,7 +37,8 @@ import { ImageUploadComponent } from "../../../_shared/image-upload/image-upload
     CKEditorModule,
     ImageUploadComponent,
     NgbModule,
-  ],
+    QuestionnaireDocumentsComponent
+],
   templateUrl: './questionnaire-list.component.html',
   styleUrl: './questionnaire-list.component.css',
 })
