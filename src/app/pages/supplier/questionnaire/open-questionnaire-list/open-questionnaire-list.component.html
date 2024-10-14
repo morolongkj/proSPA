@@ -68,7 +68,8 @@
                             @for(document of questionnaire.documents; track
                             document) {
                             <li class="text-wrap">
-                              <a href="">{{ document.file_name }}</a>
+                              {{ document.file_name }}
+                              <button class="btn btn-light" (click)="download(document)"><i class="bi bi-download"></i></button>
                             </li>
                             }
                           </ul>

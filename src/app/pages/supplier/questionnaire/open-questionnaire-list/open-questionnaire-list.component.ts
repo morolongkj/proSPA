@@ -6,6 +6,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
 import { SubmitQuestionnaireComponent } from "./submit-questionnaire/submit-questionnaire.component";
+import { FileDownloadService } from '../../../../_services/file-download.service';
 
 @Component({
   selector: 'app-open-questionnaire-list',
@@ -18,6 +19,7 @@ export class OpenQuestionnaireListComponent implements OnInit {
   private questionnaireService = inject(QuestionnaireService);
   private toastService = inject(ToastService);
   private modalService = inject(NgbModal);
+  private fileDownloadService = inject(FileDownloadService);
 
   questionnaires: any[] = [];
 
@@ -78,5 +80,11 @@ export class OpenQuestionnaireListComponent implements OnInit {
   openModal(content: TemplateRef<any>, questionnaire: any) {
     this.currentQuestionnaire = questionnaire;
     this.modalService.open(content, { centered: true, size: 'lg' });
+  }
+
+  download(document: any): void {
+    const fileUrl = 'https://example.com/path-to-your-file.pdf';
+    const filename = 'downloaded-file.pdf';
+    this.fileDownloadService.downloadFile(document.file_path, document.file_name);
   }
 }
