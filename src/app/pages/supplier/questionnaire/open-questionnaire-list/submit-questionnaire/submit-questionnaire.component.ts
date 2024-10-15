@@ -1,8 +1,26 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, Input, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  FormArray,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
-import { ClassicEditor, Heading, Bold, Essentials, Italic, Mention, Paragraph, Undo, Link, List } from 'ckeditor5';
+import {
+  ClassicEditor,
+  Heading,
+  Bold,
+  Essentials,
+  Italic,
+  Mention,
+  Paragraph,
+  Undo,
+  Link,
+  List,
+} from 'ckeditor5';
 import { QuestionnaireService } from '../../../../../_services/questionnaire.service';
 
 @Component({
@@ -13,7 +31,7 @@ import { QuestionnaireService } from '../../../../../_services/questionnaire.ser
   styleUrl: './submit-questionnaire.component.css',
 })
 export class SubmitQuestionnaireComponent implements OnInit {
-  private questionnaireService = inject(QuestionnaireService)
+  private questionnaireService = inject(QuestionnaireService);
   @Input() questionnaire: any = {};
   form: FormGroup;
 
@@ -94,6 +112,18 @@ export class SubmitQuestionnaireComponent implements OnInit {
   onSubmit() {
     if (this.form.valid) {
       console.log(this.form.value); // Handle the form submission
+
+      const formData = new FormData();
+      formData.append('message', this.form.value.message);
+      this.form.value.attachments.forEach((attachment: any, index: number) => {
+        if (attachment.file) {
+          formData.append(`attachments[${index}][file_name]`, attachment.name);
+          formData.append(`attachments[${index}][file]`, attachment.file);
+        }
+      });
+
+      console.log(formData);
+      this.prequalificationService.submitQ
     }
   }
 
