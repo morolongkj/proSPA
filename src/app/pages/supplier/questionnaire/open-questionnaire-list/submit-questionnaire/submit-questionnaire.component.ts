@@ -123,7 +123,7 @@ export class SubmitQuestionnaireComponent implements OnInit {
       });
 
       console.log(formData);
-      this.prequalificationService.submitQ
+      // this.prequalificationService.submitQ
     }
   }
 

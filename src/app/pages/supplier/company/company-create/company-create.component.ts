@@ -35,9 +35,17 @@ export class CompanyCreateComponent implements OnInit {
   handleFormSubmit(event: any) {
     console.log('Form submitted:', event.formData);
     const model = {
-      title: event.formData.companyTitle,
-      description: event.formData.companyDescription,
-      display_order: event.formData.companyDisplayOrder,
+      company_name: event.formData.companyName,
+      year_established: event.formData.yearEstablished,
+      company_form: event.formData.companyForm,
+      specify_company_form: event.formData.specifyCompanyForm,
+      legal_status: event.formData.legalStatus,
+      trade_registration_number: event.formData.tradeRegistrationNumber,
+      vat_number: event.formData.vatNumber,
+      address: event.formData.address,
+      country: event.formData.country,
+      telephone: event.formData.telephone,
+      email: event.formData.email,
     };
     this.companyService.addCompany(model).subscribe({
       next: (res: any) => {

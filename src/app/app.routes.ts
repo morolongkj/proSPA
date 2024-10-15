@@ -245,6 +245,15 @@ export const routes: Routes = [
     runGuardsAndResolvers: 'always',
     canActivate: [authGuard],
   },
+  {
+    path: 'supplier/prequalification',
+    loadComponent: () =>
+      import(
+        './pages/supplier/prequalification/prequalification-list/prequalification-list.component'
+      ).then((c) => c.PrequalificationListComponent),
+    runGuardsAndResolvers: 'always',
+    canActivate: [authGuard],
+  },
   { path: 'unauthorised', component: UnauthorisedComponent },
   {
     path: '**',
