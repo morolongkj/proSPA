@@ -1,5 +1,5 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withHashLocation, withRouterConfig } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
@@ -14,7 +14,13 @@ import { loadingInterceptor } from './_interceptors/loading.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes),
+    provideRouter(
+      routes,
+      withHashLocation(),
+      withRouterConfig({
+        onSameUrlNavigation: 'reload',
+      })
+    ),
     provideHttpClient(
       withInterceptors([errorInterceptor, jwtInterceptor, loadingInterceptor])
     ),
