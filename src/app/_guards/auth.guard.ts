@@ -12,7 +12,7 @@ export const authGuard: CanActivateFn = (route, state) => {
     return true;
   } else {
     toastService.error('You shall not pass!');
-    router.navigate(['/unauthorised']);
+    router.navigate(['/auth/login']);
     return false;
   }
 };

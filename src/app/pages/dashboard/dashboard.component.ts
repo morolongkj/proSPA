@@ -5,11 +5,14 @@ import { CompanyService } from '../../_services/company.service';
 import { tap, finalize, takeUntil, Subject } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { CalendarOptions } from '@fullcalendar/core';
+import dayGridPlugin from '@fullcalendar/daygrid';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, FullCalendarModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
@@ -20,6 +23,30 @@ export class DashboardComponent implements OnInit {
   company: any = {};
   isLoadingCompany: boolean = true;
   private unsubscribe$ = new Subject<void>();
+
+  events: any[] = [];
+  calendarOptions: CalendarOptions = {
+    plugins: [dayGridPlugin],
+    initialView: 'dayGridMonth',
+    headerToolbar: {
+      left: 'eventsTitle',
+      center: '', // Leave center section empty (no title)
+      right: 'today prev,next', // Keep only the "Today" button on the right
+    },
+    customButtons: {
+      eventsTitle: {
+        text: 'Events', // The plain text to display
+      },
+      // viewMore: {
+      //   text: 'View More', // The custom title text
+      //   click: () => {
+      //     console.log('View more clicked');
+      //   },
+      // },
+    },
+    weekends: true,
+    events: [{ title: 'Meeting', start: new Date() }],
+  };
 
   constructor() {}
 

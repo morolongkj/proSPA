@@ -1,7 +1,7 @@
 <div class="container min-vh-100 my-5">
   <div class="row">
-    <div class="col-lg-5">
-      <div class="card">
+    <div class="col-lg-4">
+      <div class="card h-100">
         <div class="card-body">
           <h5 class="card-title" data-aos="fade-down" data-aos-duration="2000">
             Company Details
@@ -63,16 +63,10 @@
             </ul>
           </div>
           <ng-template #noCompany>
-            <!-- <div class="row">
-              <div class="col-lg-12 text-center">
-                <button class="btn btn-primary">Add Company</button>
-              </div>
-            </div> -->
             <div class="row">
               <div class="col-lg-12 text-center">
                 <div class="alert alert-warning" role="alert">
                   <i class="fas fa-exclamation-triangle"></i>
-                  <!-- Font Awesome warning icon -->
                   <strong>Company not found!</strong> You are not currently
                   linked to any company. Please contact your administrator or
                   add a company to proceed.
@@ -85,6 +79,81 @@
               </div>
             </div>
           </ng-template>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8">
+      <!-- <div class="row">
+        <div class="col-lg-4">
+          <div class="card">
+            <div class="card-body">
+              <h6 class="card-title">Open Tenders</h6>
+              <h3>0</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="card">
+            <div class="card-body">
+              <h6 class="card-title">Active Bids</h6>
+               <h3>0</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="card">
+            <div class="card-body">
+              <h6 class="card-title">Notifications</h6>
+               <h3>0</h3>
+            </div>
+          </div>
+        </div>
+      </div> -->
+      <div class="row quick-access-cards">
+        <div class="col-lg-4">
+          <div class="card">
+            <div class="card-body">
+              <div class="card-icon">
+                <i class="fas fa-folder-open"></i>
+              </div>
+              <h6 class="card-title">Open Tenders</h6>
+              <h3>0</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="card">
+            <div class="card-body">
+              <div class="card-icon">
+                <i class="fas fa-balance-scale"></i>
+              </div>
+              <h6 class="card-title">Active Bids</h6>
+              <h3>0</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="card">
+            <div class="card-body">
+              <div class="card-icon">
+                <i class="fas fa-bell"></i>
+              </div>
+              <h6 class="card-title">Notifications</h6>
+              <h3>0</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-3">
+        <!-- <div
+          class="col-lg-12 d-flex justify-content-between align-items-center"
+        >
+          <h4 class="mb-0">Events</h4>
+          <button class="btn btn-primary btn-sm">View More</button>
+        </div> -->
+        <div class="col-lg-12 mt-2">
+          <full-calendar [options]="calendarOptions"></full-calendar>
         </div>
       </div>
     </div>

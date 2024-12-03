@@ -1,0 +1,62 @@
+/* Quick Access Cards */
+.quick-access-cards .card {
+  /* border: none; */
+  border-radius: 0px;
+  /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); */
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.quick-access-cards .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.quick-access-cards .card-body {
+  text-align: center;
+  padding: 20px;
+  position: relative;
+}
+
+.quick-access-cards .card-icon {
+  font-size: 40px;
+  color: #a0522d; /* Brown Theme Color */
+  margin-bottom: 15px;
+}
+
+.quick-access-cards h6 {
+  font-size: 14px;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.quick-access-cards h3 {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 0;
+  color: #333;
+}
+
+/* Responsive Behavior */
+@media (max-width: 768px) {
+  .quick-access-cards .col-lg-4 {
+    margin-bottom: 20px;
+  }
+}
+
+/* dashboard.component.css */
+
+/* Custom styling for the custom text in the header toolbar */
+.fc-toolbar .fc-eventsTitle-button {
+  font-size: 16px; /* Set the font size for the text */
+  font-weight: bold; /* Make the text bold */
+  color: #333; /* Set text color (e.g., dark gray) */
+  background: none; /* Remove background to make it plain */
+  border: none; /* Remove button border */
+  box-shadow: none; /* Remove button shadow */
+  padding: 0; /* Remove padding to make it look like plain text */
+  pointer-events: none; /* Disable any interaction with the text */
+  cursor: default; /* Set default cursor to indicate non-clickable text */
+  text-transform: none; /* Ensure no unwanted capitalization */
+}
