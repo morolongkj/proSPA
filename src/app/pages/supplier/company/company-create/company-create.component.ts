@@ -7,7 +7,7 @@ import { CompanyService } from '../../../../_services/company.service';
 import { QuestionService } from '../../../../_services/question.service';
 import { ToastService } from '../../../../_services/toast.service';
 import { AsyncPipe } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-company-create',
@@ -23,6 +23,7 @@ export class CompanyCreateComponent implements OnInit {
   questions$: Observable<QuestionBase<any>[]>;
   private companyService = inject(CompanyService);
   private toastService = inject(ToastService);
+  private router = inject(Router);
 
   constructor(service: QuestionService) {
     this.questions$ = service.getCompanyQuestions();
@@ -52,8 +53,21 @@ export class CompanyCreateComponent implements OnInit {
         console.log(res);
         if (res['status']) {
           //successful
+          // Successful response
+          const companyId = res.company?.id; // Extract company ID from the response
+          if (companyId) {
+            // Retrieve user object from localStorage
+            const user = JSON.parse(localStorage.getItem('user') ?? '{}');
+
+            // Update user object with company_id
+            user.company_id = companyId;
+
+            // Save updated user object back to localStorage
+            localStorage.setItem('user', JSON.stringify(user));
+          }
           this.toastService.success('Company is created successfully!');
           this.dynamicFormComponent.resetForm();
+          this.router.navigate(['/']);
         } else {
           this.toastService.error('Unknown error occured');
         }

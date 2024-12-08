@@ -12,7 +12,7 @@ export class UserService {
 
   constructor() {}
 
-  getUserWithRoles(page: number = 1, perPage: number = 2, filters: any = {}) {
+  getUserWithRoles(page: number = 1, perPage: number = 10, filters: any = {}) {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('perPage', perPage.toString());

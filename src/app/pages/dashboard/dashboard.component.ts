@@ -53,7 +53,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     AOS.init();
     if (this.authService.getCompanyId() !== null) {
-      const companyId: string = this.authService.getCompanyId() ?? '';
+      const companyId: any = this.authService.getCompanyId() ?? '';
       this.loadCompany(companyId);
     }
   }

@@ -107,6 +107,7 @@ export class AuthService {
     return isMatch && this.isAuthenticatedUser();
   }
 
+
   getCompanyId(): string | null {
     let user: any = null;
 

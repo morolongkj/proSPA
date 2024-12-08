@@ -66,4 +66,9 @@ export class QuestionnaireService {
     const url = `${this.baseUrl}/questionnaire-products/${id}`;
     return this.http.delete(url);
   }
+
+  // submissions
+  addQuestionnaireSubmission(model: any) {
+    return this.http.post(this.baseUrl + 'questionnaires/submit', model);
+  }
 }

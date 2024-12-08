@@ -1,5 +1,11 @@
-import { Component, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { CategoryService } from '../../../../_services/category.service';
+import {
+  Component,
+  inject,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
+import { DocumentService } from '../../../../_services/document.service';
 import { ToastService } from '../../../../_services/toast.service';
 import { Observable } from 'rxjs';
 import { DynamicFormComponent } from '../../../../_form/dynamic-form/dynamic-form.component';
@@ -7,17 +13,33 @@ import { QuestionBase } from '../../../../_models/question-base';
 import { QuestionService } from '../../../../_services/question.service';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { NgbModal, NgbModule, NgbPopoverModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbModal,
+  NgbModule,
+  NgbPopoverModule,
+  NgbTooltipModule,
+} from '@ng-bootstrap/ng-bootstrap';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { RouterLink } from '@angular/router';
-import { ClassicEditor, Heading, Bold, Essentials, Italic, Mention, Paragraph, Undo, Link, List } from 'ckeditor5';
+import {
+  ClassicEditor,
+  Heading,
+  Bold,
+  Essentials,
+  Italic,
+  Mention,
+  Paragraph,
+  Undo,
+  Link,
+  List,
+} from 'ckeditor5';
 import { ConfirmService } from '../../../../_services/confirm.service';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
-import { ImageUploadComponent } from "../../../../_shared/image-upload/image-upload.component";
+import { ImageUploadComponent } from '../../../../_shared/image-upload/image-upload.component';
 import { HttpEventType } from '@angular/common/http';
 
 @Component({
-  selector: 'app-category-list',
+  selector: 'app-document-list',
   standalone: true,
   providers: [QuestionService],
   imports: [
@@ -31,18 +53,18 @@ import { HttpEventType } from '@angular/common/http';
     CommonModule,
     CKEditorModule,
     ImageUploadComponent,
-    NgbModule
-],
-  templateUrl: './category-list.component.html',
-  styleUrl: './category-list.component.css',
+    NgbModule,
+  ],
+  templateUrl: './document-list.component.html',
+  styleUrl: './document-list.component.css',
 })
-export class CategoryListComponent implements OnInit {
-  private categoryService = inject(CategoryService);
+export class DocumentListComponent implements OnInit {
+  private documentService = inject(DocumentService);
   private toastService = inject(ToastService);
   private confirmService = inject(ConfirmService);
   private modalService = inject(NgbModal);
 
-  categories: any[] = [];
+  documents: any[] = [];
 
   page = 1;
   perPage = 10;
@@ -55,7 +77,7 @@ export class CategoryListComponent implements OnInit {
   @ViewChild(DynamicFormComponent)
   dynamicFormComponent!: DynamicFormComponent;
 
-  currentCategory: any = {};
+  currentDocument: any = {};
 
   public Editor = ClassicEditor;
   public config = {
@@ -101,63 +123,62 @@ export class CategoryListComponent implements OnInit {
   progress: number = 0;
 
   constructor(questionService: QuestionService) {
-    this.questions$ = questionService.getCategoryFiltersQuestions();
-
+    this.questions$ = questionService.getDocumentFiltersQuestions();
   }
 
   ngOnInit(): void {
-    this.getCategories();
+    this.getDocuments();
   }
 
-  getCategories() {
-    this.categoryService
-      .getCategories(this.page, this.perPage, this.filters)
+  getDocuments() {
+    this.documentService
+      .getDocuments(this.page, this.perPage, this.filters)
       .subscribe({
         next: (res: any) => {
-          this.categories = res.data.categories;
+          this.documents = res.data.documents;
           this.total = res.data.total;
-          console.log(this.categories);
+          console.log(this.documents);
         },
       });
   }
 
   handlePageChange(event: any): void {
     this.page = event;
-    this.getCategories();
+    this.getDocuments();
   }
 
   handlePageSizeChange(event: any): void {
     this.perPage = event.target.value;
     this.page = 1;
-    this.getCategories();
+    this.getDocuments();
   }
 
   handleFormSubmit(event: any) {
     const model = {
       title: event.formData.title,
-      description: event.formData.description || "",
+      description: event.formData.description || '',
     };
     this.filters = model;
     console.log(this.filters);
     this.page = 1;
-    this.getCategories();
+    this.getDocuments();
   }
 
-  toggleEdit(category: any) {
-    category.isEditing = !category.isEditing;
+  toggleEdit(document: any) {
+    document.isEditing = !document.isEditing;
   }
 
-  saveCategory(category: any) {
-    category.isEditing = false;
-    console.log(category);
-    this.categoryService.updateCategory(category.id, category).subscribe({
+  saveDocument(document: any) {
+    document.isEditing = false;
+    console.log(document);
+    this.documentService.updateDocument(document.id, document).subscribe({
       next: (res: any) => {
-        Object.assign(category, res);
-        const index = this.categories.findIndex(
-          (attr: any) => attr.id === category.id
+        Object.assign(document, res);
+        const index = this.documents.findIndex(
+          (attr: any) => attr.id === document.id
         );
         if (index !== -1) {
-          this.categories[index] = category;
+          this.documents[index] = document;
         }
         this.toastService.success('Updated successfully');
       },
@@ -167,35 +188,33 @@ export class CategoryListComponent implements OnInit {
     });
   }
 
-  deleteCategory(category: any) {
+  deleteDocument(document: any) {
     this.confirmService
       .confirm(
         'Confirm Deletion',
-        `Are you sure you want to delete ${category.title}?`
+        `Are you sure you want to delete ${document.title}?`
       )
       .then((confirmed: any) => {
         if (confirmed) {
-          this.categoryService.deleteCategory(category.id).subscribe({
+          this.documentService.deleteDocument(document.id).subscribe({
             next: (response: any) => {
               console.log('Delete successful', response);
               this.toastService.success('Delete successful');
-              this.categories = this.categories.filter(
-                (item: any) => item.id !== category.id
+              this.documents = this.documents.filter(
+                (item: any) => item.id !== document.id
               );
             },
             error: (err: any) => {
-              console.error('Error deleting category', err);
-              this.toastService.success('Error deleting category');
+              console.error('Error deleting document', err);
+              this.toastService.success('Error deleting document');
             },
           });
         }
       });
   }
 
-
-  openModal(content: TemplateRef<any>, category: any) {
-    this.currentCategory = category;
+  openModal(content: TemplateRef<any>, document: any) {
+    this.currentDocument = document;
     this.modalService.open(content, { centered: true, size: 'lg' });
   }
-
 }

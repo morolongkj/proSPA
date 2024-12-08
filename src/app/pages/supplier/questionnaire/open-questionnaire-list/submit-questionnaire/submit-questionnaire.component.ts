@@ -22,6 +22,8 @@ import {
   List,
 } from 'ckeditor5';
 import { QuestionnaireService } from '../../../../../_services/questionnaire.service';
+import { AuthService } from '../../../../../_services/auth.service';
+import { ToastService } from '../../../../../_services/toast.service';
 
 @Component({
   selector: 'app-submit-questionnaire',
@@ -32,6 +34,8 @@ import { QuestionnaireService } from '../../../../../_services/questionnaire.ser
 })
 export class SubmitQuestionnaireComponent implements OnInit {
   private questionnaireService = inject(QuestionnaireService);
+  private authService = inject(AuthService);
+  private toastService = inject(ToastService);
   @Input() questionnaire: any = {};
   form: FormGroup;
 
@@ -76,6 +80,8 @@ export class SubmitQuestionnaireComponent implements OnInit {
     },
   };
 
+  companyId: string = '';
+
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
       message: ['', Validators.required], // Textarea input
@@ -83,7 +89,11 @@ export class SubmitQuestionnaireComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.authService.getCompanyId() !== null) {
+      this.companyId = this.authService.getCompanyId() ?? '';
+    }
+  }
 
   // Getter for attachments FormArray
   get attachments() {
@@ -111,19 +121,50 @@ export class SubmitQuestionnaireComponent implements OnInit {
   // Handle form submission
   onSubmit() {
     if (this.form.valid) {
-      console.log(this.form.value); // Handle the form submission
+      if (this.companyId) {
+        const formData = new FormData();
+        formData.append('questionnaire_id', this.questionnaire.id);
+        formData.append('company_id', this.companyId);
+        formData.append('message', this.form.value.message);
 
-      const formData = new FormData();
-      formData.append('message', this.form.value.message);
-      this.form.value.attachments.forEach((attachment: any, index: number) => {
-        if (attachment.file) {
-          formData.append(`attachments[${index}][file_name]`, attachment.name);
-          formData.append(`attachments[${index}][file]`, attachment.file);
-        }
-      });
+        // formData.append('attachments[]',this.form.value.attachments);
+        // this.form.value.attachments.forEach(
+        //   (attachment: any, index: number) => {
+        //     if (attachment.file) {
+        //       formData.append(
+        //         `attachments[${index}][file_name]`,
+        //         attachment.name
+        //       );
+        //       formData.append(`attachments[${index}][file]`, attachment.file);
+        //     }
+        //   }
+        // );
 
-      console.log(formData);
-      // this.prequalificationService.submitQ
+        this.form.value.attachments.forEach(
+          (attachment: any, index: number) => {
+            if (attachment.file) {
+              formData.append(`attachments[]`, attachment.file);
+              formData.append(`attachment_names[]`, attachment.name);
+            }
+          }
+        );
+
+        console.log(formData);
+        this.questionnaireService
+          .addQuestionnaireSubmission(formData)
+          .subscribe({
+            next: (res: any) => {
+              console.log(res);
+            },
+            error: (err: any) => {
+              console.log(err);
+            },
+          });
+      } else {
+        this.toastService.error(
+          'This account is not linked to any company, and therefore cannot submit a questionnaire.'
+        );
+      }
     }
   }
 

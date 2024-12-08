@@ -6,6 +6,7 @@ import { adminGuard } from './_guards/admin.guard';
 import { categoryListResolver } from './_resolvers/category-list.resolver';
 import { productListResolver } from './_resolvers/product-list.resolver';
 import { companyDetailsResolver } from './_resolvers/company-details.resolver';
+import { documentListResolver } from './_resolvers/document-list.resolver';
 
 export const routes: Routes = [
   {
@@ -143,6 +144,43 @@ export const routes: Routes = [
       ).then((c) => c.ProductExportComponent),
     runGuardsAndResolvers: 'always',
     resolve: { products: productListResolver },
+    canActivate: [adminGuard],
+  },
+  {
+    path: 'documents',
+    loadComponent: () =>
+      import(
+        './pages/admin/document/document-list/document-list.component'
+      ).then((c) => c.DocumentListComponent),
+    runGuardsAndResolvers: 'always',
+    canActivate: [adminGuard],
+  },
+  {
+    path: 'documents/create',
+    loadComponent: () =>
+      import(
+        './pages/admin/document/document-create/document-create.component'
+      ).then((c) => c.DocumentCreateComponent),
+    runGuardsAndResolvers: 'always',
+    canActivate: [adminGuard],
+  },
+  {
+    path: 'documents/import',
+    loadComponent: () =>
+      import(
+        './pages/admin/document/document-import/document-import.component'
+      ).then((c) => c.DocumentImportComponent),
+    runGuardsAndResolvers: 'always',
+    canActivate: [adminGuard],
+  },
+  {
+    path: 'documents/export',
+    loadComponent: () =>
+      import(
+        './pages/admin/document/document-export/document-export.component'
+      ).then((c) => c.DocumentExportComponent),
+    runGuardsAndResolvers: 'always',
+    resolve: { documents: documentListResolver },
     canActivate: [adminGuard],
   },
   {

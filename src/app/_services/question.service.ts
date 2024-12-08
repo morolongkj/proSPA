@@ -149,46 +149,44 @@ export class QuestionService {
         required: true,
         order: 3,
       }),
-      // new DropdownQuestion({
-      //   key: 'favoriteAnimal',
-      //   label: 'Favorite Animal',
-      //   options: [
-      //     { key: 'cat', value: 'Cat' },
-      //     { key: 'dog', value: 'Dog' },
-      //     { key: 'horse', value: 'Horse' },
-      //     { key: 'capybara', value: 'Capybara' },
-      //   ],
-      //   order: 4,
-      // }),
-      // new RadioQuestion({
-      //   key: 'radioTest',
-      //   label: 'Radio Test',
-      //   type: 'radio',
-      //   options: [
-      //     { key: 'cat', value: 'Cat' },
-      //     { key: 'dog', value: 'Dog' },
-      //     { key: 'horse', value: 'Horse' },
-      //     { key: 'capybara', value: 'Capybara' },
-      //   ],
-      //   order: 5,
-      // }),
-      // new CheckboxQuestion({
-      //   key: 'checkTest',
-      //   label: 'Check Test',
-      //   type: 'checkbox',
-      //   options: [
-      //     { key: 'cat', value: 'Cat' },
-      //     { key: 'dog', value: 'Dog' },
-      //     { key: 'horse', value: 'Horse' },
-      //     { key: 'capybara', value: 'Capybara' },
-      //   ],
-      //   order: 6,
-      // }),
     ];
     return of(questions.sort((a, b) => a.order - b.order));
   }
 
   getCategoryFiltersQuestions() {
+    const questions: QuestionBase<string>[] = [
+      new TextboxQuestion({
+        key: 'title',
+        label: 'Title',
+        type: 'text',
+        required: false,
+        order: 1,
+      }),
+    ];
+    return of(questions.sort((a, b) => a.order - b.order));
+  }
+
+  getDocumentQuestions() {
+    const questions: QuestionBase<string>[] = [
+      new TextboxQuestion({
+        key: 'documentTitle',
+        label: 'Document Title',
+        required: true,
+        order: 1,
+      }),
+      new TextareaQuestion({
+        key: 'documentDescription',
+        label: 'Document Description',
+        type: 'textarea',
+        richText: true,
+        required: false,
+        order: 3,
+      }),
+    ];
+    return of(questions.sort((a, b) => a.order - b.order));
+  }
+
+  getDocumentFiltersQuestions() {
     const questions: QuestionBase<string>[] = [
       new TextboxQuestion({
         key: 'title',
