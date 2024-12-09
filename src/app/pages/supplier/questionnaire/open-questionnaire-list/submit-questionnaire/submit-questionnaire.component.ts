@@ -24,6 +24,8 @@ import {
 import { QuestionnaireService } from '../../../../../_services/questionnaire.service';
 import { AuthService } from '../../../../../_services/auth.service';
 import { ToastService } from '../../../../../_services/toast.service';
+import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-submit-questionnaire',
@@ -36,6 +38,9 @@ export class SubmitQuestionnaireComponent implements OnInit {
   private questionnaireService = inject(QuestionnaireService);
   private authService = inject(AuthService);
   private toastService = inject(ToastService);
+  private router = inject(Router);
+  private modalService = inject(NgbModal);
+
   @Input() questionnaire: any = {};
   form: FormGroup;
 
@@ -155,6 +160,10 @@ export class SubmitQuestionnaireComponent implements OnInit {
           .subscribe({
             next: (res: any) => {
               console.log(res);
+              this.form.reset();
+              this.toastService.success('Submitted successfully.');
+              this.router.navigate(['/supplier/prequalification']);
+              this.modalService.dismissAll();
             },
             error: (err: any) => {
               console.log(err);
