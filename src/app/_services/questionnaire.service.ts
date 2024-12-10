@@ -71,4 +71,22 @@ export class QuestionnaireService {
   addQuestionnaireSubmission(model: any) {
     return this.http.post(this.baseUrl + 'questionnaires/submit', model);
   }
+
+  getQuestionnaireSubmissions(
+    page: number = 1,
+    perPage: number = 0,
+    filters: any = {}
+  ): any {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('perPage', perPage.toString());
+    // Append additional filters from the filters object
+    Object.keys(filters).forEach((key) => {
+      params = params.append(key, filters[key]);
+    });
+
+    return this.http.get<any>(this.baseUrl + 'questionnaire-submissions', {
+      params,
+    });
+  }
 }

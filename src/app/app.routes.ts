@@ -220,22 +220,22 @@ export const routes: Routes = [
     canActivate: [authGuard, adminGuard],
   },
   {
-    path: 'admin/prequalifications',
+    path: 'admin/pre-qualification',
     loadComponent: () =>
       import(
         './pages/admin/pre-qualifications/pre-qualification-list/pre-qualification-list.component'
       ).then((c) => c.PreQualificationListComponent),
     runGuardsAndResolvers: 'always',
-    // canActivate: [authGuard, adminGuard],
+    canActivate: [authGuard, adminGuard],
   },
   {
-    path: 'admin/prequalifications/create',
+    path: 'admin/pre-qualification/create',
     loadComponent: () =>
       import(
         './pages/admin/pre-qualifications/pre-qualification-create/pre-qualification-create.component'
       ).then((c) => c.PreQualificationCreateComponent),
     runGuardsAndResolvers: 'always',
-    // canActivate: [authGuard, adminGuard],
+    canActivate: [authGuard, adminGuard],
   },
 
   {

@@ -1,77 +1,81 @@
 import { CommonModule } from '@angular/common';
-import { Component, TemplateRef } from '@angular/core';
+import { Component, inject, OnInit, TemplateRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { QuestionnaireService } from '../../../../_services/questionnaire.service';
+import { Subject, tap, finalize, takeUntil } from 'rxjs';
+import { ToastService } from '../../../../_services/toast.service';
+import AOS from 'aos';
 
 @Component({
   selector: 'app-prequalification-list',
   standalone: true,
   imports: [NgxPaginationModule, CommonModule, FormsModule],
   templateUrl: './prequalification-list.component.html',
-  styleUrl: './prequalification-list.component.css'
+  styleUrl: './prequalification-list.component.css',
 })
-export class PrequalificationListComponent {
-  questionnaires: any[] = [
-    {
-      id: '',
-      prequalificationNotice:
-        'Pre-Qualification of Suppliers for Medical Supplies and Equipment',
-      dateOfSubmission: '18/04/2024',
-      status: 'Submitted',
-    },
-    {
-      id: '',
-      prequalificationNotice:
-        'Pre-Qualification of Suppliers for Medical Supplies and Equipment',
-      dateOfSubmission: '01/01/2024',
-      status: 'Rejected',
-    },
-    {
-      id: '',
-      prequalificationNotice:
-        'Pre-Qualification of Suppliers for Laboratory Equipment / Consumables / Diagnostics',
-      dateOfSubmission: '16/02/2024',
-      status: 'Approved, waiting for samples',
-    },
-    {
-      id: '',
-      prequalificationNotice:
-        'Pre-Qualification of Suppliers for Rehabilitation/Emergency Supplies',
-      dateOfSubmission: '03/04/2024',
-      status: 'In Review',
-    },
-    {
-      id: '',
-      prequalificationNotice:
-        'Pre-Qualification of Suppliers for Office Stationery',
-      dateOfSubmission: '04/02/2024',
-      status: 'In Review',
-    },
-  ];
+export class PrequalificationListComponent implements OnInit {
+  private questionnaireService = inject(QuestionnaireService);
+  private toastService = inject(ToastService);
 
-  pageSize: number = 4;
-  currentPage: number = 1;
-  totalQuestionnaires: number = 5;
-  pageSizes = [4, 8, 16, 20];
+  submissions: any[] = [];
+
+  page = 1;
+  perPage = 10;
+  total = 0;
+  pageSizes = [10, 20, 30, 40, 50];
+  isLoading = true;
+
+  filters: any = {};
+  private unsubscribe$ = new Subject<void>();
 
   constructor(private modalService: NgbModal) {}
 
+  ngOnInit(): void {
+    AOS.init();
+    this.getSubmissions();
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
+  private getSubmissions() {
+    this.questionnaireService
+      .getQuestionnaireSubmissions(this.page, this.perPage, this.filters)
+      .pipe(
+        tap({
+          next: (res: any) => {
+            if (res) {
+              console.log(res);
+              this.submissions = res.data.submissions;
+              this.total = res.data.total;
+            }
+          },
+          error: (error) => alert(error),
+        }),
+        finalize(() => (this.isLoading = false)),
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe();
+  }
+
   handlePageChange(event: any): void {
-    this.currentPage = event;
-    // this.loadItems();
+    this.page = event;
+     this.getSubmissions();
   }
 
   handlePageSizeChange(event: any): void {
     // if (JSON.stringify(this.filters) !== '{}') {
-    this.pageSize = event.target.value;
-    this.currentPage = 1;
-    // this.loadItems();
+    this.perPage = event.target.value;
+    this.page = 1;
+    this.getSubmissions();
     // }
   }
 
   openModal(content: TemplateRef<any>) {
     this.modalService.open(content, { centered: true, size: 'lg' });
   }
-
 }
