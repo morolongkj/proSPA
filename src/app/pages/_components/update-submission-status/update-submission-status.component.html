@@ -1,0 +1,78 @@
+<div class="container">
+  <form [formGroup]="messageForm" (ngSubmit)="onSubmit()">
+    <!-- Subject Field -->
+    <div class="mb-3">
+      <label for="subject" class="form-label">Subject</label>
+      <input
+        type="text"
+        id="subject"
+        class="form-control"
+        formControlName="subject"
+        placeholder="Enter the subject"
+      />
+      <div
+        *ngIf="
+          messageForm.get('subject')?.touched &&
+          messageForm.get('subject')?.invalid
+        "
+        class="text-danger mt-1"
+      >
+        <small *ngIf="messageForm.get('subject')?.errors?.['required']">
+          Subject is required.
+        </small>
+        <small *ngIf="messageForm.get('subject')?.errors?.['maxLength']">
+          Subject must be less than 100 characters.
+        </small>
+      </div>
+    </div>
+
+    <!-- Message Body Field -->
+    <div class="mb-3">
+      <label for="messageBody" class="form-label">Message Body</label>
+      <ckeditor
+        formControlName="messageBody"
+        id="messageBody"
+        [editor]="Editor"
+        [config]="config"
+        data="<p>Message Here!</p>"
+      ></ckeditor>
+      <div
+        *ngIf="
+          messageForm.get('messageBody')?.touched &&
+          messageForm.get('messageBody')?.invalid
+        "
+        class="text-danger mt-1"
+      >
+        <small *ngIf="messageForm.get('messageBody')?.errors?.['required']">
+          Message body is required.
+        </small>
+        <small *ngIf="messageForm.get('messageBody')?.errors?.['minLength']">
+          Message body must be at least 10 characters long.
+        </small>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <button
+      type="submit"
+      class="btn"
+      [ngClass]="{
+                    'btn-success': (status === 'Approved' || status === 'Sample Passed' || status === 'Qualified'),
+                    'btn-danger': (status === 'Rejected' || status === 'Sample Failed'),
+                        }"
+      [disabled]="messageForm.invalid"
+    >
+      <span *ngIf="status === 'Approved'">Approve and Send Notification</span>
+      <span *ngIf="status === 'Sample Passed'"
+        >Update and Send Notification</span
+      >
+      <span *ngIf="status === 'Rejected'">Reject and Send Notification</span>
+      <span *ngIf="status === 'Sample Failed'"
+        >Update and Send Notification</span
+      >
+          <span *ngIf="status === 'Qualified'"
+        >Update and Send Notification</span
+      >
+    </button>
+  </form>
+</div>

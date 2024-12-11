@@ -2,7 +2,15 @@
   <div class="card-body">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h5 class="card-title mb-0">Products</h5>
-      <button class="btn btn-primary btn-sm" (click)="addproduct(content)"   *ngIf="!tender.isEditing && tender.current_status === 'Draft' ||tender.current_status === 'Initiated' || tender.current_status === 'Submitted'">
+      <button
+        class="btn btn-primary btn-sm"
+        (click)="addproduct(content)"
+        *ngIf="
+          (!tender.isEditing && tender.current_status === 'Draft') ||
+          tender.current_status === 'Initiated' ||
+          tender.current_status === 'Submitted'
+        "
+      >
         <i class="bi bi-plus"></i>
       </button>
     </div>
@@ -16,7 +24,15 @@
                 <th>Code</th>
                 <th>Title</th>
                 <th>Quantity</th>
-                <th>Action</th>
+                <th
+                  *ngIf="
+                    (!tender.isEditing && tender.current_status === 'Draft') ||
+                    tender.current_status === 'Initiated' ||
+                    tender.current_status === 'Submitted'
+                  "
+                >
+                  Action
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -30,7 +46,12 @@
                     <button
                       class="btn btn-sm btn-danger"
                       (click)="deleteTenderProduct(product)"
-                        *ngIf="!tender.isEditing && tender.current_status === 'Draft' ||tender.current_status === 'Initiated' || tender.current_status === 'Submitted'"
+                      *ngIf="
+                        (!tender.isEditing &&
+                          tender.current_status === 'Draft') ||
+                        tender.current_status === 'Initiated' ||
+                        tender.current_status === 'Submitted'
+                      "
                     >
                       <i class="bi bi-trash"></i>
                     </button>

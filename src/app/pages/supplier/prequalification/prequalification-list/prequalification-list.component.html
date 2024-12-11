@@ -31,6 +31,7 @@
                   <thead>
                     <tr class="bg-primary">
                       <th scope="col">Questionnaire</th>
+                      <th scope="col">Product</th>
                       <th scope="col">Date Submitted</th>
                       <th scope="col">Status</th>
                       <th scope="col" class="text-end">Action</th>
@@ -46,23 +47,36 @@
                         <td>
                           <span>{{ submission.questionnaire.title }}</span>
                         </td>
+                        <td>
+                          <span>{{ submission.product.title }}</span>
+                        </td>
                         <td>{{ submission.created_at }}</td>
                         <td>
                           <span
                             class="badge"
-                                    [ngClass]="{
-            'bg-success': submission.status.title === 'Approved',
-            'bg-warning': submission.status.title === 'Pending',
-            'bg-primary': submission.status.title === 'Submitted',
-            'bg-danger': submission.status.title === 'Rejected',
-            'bg-info': submission.status.title === 'Under Review'
-          }"
+                            [ngClass]="{
+                              'bg-success':
+                                submission.status.title === 'Approved' ||
+                                submission.status?.title === 'Sample Passed' ||
+                                submission.status?.title === 'Qualified',
+                              'bg-warning':
+                                submission.status.title === 'Pending',
+                              'bg-primary':
+                                submission.status.title === 'Submitted',
+                              'bg-danger':
+                                submission.status.title === 'Rejected',
+                              'bg-info':
+                                submission.status.title === 'Under Review'
+                            }"
                           >
                             {{ submission.status.title }}</span
                           >
                         </td>
                         <td class="text-end">
-                          <button class="btn btn-primary btn-sm">
+                          <button
+                            class="btn btn-primary btn-sm"
+                            (click)="openModal(content, submission)"
+                          >
                             View Details
                           </button>
                         </td>
@@ -104,171 +118,20 @@
   </div>
 </div>
 
-<!-- <div class="container min-vh-100 py-5">
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="card">
-          <div class="card-header">
-            <div class="d-flex flex-row justify-content-between">
-              <h6 class="card-title">
-                <i class="bi bi-list-ul"></i>
-                Questionnaire List
-              </h6>
-              <select
-                class="form-select form-select-sm"
-                aria-label=".form-select-sm example"
-                style="width: 120px"
-              >
-                <option selected>Filter</option>
-                <option value="1">All</option>
-                <option value="2">Submitted</option>
-                <option value="2">In Review</option>
-                <option value="3">Approved</option>
-                <option value="3">Rejected</option>
-              </select>
-            </div>
-          </div>
-          <div class="card-body">
-            <div class="row my-3">
-              <div class="col-lg-12">
-                <div class="table-responsive">
-                  <table class="table table-striped">
-                    <thead>
-                      <tr>
-                        <th>Prequalification Notice</th>
-                        <th>Date of Submission</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr
-                        *ngFor="
-                          let questionnaire of questionnaires
-                            | paginate
-                              : {
-                                  id: 'questionnaires-pagination',
-                                  itemsPerPage: pageSize,
-                                  currentPage: currentPage,
-                                  totalItems: totalQuestionnaires
-                                };
-                          let i = index
-                        "
-                      >
-                        <td>{{ questionnaire.prequalificationNotice }}</td>
-                        <td>{{ questionnaire.dateOfSubmission }}</td>
-                        <td>
-                          <span
-                            class="badge bg-primary"
-                            *ngIf="questionnaire.status === 'Submitted'"
-                          >
-                            {{ questionnaire.status }}</span
-                          >
-                          <span
-                            class="badge bg-info"
-                            *ngIf="questionnaire.status === 'In Review'"
-                          >
-                            {{ questionnaire.status }}</span
-                          >
-                          <span
-                            class="badge bg-success"
-                            *ngIf="
-                              questionnaire.status ===
-                              'Approved, waiting for samples'
-                            "
-                          >
-                            {{ questionnaire.status }}</span
-                          >
-                          <span
-                            class="badge bg-danger"
-                            *ngIf="questionnaire.status === 'Rejected'"
-                          >
-                            {{ questionnaire.status }}</span
-                          >
-                          <br />
-                          <button
-                            class="btn btn-primary my-2"
-                            *ngIf="
-                              questionnaire.status ===
-                              'Approved, waiting for samples'
-                            "
-                            (click)="openModal(content)"
-                          >
-                            Submit Sample
-                          </button>
-
-                          <button
-                            class="btn btn-warning my-2"
-                            *ngIf="questionnaire.status === 'Rejected'"
-                            (click)="openModal(rejectionReason)"
-                          >
-                            Reason for Rejection
-                          </button>
-                        </td>
-                        <td>{{ questionnaire.created }}</td>
-                        <td>
-                          <a class="btn btn-primary">View Details</a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-
-            <div class="row my-3">
-              <div class="col-md-3">
-                Per Page:
-                <select (change)="handlePageSizeChange($event)" class="p-1">
-                  <option *ngFor="let size of pageSizes" [ngValue]="size">
-                    {{ size }}
-                  </option>
-                </select>
-              </div>
-              <div class="col-lg-9 text-end">
-                <pagination-controls
-                  id="questionnaires-pagination"
-                  previousLabel="Prev"
-                  nextLabel="Next"
-                  [responsive]="true"
-                  (pageChange)="handlePageChange($event)"
-                ></pagination-controls>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Submission Details: {{ selectedSubmission.id }}</h5>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
   </div>
-
-  <ng-template #content let-modal>
-    <div class="modal-header bg-brown text-white">
-      <h5 class="modal-title">Submit Sample</h5>
-      <button
-        type="button"
-        class="btn-close"
-        aria-label="Close"
-        (click)="modal.dismiss('Cross click')"
-      ></button>
-    </div>
-    <div class="modal-body">
-      <p>Form to narrate how the sample will be delivered</p>
-    </div>
-  </ng-template>
-
-  <ng-template #rejectionReason let-modal>
-    <div class="modal-header bg-brown text-white">
-      <h5 class="modal-title">Reasons For Rejection</h5>
-      <button
-        type="button"
-        class="btn-close"
-        aria-label="Close"
-        (click)="modal.dismiss('Cross click')"
-      ></button>
-    </div>
-    <div class="modal-body">
-      <p>1. Incomplete Documentation</p>
-      <p>2. Failure to Meet Requirements</p>
-      <p>3. Insufficient Experience or Qualifications</p>
-    </div>
-  </ng-template> -->
+  <div class="modal-body">
+    <!-- Show submission details if view is 'details' -->
+    <app-submission-details
+      [submissionData]="selectedSubmission"
+    ></app-submission-details>
+  </div>
+</ng-template>

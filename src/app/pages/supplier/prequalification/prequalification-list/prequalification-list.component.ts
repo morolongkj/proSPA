@@ -7,11 +7,12 @@ import { QuestionnaireService } from '../../../../_services/questionnaire.servic
 import { Subject, tap, finalize, takeUntil } from 'rxjs';
 import { ToastService } from '../../../../_services/toast.service';
 import AOS from 'aos';
+import { SubmissionDetailsComponent } from "../../../_components/submission-details/submission-details.component";
 
 @Component({
   selector: 'app-prequalification-list',
   standalone: true,
-  imports: [NgxPaginationModule, CommonModule, FormsModule],
+  imports: [NgxPaginationModule, CommonModule, FormsModule, SubmissionDetailsComponent],
   templateUrl: './prequalification-list.component.html',
   styleUrl: './prequalification-list.component.css',
 })
@@ -20,6 +21,7 @@ export class PrequalificationListComponent implements OnInit {
   private toastService = inject(ToastService);
 
   submissions: any[] = [];
+  selectedSubmission: any = {};
 
   page = 1;
   perPage = 10;
@@ -64,7 +66,7 @@ export class PrequalificationListComponent implements OnInit {
 
   handlePageChange(event: any): void {
     this.page = event;
-     this.getSubmissions();
+    this.getSubmissions();
   }
 
   handlePageSizeChange(event: any): void {
@@ -75,7 +77,13 @@ export class PrequalificationListComponent implements OnInit {
     // }
   }
 
-  openModal(content: TemplateRef<any>) {
-    this.modalService.open(content, { centered: true, size: 'lg' });
+  openModal(content: TemplateRef<any>, submission: any) {
+    this.selectedSubmission = submission;
+    console.log(this.selectedSubmission);
+    this.modalService.open(content, {
+      centered: false,
+      size: 'lg',
+      scrollable: true,
+    });
   }
 }

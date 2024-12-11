@@ -1,1 +1,130 @@
-<p>bid-create works!</p>
+<div class="container min-vh-100 my-5">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title" data-aos="fade-down" data-aos-duration="2000">
+            Prepare a Bid for {{ tender.title }}
+          </h5>
+          <small class="text-muted"
+            >Reference: {{ tender.reference_number }}</small
+          >
+          <hr
+            class="custom-hr"
+            data-aos="fade-right"
+            data-aos-duration="2000"
+          />
+
+          <!-- Products Table -->
+          <div class="table-responsive mb-4">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Select</th>
+                  <th>Product</th>
+                  <th>Quantity Available</th>
+                  <th>Your Bid Quantity</th>
+                  <th>Your Price (Per Unit)</th>
+                  <th>Comments</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let product of tender.products">
+                  <!-- Checkbox Column -->
+                  <td class="text-center">
+                    <input
+                      type="checkbox"
+                      [checked]="isProductSelected(product)"
+                      (change)="toggleProductSelection(product)"
+                    />
+                  </td>
+                  <!-- Product Details -->
+                  <td>{{ product.title }}</td>
+                  <td class="text-center">{{ product.quantity }}</td>
+                  <!-- Input Fields -->
+                  <td>
+                    <input
+                      type="number"
+                      class="form-control"
+                      [value]="product.bidQuantity || ''"
+                      [disabled]="!isProductSelected(product)"
+                      (input)="
+                        updateProductField(
+                          product,
+                          'bidQuantity',
+                          $event.target
+                        )
+                      "
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="form-control"
+                      [value]="product.bidPrice || ''"
+                      [disabled]="!isProductSelected(product)"
+                      (input)="
+                        updateProductField(product, 'bidPrice', $event.target)
+                      "
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      class="form-control"
+                      [value]="product.bidComment || ''"
+                      [disabled]="!isProductSelected(product)"
+                      (input)="
+                        updateProductField(product, 'bidComment', $event.target)
+                      "
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- File Attachment -->
+          <div class="mb-4">
+            <h5 class="text-primary">Attach Files</h5>
+            <div *ngFor="let file of bidFiles; let i = index" class="mb-2">
+              <input
+                type="file"
+                class="form-control"
+                (change)="onFileSelected($event, i)"
+              />
+            </div>
+            <button class="btn btn-outline-primary btn-sm" (click)="addFileInput()">
+              Add More Files
+            </button>
+          </div>
+
+          <!-- Selected Products Summary -->
+          <!-- <div *ngIf="selectedProducts.length > 0" class="mb-4">
+            <h5 class="text-success">Selected Products</h5>
+            <ul class="list-group">
+              <li
+                *ngFor="let product of selectedProducts"
+                class="list-group-item"
+              >
+                {{ product.title }} - Bid Quantity: {{ product.bidQuantity }},
+                Price: {{ product.bidPrice }}
+              </li>
+            </ul>
+          </div> -->
+
+          <!-- Submit Button -->
+          <div class="text-end">
+            <button
+              class="btn btn-success"
+              [disabled]="!bidForm.valid || bidFiles.length === 0"
+              (click)="submitBid()"
+            >
+              Submit Bid
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

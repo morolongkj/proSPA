@@ -7,6 +7,7 @@ import { categoryListResolver } from './_resolvers/category-list.resolver';
 import { productListResolver } from './_resolvers/product-list.resolver';
 import { companyDetailsResolver } from './_resolvers/company-details.resolver';
 import { documentListResolver } from './_resolvers/document-list.resolver';
+import { tenderDetailsResolver } from './_resolvers/tender-details.resolver';
 
 export const routes: Routes = [
   {
@@ -257,12 +258,13 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
-    path: 'supplier/bids/create',
+    path: 'supplier/bids/create/:id',
     loadComponent: () =>
       import('./pages/supplier/bid/bid-create/bid-create.component').then(
         (c) => c.BidCreateComponent
       ),
     runGuardsAndResolvers: 'always',
+    resolve: { tender: tenderDetailsResolver },
     canActivate: [authGuard],
   },
   {

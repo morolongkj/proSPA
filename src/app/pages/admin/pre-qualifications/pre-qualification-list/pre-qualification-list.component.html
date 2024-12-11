@@ -33,6 +33,7 @@
                 <tr class="bg-primary">
                   <th scope="col">Company Name</th>
                   <th scope="col">Questionnaire</th>
+                  <th scope="col">Product</th>
                   <th scope="col">Date Submitted</th>
                   <th scope="col">Status</th>
                   <th scope="col" class="text-end">Action</th>
@@ -51,12 +52,18 @@
                     <td>
                       <span>{{ submission.questionnaire.title }}</span>
                     </td>
+                    <td>
+                      <span>{{ submission.product.title }}</span>
+                    </td>
                     <td>{{ submission.created_at }}</td>
                     <td>
                       <span
                         class="badge"
                         [ngClass]="{
-                          'bg-success': submission.status.title === 'Approved',
+                          'bg-success':
+                            submission.status.title === 'Approved' ||
+                            submission.status?.title === 'Sample Passed' ||
+                            submission.status?.title === 'Qualified',
                           'bg-warning': submission.status.title === 'Pending',
                           'bg-primary': submission.status.title === 'Submitted',
                           'bg-danger': submission.status.title === 'Rejected',
@@ -67,7 +74,10 @@
                       >
                     </td>
                     <td class="text-end">
-                      <button class="btn btn-primary btn-sm">
+                      <button
+                        class="btn btn-primary btn-sm"
+                        (click)="openModal(content, submission)"
+                      >
                         View Details
                       </button>
                     </td>
@@ -103,3 +113,119 @@
     </div>
   </div>
 </div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" *ngIf="view === 'details'">
+      Submission Details: {{ selectedSubmission.id }}
+    </h5>
+    <h5 class="modal-title" *ngIf="view === 'approve'">
+      <span class="bg-success text-white p-2">Approve:</span>
+      {{ selectedSubmission.product?.title }} -
+      {{ selectedSubmission.company?.company_name }}
+    </h5>
+    <h5 class="modal-title" *ngIf="view === 'reject'">
+      <span class="bg-danger text-white p-2">Reject:</span>
+      {{ selectedSubmission.product?.title }} -
+      {{ selectedSubmission.company?.company_name }}
+    </h5>
+    <h5 class="modal-title" *ngIf="view === 'sample-passed'">
+      <span class="bg-success text-white p-2">Sample Passed:</span>
+      {{ selectedSubmission.product?.title }} -
+      {{ selectedSubmission.company?.company_name }}
+    </h5>
+    <h5 class="modal-title" *ngIf="view === 'sample-failed'">
+      <span class="bg-danger text-white p-2">Sample Failed:</span>
+      {{ selectedSubmission.product?.title }} -
+      {{ selectedSubmission.company?.company_name }}
+    </h5>
+    <h5 class="modal-title" *ngIf="view === 'qualified'">
+      <span class="bg-success text-white p-2">Qualified:</span>
+      {{ selectedSubmission.product?.title }} -
+      {{ selectedSubmission.company?.company_name }}
+    </h5>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <!-- Show submission details if view is 'details' -->
+    <app-submission-details
+      *ngIf="view === 'details'"
+      [submissionData]="selectedSubmission"
+    ></app-submission-details>
+
+    <app-update-submission-status
+      *ngIf="view !== 'details'"
+      [submissionData]="selectedSubmission"
+      [status]="currentStatus"
+    ></app-update-submission-status>
+  </div>
+
+  <div class="modal-footer">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center">
+        <button
+          class="btn btn-success me-3"
+          (click)="onApprove()"
+          *ngIf="
+            view === 'details' &&
+            selectedSubmission.status?.title === 'Submitted'
+          "
+        >
+          <i class="bi bi-check-circle me-2"></i> Approve, waiting for Sample
+        </button>
+        <button
+          class="btn btn-primary me-3"
+          (click)="viewDetails()"
+          *ngIf="view !== 'details'"
+        >
+          <i class="bi bi-view-list me-2"></i> View Details
+        </button>
+        <button
+          class="btn btn-success me-3"
+          (click)="onSamplePassed()"
+          *ngIf="
+            view === 'details' &&
+            selectedSubmission.status?.title === 'Approved'
+          "
+        >
+          <i class="bi bi-check-circle me-2"></i> Sample Passed
+        </button>
+        <button
+          class="btn btn-success me-3"
+          (click)="onQualified()"
+          *ngIf="
+            view === 'details' &&
+            selectedSubmission.status?.title === 'Sample Passed'
+          "
+        >
+          <i class="bi bi-check-circle me-2"></i> Mark as Qualified
+        </button>
+        <button
+          class="btn btn-danger"
+          (click)="onReject()"
+          *ngIf="
+            view === 'details' &&
+            selectedSubmission.status?.title === 'Submitted'
+          "
+        >
+          <i class="bi bi-x-circle me-2"></i> Reject
+        </button>
+        <button
+          class="btn btn-danger"
+          (click)="onSampleFailed()"
+          *ngIf="
+            view === 'details' &&
+            selectedSubmission.status?.title === 'Approved'
+          "
+        >
+          <i class="bi bi-x-circle me-2"></i> Sample Failed
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>

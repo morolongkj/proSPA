@@ -7,11 +7,17 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
 import { SubmitQuestionnaireComponent } from "./submit-questionnaire/submit-questionnaire.component";
 import { FileDownloadService } from '../../../../_services/file-download.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-open-questionnaire-list',
   standalone: true,
-  imports: [NgxPaginationModule, CommonModule, SubmitQuestionnaireComponent],
+  imports: [
+    NgxPaginationModule,
+    CommonModule,
+    SubmitQuestionnaireComponent,
+    FormsModule,
+  ],
   templateUrl: './open-questionnaire-list.component.html',
   styleUrl: './open-questionnaire-list.component.css',
 })
@@ -35,6 +41,7 @@ export class OpenQuestionnaireListComponent implements OnInit {
   private unsubscribe$ = new Subject<void>();
 
   currentQuestionnaire: any = {};
+  selectedProduct: any = null;
 
   constructor() {}
 
@@ -79,12 +86,16 @@ export class OpenQuestionnaireListComponent implements OnInit {
 
   openModal(content: TemplateRef<any>, questionnaire: any) {
     this.currentQuestionnaire = questionnaire;
+    console.log(this.selectedProduct);
     this.modalService.open(content, { centered: true, size: 'lg' });
   }
 
   download(document: any): void {
     const fileUrl = 'https://example.com/path-to-your-file.pdf';
     const filename = 'downloaded-file.pdf';
-    this.fileDownloadService.downloadFile(document.file_path, document.file_name);
+    this.fileDownloadService.downloadFile(
+      document.file_path,
+      document.file_name
+    );
   }
 }

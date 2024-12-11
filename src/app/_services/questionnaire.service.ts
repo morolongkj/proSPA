@@ -89,4 +89,9 @@ export class QuestionnaireService {
       params,
     });
   }
+
+  updateQuestionnaireSubmissionStatus(id: string, updatedData: any): Observable<any> {
+    const url = `${this.baseUrl}/questionnaire-submissions/update-status/${id}`;
+    return this.http.put(url, updatedData);
+  }
 }

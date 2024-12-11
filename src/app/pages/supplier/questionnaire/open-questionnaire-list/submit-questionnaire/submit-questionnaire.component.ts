@@ -42,6 +42,7 @@ export class SubmitQuestionnaireComponent implements OnInit {
   private modalService = inject(NgbModal);
 
   @Input() questionnaire: any = {};
+  @Input() selectedProduct: any = {};
   form: FormGroup;
 
   public Editor = ClassicEditor;
@@ -131,6 +132,7 @@ export class SubmitQuestionnaireComponent implements OnInit {
         formData.append('questionnaire_id', this.questionnaire.id);
         formData.append('company_id', this.companyId);
         formData.append('message', this.form.value.message);
+        formData.append('product_id', this.selectedProduct.product_id);
 
         // formData.append('attachments[]',this.form.value.attachments);
         // this.form.value.attachments.forEach(

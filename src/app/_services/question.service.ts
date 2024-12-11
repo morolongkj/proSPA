@@ -247,24 +247,7 @@ export class QuestionService {
         ],
         order: 4,
       }),
-      new RadioQuestion({
-        key: 'question1',
-        label: 'What is your gender?',
-        type: 'radio',
-        options: [
-          { key: 'male', value: 'Male' },
-          { key: 'female', value: 'Female' },
-        ],
-      }),
-      new RadioQuestion({
-        key: 'question2',
-        label: 'What are your hobbies?',
-        type: 'checkbox',
-        options: [
-          { key: 'reading', value: 'Reading' },
-          { key: 'sports', value: 'Sports' },
-        ],
-      }),
+      
     ];
     return of(questions.sort((a, b) => a.order - b.order));
   }
@@ -513,4 +496,5 @@ export class QuestionService {
     ];
     return of(questions.sort((a, b) => a.order - b.order));
   }
+
 }

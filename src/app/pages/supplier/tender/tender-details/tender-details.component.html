@@ -1,0 +1,81 @@
+<div class="container">
+  <div class="card border-0">
+    <div class="card-header">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h4 class="mb-0">{{ tender.title }}</h4>
+          <small>Reference: {{ tender.reference_number }}</small>
+        </div>
+        <span class="badge bg-success">Open</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <!-- Tender Description -->
+      <div class="mb-4">
+        <h6>Description</h6>
+        <p [innerHTML]="tender.description"></p>
+      </div>
+
+      <!-- Tender Dates -->
+      <div class="mb-4">
+        <hr />
+        <h6>Dates</h6>
+        <div class="row">
+          <div class="col-md-6">
+            <strong>Opening Date:</strong> {{ tender.opening_date }}
+            {{ tender.opening_time }}
+          </div>
+          <div class="col-md-6">
+            <strong>Closing Date:</strong> {{ tender.closing_date }}
+            {{ tender.closing_time }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Products -->
+      <div class="my-4">
+        <hr />
+        <h6>Products</h6>
+        <ul class="list-group">
+          <li *ngFor="let product of tender.products" class="list-group-item">
+            <strong>{{ product.title }}</strong>
+            <div class="text-muted">
+              Code: {{ product.code }} | Quantity: {{ product.quantity }}
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Attachments -->
+      <div class="my-4">
+        <hr />
+        <h6>Attachments</h6>
+        <div *ngIf="tender.attachments.length > 0; else noAttachments">
+          <ul class="list-group">
+            <li
+              *ngFor="let attachment of tender.attachments"
+              class="list-group-item d-flex justify-content-between align-items-center"
+            >
+              <span>{{ attachment.file_name }}</span>
+              <button
+                class="btn btn-sm btn-outline-primary"
+                (click)="
+                  downloadAttachment(attachment.file_path, attachment.file_name)
+                "
+              >
+                Download
+              </button>
+            </li>
+          </ul>
+        </div>
+        <ng-template #noAttachments>
+          <p class="text-muted">No attachments available.</p>
+        </ng-template>
+      </div>
+    </div>
+
+    <div class="card-footer bg-light text-center">
+      <small class="text-muted"> Created on: {{ tender.created_at }} </small>
+    </div>
+  </div>
+</div>

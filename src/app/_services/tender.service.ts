@@ -24,6 +24,10 @@ export class TenderService {
     return this.http.get<any>(this.baseUrl + 'tenders', { params });
   }
 
+  getTender(id: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/tenders/${id}`);
+  }
+
   addTender(model: any) {
     return this.http.post(this.baseUrl + 'tenders', model);
   }

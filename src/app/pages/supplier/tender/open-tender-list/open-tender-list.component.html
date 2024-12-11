@@ -1,1 +1,123 @@
-<p>open-tender-list works!</p>
+<div class="container min-vh-100 my-5">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title" data-aos="fade-down" data-aos-duration="2000">
+            Open Tenders
+          </h5>
+          <hr
+            class="custom-hr"
+            data-aos="fade-right"
+            data-aos-duration="2000"
+          />
+          <div class="row mb-3">
+            <div class="col-md-2 my-auto ms-auto">
+              Per Page:
+              <select (change)="handlePageSizeChange($event)" class="p-1">
+                @for(pageSize of pageSizes; track pageSize) {
+                <option [value]="pageSize">
+                  {{ pageSize }}
+                </option>
+                }
+              </select>
+            </div>
+          </div>
+
+          <div class="row my-3">
+            <div class="col-lg-12">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr class="bg-primary">
+                      <th scope="col">Reference Number</th>
+                      <th scope="col">Title</th>
+                      <th scope="col">Description</th>
+                      <th scope="col">Closing Date</th>
+                      <th scope="col">Closing Time</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngIf="tenders.length > 0; else noData">
+                      @for (tender of tenders | paginate : { id:
+                      'tenders-pagination', itemsPerPage: perPage, currentPage:
+                      page, totalItems: total }; track tender.id; let i =
+                      $index) {
+                      <tr>
+                        <td>{{ tender.reference_number }}</td>
+                        <td>{{ tender.title }}</td>
+                        <td>
+                          <div [innerHTML]="tender.description"></div>
+                        </td>
+                        <td>{{ tender.closing_date }}</td>
+                        <td>{{ tender.closing_time }}</td>
+                        <td>
+                          <button
+                            class="btn btn-primary btn-sm"
+                            (click)="openModal(content, tender)"
+                          >
+                            View Details
+                          </button>
+                        </td>
+                      </tr>
+                      }
+                    </ng-container>
+                    <ng-template #noData>
+                      <tr>
+                        <td colspan="9" class="text-center text-muted py-4">
+                          <i
+                            class="bi bi-emoji-frown"
+                            style="font-size: 2rem"
+                          ></i>
+                          <div>Data not available</div>
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="row my-3">
+            <div class="col-lg-10 text-center mx-auto">
+              <pagination-controls
+                id="tenders-pagination"
+                previousLabel="Prev"
+                nextLabel="Next"
+                [responsive]="true"
+                (pageChange)="handlePageChange($event)"
+                class="bg-success"
+              ></pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Tender Details: {{ selectedTender.id }}</h5>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <app-tender-details [tender]="selectedTender"></app-tender-details>
+  </div>
+  <div class="modal-footer">
+    <div class="container">
+      <div class="d-flex justify-content-center align-items-center">
+        <button class="btn btn-success me-3" (click)="prepareBid()">
+          <i class="bi bi-file-earmark-plus me-2"></i> Prepare a Bid
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>

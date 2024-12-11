@@ -54,14 +54,31 @@
                           <div [innerHTML]="questionnaire.description"></div>
                         </td>
                         <td>
-                          <ul>
+                          <ul class="list-unstyled">
+    <li *ngFor="let product of questionnaire.products; let i = index">
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="radio"
+          [id]="'product-' + i"
+          [value]="product"
+          name="product"
+          [(ngModel)]="selectedProduct"
+        />
+        <label class="form-check-label" [for]="'product-' + i">
+          {{ product.title }}
+        </label>
+      </div>
+    </li>
+  </ul>
+                          <!-- <ul>
                             @for(product of questionnaire.products; track
                             product) {
                             <li class="text-wrap">
                               {{ product.title }}
                             </li>
                             }
-                          </ul>
+                          </ul> -->
                         </td>
                         <td>
                           <ul>
@@ -78,6 +95,7 @@
                           <button
                             class="btn btn-primary btn-sm"
                             (click)="openModal(content, questionnaire)"
+                            [disabled]="!selectedProduct"
                           >
                             Submit Questionnaire
                           </button>
@@ -135,6 +153,7 @@
   <div class="modal-body">
     <app-submit-questionnaire
       [questionnaire]="currentQuestionnaire"
+      [selectedProduct]="selectedProduct"
     ></app-submit-questionnaire>
   </div>
   <!-- <div class="modal-footer">
