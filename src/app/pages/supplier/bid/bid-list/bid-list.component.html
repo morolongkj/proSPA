@@ -1,1 +1,160 @@
-<p>bid-list works!</p>
+<div class="container min-vh-100 my-5">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <h5
+                class="card-title"
+                data-aos="fade-down"
+                data-aos-duration="2000"
+              >
+                Bids
+              </h5>
+              <hr
+                class="custom-hr"
+                data-aos="fade-right"
+                data-aos-duration="2000"
+              />
+            </div>
+            <div class="input-group" style="max-width: 300px">
+              <span class="input-group-text bg-yellow">
+                <i class="bi bi-search"></i>
+              </span>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Search bids..."
+                aria-label="Search"
+                #searchInput
+                [(ngModel)]="searchText"
+                (keydown.enter)="onSearch(searchText)"
+              />
+              <button
+                class="btn btn-outline-danger"
+                type="button"
+                (click)="clearSearch()"
+                *ngIf="searchText"
+              >
+                <i class="bi bi-x-circle"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="row my-3">
+            <div class="col-lg-12">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr class="bg-primary">
+                      <th scope="col">Tender</th>
+                      <th scope="col">Company</th>
+                      <th scope="col">Date Submitted</th>
+                      <th scope="col">Status</th>
+                      <th scope="col" class="text-end">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngIf="bids.length > 0; else noData">
+                      @for (bid of bids | paginate : { id: 'bids-pagination',
+                      itemsPerPage: perPage, currentPage: page, totalItems:
+                      total }; track bid.id; let i = $index) {
+                      <tr>
+                        <td>
+                          <span>{{ bid.tender.reference_number }}</span>
+                        </td>
+                        <td>
+                          <span>{{ bid.company.company_name }}</span>
+                        </td>
+                        <td>{{ bid.created_at }}</td>
+                        <td>
+                          <span
+                            class="badge"
+                            [ngClass]="{
+                              'bg-success':
+                                bid.status.title === 'Approved' ||
+                                bid.status?.title === 'Sample Passed' ||
+                                bid.status?.title === 'Qualified',
+                              'bg-warning': bid.status.title === 'Pending',
+                              'bg-primary': bid.status.title === 'Submitted',
+                              'bg-danger': bid.status.title === 'Rejected',
+                              'bg-info': bid.status.title === 'Under Review'
+                            }"
+                          >
+                            {{ bid.status.title }}</span
+                          >
+                        </td>
+                        <td class="text-end">
+                          <button
+                            class="btn btn-primary btn-sm"
+                            (click)="openModal(content, bid)"
+                          >
+                            View Details
+                          </button>
+                        </td>
+                      </tr>
+                      }
+                    </ng-container>
+                    <ng-template #noData>
+                      <tr>
+                        <td colspan="9" class="text-center text-muted py-4">
+                          <i
+                            class="bi bi-emoji-frown"
+                            style="font-size: 2rem"
+                          ></i>
+                          <div>Data not available</div>
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="row my-3">
+            <div class="col-md-2 me-auto">
+              Per Page:
+              <select (change)="handlePageSizeChange($event)">
+                @for(pageSize of pageSizes; track pageSize) {
+                <option [value]="pageSize">
+                  {{ pageSize }}
+                </option>
+                }
+              </select>
+            </div>
+            <div class="col-lg-10 text-end ms-auto">
+              <pagination-controls
+                id="bids-pagination"
+                previousLabel="Prev"
+                nextLabel="Next"
+                [responsive]="true"
+                (pageChange)="handlePageChange($event)"
+                class="bg-success"
+              ></pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Bid Details: {{ selectedBid.id }}</h5>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <!-- Show bid details if view is 'details' -->
+    <!-- <app-bid-details
+      [bidData]="selectedBid"
+    ></app-bid-details> -->
+  </div>
+</ng-template>

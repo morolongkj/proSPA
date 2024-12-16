@@ -42,6 +42,11 @@
             aria-current="page"
             routerLink="/dashboard"
             *appHasRole="['admin', 'user']"
+             [ngClass]="{
+              active: isDropdownLinkActive([
+                '/dashboard',
+              ])
+            }"
             >Dashboard</a
           >
         </li>
@@ -53,6 +58,14 @@
             role="button"
             data-bs-toggle="dropdown"
             aria-expanded="false"
+            [ngClass]="{
+              active: isDropdownLinkActive([
+                '/questionnaires',
+                '/admin/pre-qualification',
+                '/supplier/questionnaires',
+                '/supplier/prequalification'
+              ])
+            }"
           >
             Quality Assurance
           </a>
@@ -127,9 +140,7 @@
               >
             </li>
             <li *appHasRole="['user']">
-              <a
-                class="dropdown-item"
-                routerLink="/supplier/tenders"
+              <a class="dropdown-item" routerLink="/supplier/tenders"
                 >Open Tenders</a
               >
             </li>

@@ -20,6 +20,10 @@ body {
   background-color: #8c3b0b !important;
 }
 
+.bg-yellow {
+  background-color: #f5c945 !important;
+}
+
 .gradient-button {
   /* Base styles */
   background-image: linear-gradient(

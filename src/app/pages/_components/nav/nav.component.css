@@ -1,0 +1,9 @@
+.dropdown-menu {
+  border-radius: 0px;
+}
+
+.navbar-nav .nav-item .nav-link.active {
+  color: #f5c945;
+}
+
+

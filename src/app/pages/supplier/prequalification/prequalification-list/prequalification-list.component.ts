@@ -12,7 +12,12 @@ import { SubmissionDetailsComponent } from "../../../_components/submission-deta
 @Component({
   selector: 'app-prequalification-list',
   standalone: true,
-  imports: [NgxPaginationModule, CommonModule, FormsModule, SubmissionDetailsComponent],
+  imports: [
+    NgxPaginationModule,
+    CommonModule,
+    FormsModule,
+    SubmissionDetailsComponent,
+  ],
   templateUrl: './prequalification-list.component.html',
   styleUrl: './prequalification-list.component.css',
 })
@@ -31,6 +36,8 @@ export class PrequalificationListComponent implements OnInit {
 
   filters: any = {};
   private unsubscribe$ = new Subject<void>();
+
+  searchText: string = '';
 
   constructor(private modalService: NgbModal) {}
 
@@ -75,6 +82,19 @@ export class PrequalificationListComponent implements OnInit {
     this.page = 1;
     this.getSubmissions();
     // }
+  }
+
+  onSearch(searchText: string): void {
+    this.searchText = searchText;
+    console.log('Search initiated with text:', this.searchText);
+    this.filters.searchTerm = this.searchText;
+    this.getSubmissions();
+  }
+
+  clearSearch(): void {
+    this.searchText = '';
+    this.filters.searchTerm = this.searchText;
+    this.getSubmissions();
   }
 
   openModal(content: TemplateRef<any>, submission: any) {
