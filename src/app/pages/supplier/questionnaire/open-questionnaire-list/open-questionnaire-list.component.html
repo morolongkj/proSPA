@@ -3,24 +3,42 @@
     <div class="col-lg-12">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title" data-aos="fade-down" data-aos-duration="2000">
-            Questionnaires
-          </h5>
-          <hr
-            class="custom-hr"
-            data-aos="fade-right"
-            data-aos-duration="2000"
-          />
-          <div class="row mb-3">
-            <div class="col-md-2 my-auto ms-auto">
-              Per Page:
-              <select (change)="handlePageSizeChange($event)" class="p-1">
-                @for(pageSize of pageSizes; track pageSize) {
-                <option [value]="pageSize">
-                  {{ pageSize }}
-                </option>
-                }
-              </select>
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <h5
+                class="card-title"
+                data-aos="fade-down"
+                data-aos-duration="2000"
+              >
+                Questionnaires
+              </h5>
+              <hr
+                class="custom-hr"
+                data-aos="fade-right"
+                data-aos-duration="2000"
+              />
+            </div>
+            <div class="input-group">
+              <span class="input-group-text bg-white">
+                <i class="bi bi-search text-yellow"></i>
+              </span>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Search ..."
+                aria-label="Search"
+                #searchInput
+                [(ngModel)]="searchText"
+                (keydown.enter)="onSearch(searchText)"
+              />
+              <button
+                class="btn btn-outline-danger"
+                type="button"
+                (click)="clearSearch()"
+                *ngIf="searchText"
+              >
+                <i class="bi bi-x-circle"></i>
+              </button>
             </div>
           </div>
 
@@ -54,31 +72,49 @@
                           <div [innerHTML]="questionnaire.description"></div>
                         </td>
                         <td>
-                          <ul class="list-unstyled">
-    <li *ngFor="let product of questionnaire.products; let i = index">
-      <div class="form-check">
-        <input
-          class="form-check-input"
-          type="radio"
-          [id]="'product-' + i"
-          [value]="product"
-          name="product"
-          [(ngModel)]="selectedProduct"
-        />
-        <label class="form-check-label" [for]="'product-' + i">
-          {{ product.title }}
-        </label>
-      </div>
-    </li>
-  </ul>
-                          <!-- <ul>
-                            @for(product of questionnaire.products; track
-                            product) {
-                            <li class="text-wrap">
-                              {{ product.title }}
+                          <!-- <ul class="list-unstyled">
+                            <li
+                              *ngFor="
+                                let product of questionnaire.products;
+                                let i = index
+                              "
+                            >
+                              <div class="form-check">
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  [id]="'product-' + i"
+                                  [value]="product"
+                                  name="product"
+                                  [(ngModel)]="selectedProduct"
+                                />
+                                <label
+                                  class="form-check-label"
+                                  [for]="'product-' + i"
+                                >
+                                  {{ product.title }}
+                                </label>
+                              </div>
                             </li>
-                            }
                           </ul> -->
+<ul class="list-unstyled">
+  <li *ngFor="let product of questionnaire.products; let i = index">
+    <div class="form-check">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        [id]="'product-' + i"
+        [checked]="isSelected(product)"
+        (change)="toggleSelection(product, $event)"
+      />
+      <label class="form-check-label" [for]="'product-' + i">
+        {{ product.title }}
+      </label>
+    </div>
+  </li>
+</ul>
+
+
                         </td>
                         <td>
                           <ul>
@@ -86,7 +122,12 @@
                             document) {
                             <li class="text-wrap">
                               {{ document.file_name }}
-                              <button class="btn btn-light" (click)="download(document)"><i class="bi bi-download"></i></button>
+                              <button
+                                class="btn btn-light"
+                                (click)="download(document)"
+                              >
+                                <i class="bi bi-download"></i>
+                              </button>
                             </li>
                             }
                           </ul>
@@ -95,7 +136,7 @@
                           <button
                             class="btn btn-primary btn-sm"
                             (click)="openModal(content, questionnaire)"
-                            [disabled]="!selectedProduct"
+                            [disabled]="selectedProducts.length < 1"
                           >
                             Submit Questionnaire
                           </button>
@@ -121,7 +162,17 @@
           </div>
 
           <div class="row my-3">
-            <div class="col-lg-10 text-center mx-auto">
+            <div class="col-md-2 my-auto me-auto">
+              Per Page:
+              <select (change)="handlePageSizeChange($event)" class="p-0">
+                @for(pageSize of pageSizes; track pageSize) {
+                <option [value]="pageSize">
+                  {{ pageSize }}
+                </option>
+                }
+              </select>
+            </div>
+            <div class="col-lg-10 text-end ms-auto">
               <pagination-controls
                 id="Questionnaires-pagination"
                 previousLabel="Prev"
@@ -153,10 +204,7 @@
   <div class="modal-body">
     <app-submit-questionnaire
       [questionnaire]="currentQuestionnaire"
-      [selectedProduct]="selectedProduct"
+      [selectedProducts]="selectedProducts"
     ></app-submit-questionnaire>
   </div>
-  <!-- <div class="modal-footer">
-		<button type="button" class="btn btn-secondary" (click)="modal.close('Close click')">Close</button>
-	</div> -->
 </ng-template>

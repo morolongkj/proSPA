@@ -7,7 +7,8 @@ import { QuestionnaireService } from '../../../../_services/questionnaire.servic
 import { Subject, tap, finalize, takeUntil } from 'rxjs';
 import { ToastService } from '../../../../_services/toast.service';
 import AOS from 'aos';
-import { SubmissionDetailsComponent } from "../../../_components/submission-details/submission-details.component";
+import { SubmissionDetailsComponent } from '../../../_components/submission-details/submission-details.component';
+import { AuthService } from '../../../../_services/auth.service';
 
 @Component({
   selector: 'app-prequalification-list',
@@ -24,6 +25,7 @@ import { SubmissionDetailsComponent } from "../../../_components/submission-deta
 export class PrequalificationListComponent implements OnInit {
   private questionnaireService = inject(QuestionnaireService);
   private toastService = inject(ToastService);
+  private authService = inject(AuthService);
 
   submissions: any[] = [];
   selectedSubmission: any = {};
@@ -38,12 +40,17 @@ export class PrequalificationListComponent implements OnInit {
   private unsubscribe$ = new Subject<void>();
 
   searchText: string = '';
+  companyId: string = '';
 
   constructor(private modalService: NgbModal) {}
 
   ngOnInit(): void {
     AOS.init();
-    this.getSubmissions();
+    this.companyId = this.authService.getCompanyId() ?? '';
+    if (this.companyId) {
+      this.filters.company_id = this.companyId;
+      this.getSubmissions();
+    }
   }
 
   ngOnDestroy(): void {

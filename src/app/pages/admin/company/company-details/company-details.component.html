@@ -1,0 +1,98 @@
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header">
+      <h3>{{ company.company_name }}</h3>
+      <p class="text-muted">Established: {{ company.year_established }}</p>
+    </div>
+    <div class="card-body">
+      <!-- Company Information -->
+      <h5>General Information</h5>
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <th>Legal Status</th>
+            <td>{{ company.legal_status }}</td>
+          </tr>
+          <tr>
+            <th>Company Form</th>
+            <td>{{ company.company_form }}</td>
+          </tr>
+          <tr *ngIf="company.company_form === 'Other'">
+            <th>Specific Company Form</th>
+            <td>{{ company.specify_company_form }}</td>
+          </tr>
+          <tr>
+            <th>Trade Registration Number</th>
+            <td>{{ company.trade_registration_number }}</td>
+          </tr>
+          <tr>
+            <th>VAT Number</th>
+            <td>{{ company.vat_number }}</td>
+          </tr>
+          <tr>
+            <th>Country</th>
+            <td>{{ company.country }}</td>
+          </tr>
+          <tr>
+            <th>Address</th>
+            <td [innerHTML]="company.address"></td>
+          </tr>
+          <tr>
+            <th>Telephone</th>
+            <td>{{ company.telephone }}</td>
+          </tr>
+          <tr>
+            <th>Email</th>
+            <td>{{ company.email }}</td>
+          </tr>
+          <tr>
+            <th>Website</th>
+            <td>{{ company.website || 'N/A' }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Products Section -->
+      <h5 class="mt-4">Products</h5>
+      <div *ngIf="company.products?.length > 0; else noProducts">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Title</th>
+              <th>Description</th>
+              <th>Category ID</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let product of company.products">
+              <td>{{ product.code }}</td>
+              <td>{{ product.title }}</td>
+              <td>{{ product.description || 'No description' }}</td>
+              <td>{{ product.category_id }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <ng-template #noProducts>
+        <div class="alert alert-warning">No products available</div>
+      </ng-template>
+
+      <!-- Users Section -->
+      <h5 class="mt-4">Users</h5>
+      <div *ngIf="company.users?.length > 0; else noUsers">
+        <ul class="list-group">
+          <li *ngFor="let user of company.users" class="list-group-item">
+            {{ user.contact_person }} ({{ user.username }})
+          </li>
+        </ul>
+      </div>
+      <ng-template #noUsers>
+        <div class="alert alert-warning">No users associated with this company</div>
+      </ng-template>
+    </div>
+    <div class="card-footer text-muted">
+      Created At: {{ company.created_at }} | Updated At: {{ company.updated_at }}
+    </div>
+  </div>
+</div>

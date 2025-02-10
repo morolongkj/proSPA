@@ -11,7 +11,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   if (authService.isAuthenticatedUser()) {
     return true;
   } else {
-    toastService.error('You shall not pass!');
+    // toastService.error('You shall not pass!');
     router.navigate(['/auth/login']);
     return false;
   }

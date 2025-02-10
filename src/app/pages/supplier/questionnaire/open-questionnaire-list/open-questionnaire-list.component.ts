@@ -43,6 +43,9 @@ export class OpenQuestionnaireListComponent implements OnInit {
   currentQuestionnaire: any = {};
   selectedProduct: any = null;
 
+  searchText: string = '';
+
+  selectedProducts: any[] = [];
   constructor() {}
 
   ngOnInit(): void {
@@ -84,18 +87,46 @@ export class OpenQuestionnaireListComponent implements OnInit {
     this.loadQuestionnaires();
   }
 
+  onSearch(searchText: string): void {
+    this.searchText = searchText;
+    console.log('Search initiated with text:', this.searchText);
+    this.filters.searchTerm = this.searchText;
+    this.loadQuestionnaires();
+  }
+
+  clearSearch(): void {
+    this.searchText = '';
+    this.filters.searchTerm = this.searchText;
+    this.loadQuestionnaires();
+  }
+
   openModal(content: TemplateRef<any>, questionnaire: any) {
     this.currentQuestionnaire = questionnaire;
-    console.log(this.selectedProduct);
+    console.log(this.selectedProducts);
     this.modalService.open(content, { centered: true, size: 'lg' });
   }
 
   download(document: any): void {
-    const fileUrl = 'https://example.com/path-to-your-file.pdf';
-    const filename = 'downloaded-file.pdf';
+    // const fileUrl = 'https://example.com/path-to-your-file.pdf';
+    // const filename = 'downloaded-file.pdf';
     this.fileDownloadService.downloadFile(
       document.file_path,
       document.file_name
     );
+  }
+
+  toggleSelection(product: any, event: Event) {
+    const isChecked = (event.target as HTMLInputElement).checked;
+    const index = this.selectedProducts.findIndex((p) => p.id === product.id);
+
+    if (isChecked && index === -1) {
+      this.selectedProducts.push(product);
+    } else if (!isChecked && index > -1) {
+      this.selectedProducts.splice(index, 1);
+    }
+  }
+
+  isSelected(product: any): boolean {
+    return this.selectedProducts.some((p) => p.id === product.id);
   }
 }

@@ -1,21 +1,31 @@
 <div class="container min-vh-100 my-5">
-  <div class="row">
+  <div class="row" *appHasRole="['user','admin']">
     <div class="col-lg-4">
       <div class="card h-100">
         <div class="card-body">
-          <h5 class="card-title" data-aos="fade-down" data-aos-duration="2000">
-            Company Details
-          </h5>
-          <hr
-            class="custom-hr"
-            data-aos="fade-right"
-            data-aos-duration="2000"
-          />
+          <div class="d-flex justify-content-between">
+            <div>
+              <h5
+                class="card-title"
+                data-aos="fade-down"
+                data-aos-duration="2000"
+              >
+                Company Details
+              </h5>
+              <hr
+                class="custom-hr"
+                data-aos="fade-right"
+                data-aos-duration="2000"
+              />
+            </div>
+            <div *ngIf="company?.id">
+              <a routerLink="/supplier/companies/edit/{{company?.id}}" class="btn btn-link btn-md text-warning" placement="bottom" ngbTooltip="Edit Details">
+                <i class="bi bi-pencil-square"></i>
+              </a>
+            </div>
+          </div>
           <div *ngIf="company?.id; else noCompany">
             <ul class="list-group list-group-flush">
-              <li class="list-group-item">
-                <span class="fw-bold">ID:</span> {{ company.id }}
-              </li>
               <li class="list-group-item">
                 <span class="fw-bold">Company Name:</span>
                 {{ company.company_name }}
@@ -33,7 +43,8 @@
                 {{ company.vat_number }}
               </li>
               <li class="list-group-item">
-                <span class="fw-bold">Address:</span> {{ company.address }}
+                <span class="fw-bold">Address:</span>
+                <span [innerHTML]="company.address"></span>
               </li>
               <li class="list-group-item">
                 <span class="fw-bold">Country:</span> {{ company.country }}
@@ -83,32 +94,6 @@
       </div>
     </div>
     <div class="col-lg-8">
-      <!-- <div class="row">
-        <div class="col-lg-4">
-          <div class="card">
-            <div class="card-body">
-              <h6 class="card-title">Open Tenders</h6>
-              <h3>0</h3>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4">
-          <div class="card">
-            <div class="card-body">
-              <h6 class="card-title">Active Bids</h6>
-               <h3>0</h3>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4">
-          <div class="card">
-            <div class="card-body">
-              <h6 class="card-title">Notifications</h6>
-               <h3>0</h3>
-            </div>
-          </div>
-        </div>
-      </div> -->
       <div class="row quick-access-cards">
         <div class="col-lg-4">
           <div class="card">
@@ -146,12 +131,6 @@
       </div>
 
       <div class="row mt-3">
-        <!-- <div
-          class="col-lg-12 d-flex justify-content-between align-items-center"
-        >
-          <h4 class="mb-0">Events</h4>
-          <button class="btn btn-primary btn-sm">View More</button>
-        </div> -->
         <div class="col-lg-12 mt-2">
           <full-calendar [options]="calendarOptions"></full-calendar>
         </div>

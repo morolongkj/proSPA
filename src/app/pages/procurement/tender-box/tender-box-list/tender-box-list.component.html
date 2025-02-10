@@ -1,0 +1,133 @@
+<div class="container min-vh-100 py-5">
+  <div class="d-flex align-items-center justify-content-between">
+    <div>
+      <h5 class="card-title" data-aos="fade-down" data-aos-duration="2000">
+        Tender Boxes
+      </h5>
+      <hr class="custom-hr" data-aos="fade-right" data-aos-duration="2000" />
+    </div>
+    <!-- <div class="input-group">
+              <span class="input-group-text bg-white">
+                <i class="bi bi-search text-yellow"></i>
+              </span>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Search ..."
+                aria-label="Search"
+                #searchInput
+                [(ngModel)]="searchText"
+                (keydown.enter)="onSearch(searchText)"
+              />
+              <button
+                class="btn btn-outline-danger"
+                type="button"
+                (click)="clearSearch()"
+                *ngIf="searchText"
+              >
+                <i class="bi bi-x-circle"></i>
+              </button>
+            </div> -->
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="text-center mt-4">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Error Message with Retry -->
+  <div
+    *ngIf="errorMessage"
+    class="alert alert-danger text-center mt-3"
+    role="alert"
+  >
+    {{ errorMessage }}
+    <button
+      class="btn btn-link text-decoration-none"
+      (click)="loadTenderBoxes()"
+    >
+      Retry
+    </button>
+  </div>
+
+  <!-- No Data Available -->
+  <div *ngIf="!isLoading && tenderBoxes.length === 0" class="text-center mt-4">
+    <div class="alert alert-info" role="alert">
+      <i class="bi bi-info-circle me-2"></i> There are no tender boxes available
+      at the moment.
+    </div>
+  </div>
+
+  <div class="row my-3">
+    <div class="col-md-4 col-sm-6 mb-4" *ngFor="let box of tenderBoxes">
+      <div class="card shadow-0 border-1">
+        <div class="card-body">
+          <h5 class="card-title d-flex align-items-center">
+            <i class="fas fa-box-open text-primary me-2"></i>
+            {{ box.reference_number }}
+          </h5>
+          <p class="card-text">{{ box.title }}</p>
+
+          <div class="d-flex justify-content-between align-items-center">
+            <a
+              class="btn btn-outline-primary px-3"
+              routerLink="/tender-boxes/{{ box.id }}"
+            >
+              <i class="fas fa-folder-open"></i> Open
+            </a>
+
+            <i *ngIf="!box.access" class="fas fa-lock locked"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row my-5">
+    <div class="col-lg-6">
+      <!-- PerPage Select Input -->
+      <div>
+        <label for="entriesPerPage" class="me-2">Show</label>
+        <select
+          id="entriesPerPage"
+          class="form-select form-select-sm d-inline-block w-auto"
+          [(ngModel)]="perPage"
+          (change)="changePerPage()"
+        >
+          <option *ngFor="let option of perPageOptions" [value]="option">
+            {{ option }}
+          </option>
+        </select>
+        <span class="ms-2">entries</span>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <!-- Pagination Controls -->
+      <div
+        *ngIf="!isLoading"
+        class="d-flex justify-content-between align-items-center"
+      >
+        <button
+          class="btn btn-secondary btn-sm"
+          [disabled]="+pagination.currentPage === 1"
+          (click)="changePage(+pagination.currentPage - 1)"
+        >
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        <span
+          >Page {{ pagination.currentPage }} of
+          {{ pagination.totalPages }}</span
+        >
+        <button
+          class="btn btn-secondary btn-sm"
+          [disabled]="+pagination.currentPage === +pagination.totalPages"
+          (click)="changePage(+pagination.currentPage + 1)"
+        >
+          <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

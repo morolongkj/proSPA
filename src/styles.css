@@ -24,6 +24,10 @@ body {
   background-color: #f5c945 !important;
 }
 
+.text-yellow {
+  color: #f5c945;
+}
+
 .gradient-button {
   /* Base styles */
   background-image: linear-gradient(
@@ -80,4 +84,3 @@ body {
 /* .form-control {
   width: 300px;
 } */
-

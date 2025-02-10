@@ -34,12 +34,17 @@ export class NavComponent implements OnInit {
   verifiedId: string = '';
   approvedId: string = '';
   publishedId: string = '';
+
+  companyId: string = '';
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
     AOS.init();
     this.isLoggedIn = this.authService.isAuthenticatedUser();
-    this.getTenderStatusList();
+    if (this.isLoggedIn) {
+      this.companyId = this.authService.getCompanyId() ?? '';
+      this.getTenderStatusList();
+    }
   }
 
   isDropdownLinkActive(routes: string[]): boolean {

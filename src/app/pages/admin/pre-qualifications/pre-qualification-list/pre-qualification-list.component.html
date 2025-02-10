@@ -10,21 +10,30 @@
           </li>
         </ol>
       </nav>
+      <div class="input-group">
+        <span class="input-group-text bg-white">
+          <i class="bi bi-search text-yellow"></i>
+        </span>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search ..."
+          aria-label="Search"
+          #searchInput
+          [(ngModel)]="searchText"
+          (keydown.enter)="onSearch(searchText)"
+        />
+        <button
+          class="btn btn-outline-danger"
+          type="button"
+          (click)="clearSearch()"
+          *ngIf="searchText"
+        >
+          <i class="bi bi-x-circle"></i>
+        </button>
+      </div>
     </div>
     <div class="card-body">
-      <div class="row mb-3">
-        <div class="col-md-2 my-auto">
-          Per Page:
-          <select (change)="handlePageSizeChange($event)" class="p-1">
-            @for(pageSize of pageSizes; track pageSize) {
-            <option [value]="pageSize">
-              {{ pageSize }}
-            </option>
-            }
-          </select>
-        </div>
-      </div>
-
       <div class="row my-3">
         <div class="col-lg-12">
           <div class="table-responsive">
@@ -35,7 +44,7 @@
                   <th scope="col">Questionnaire</th>
                   <th scope="col">Product</th>
                   <th scope="col">Date Submitted</th>
-                  <th scope="col">Status</th>
+                  <!-- <th scope="col">Status</th> -->
                   <th scope="col" class="text-end">Action</th>
                 </tr>
               </thead>
@@ -53,26 +62,36 @@
                       <span>{{ submission.questionnaire.title }}</span>
                     </td>
                     <td>
-                      <span>{{ submission.product.title }}</span>
+                      <!-- <span>{{ submission.product.title }}</span> -->
+                         <div *ngFor="let item of submission.products">
+  <span class="fw-bold">{{
+                            item.product_name
+                          }}</span>
+                          <br />
+                      <span
+                            class="badge"
+                            [ngClass]="{
+                              'bg-success':
+                                item.status === 'Approved' ||
+                                item.status === 'Sample Passed' ||
+                                item.status === 'Qualified',
+                              'bg-warning':
+                                item.status === 'Pending',
+                              'bg-primary':
+                                item.status === 'Submitted',
+                              'bg-danger':
+                                item.status === 'Rejected' ||
+                                item.status === 'Sample Failed',
+                              'bg-info':
+                                item.status === 'Under Review'
+                            }"
+                          >
+                            {{ item.status }}</span
+                          >
+                        </div>
                     </td>
                     <td>{{ submission.created_at }}</td>
-                    <td>
-                      <span
-                        class="badge"
-                        [ngClass]="{
-                          'bg-success':
-                            submission.status.title === 'Approved' ||
-                            submission.status?.title === 'Sample Passed' ||
-                            submission.status?.title === 'Qualified',
-                          'bg-warning': submission.status.title === 'Pending',
-                          'bg-primary': submission.status.title === 'Submitted',
-                          'bg-danger': submission.status.title === 'Rejected',
-                          'bg-info': submission.status.title === 'Under Review'
-                        }"
-                      >
-                        {{ submission.status.title }}</span
-                      >
-                    </td>
+               
                     <td class="text-end">
                       <button
                         class="btn btn-primary btn-sm"
@@ -99,7 +118,17 @@
       </div>
 
       <div class="row my-3">
-        <div class="col-lg-10 text-center mx-auto">
+        <div class="col-lg-2 me-auto">
+          Per Page:
+          <select (change)="handlePageSizeChange($event)" class="p-0">
+            @for(pageSize of pageSizes; track pageSize) {
+            <option [value]="pageSize">
+              {{ pageSize }}
+            </option>
+            }
+          </select>
+        </div>
+        <div class="col-lg-10 text-end ms-auto">
           <pagination-controls
             id="submissions-pagination"
             previousLabel="Prev"
@@ -162,6 +191,7 @@
       *ngIf="view !== 'details'"
       [submissionData]="selectedSubmission"
       [status]="currentStatus"
+      (messageEvent)="receiveMessage($event)"
     ></app-update-submission-status>
   </div>
 
@@ -209,8 +239,10 @@
           class="btn btn-danger"
           (click)="onReject()"
           *ngIf="
-            view === 'details' &&
-            selectedSubmission.status?.title === 'Submitted'
+            (view === 'details' &&
+              selectedSubmission.status?.title === 'Submitted') ||
+            (view === 'details' &&
+              selectedSubmission.status?.title === 'Sample Passed')
           "
         >
           <i class="bi bi-x-circle me-2"></i> Reject

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import {
   FormGroup,
   FormBuilder,
@@ -22,6 +22,7 @@ import {
 } from 'ckeditor5';
 import { QuestionnaireService } from '../../../_services/questionnaire.service';
 import { ToastService } from '../../../_services/toast.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-update-submission-status',
@@ -78,7 +79,9 @@ export class UpdateSubmissionStatusComponent implements OnInit {
     },
   };
 
-  constructor(private fb: FormBuilder) {
+  @Output() messageEvent = new EventEmitter<string>();
+
+  constructor(private fb: FormBuilder, private modalService: NgbModal) {
     // Initialize the reactive form
     this.messageForm = this.fb.group({
       subject: ['', [Validators.required, Validators.maxLength(100)]],
@@ -218,7 +221,9 @@ export class UpdateSubmissionStatusComponent implements OnInit {
         .subscribe({
           next: (res: any) => {
             console.log(res);
-            this.toastService.success('Updated successfully.');
+            // this.toastService.success('');
+            this.messageEvent.emit('Update is successful.');
+            // this.modalService.dismissAll();
           },
           error: (err: any) => {
             console.log(err);

@@ -7,7 +7,11 @@
     @if(isLoggedIn) {
     <nav class="navbar-nav ms-auto top-nav">
       <li class="nav-item" routerLinkActive="active">
-        <a class="nav-link" aria-current="page" routerLink="/notifications">
+        <a
+          class="nav-link"
+          aria-current="page"
+          routerLink="/supplier/notifications"
+        >
           <i class="fa fa-bell me-2"></i>Notifications</a
         >
       </li>
@@ -42,10 +46,8 @@
             aria-current="page"
             routerLink="/dashboard"
             *appHasRole="['admin', 'user']"
-             [ngClass]="{
-              active: isDropdownLinkActive([
-                '/dashboard',
-              ])
+            [ngClass]="{
+              active: isDropdownLinkActive(['/dashboard'])
             }"
             >Dashboard</a
           >
@@ -80,6 +82,7 @@
                 >Prequalification</a
               >
             </li>
+            <!-- @if(companyId) { -->
             <li *appHasRole="['user']">
               <a class="dropdown-item" routerLink="/supplier/questionnaires"
                 >Questionnaires</a
@@ -90,6 +93,13 @@
                 >Prequalification</a
               >
             </li>
+            <!-- } @else {
+            <li class="p-2" *appHasRole="['user']">
+              <div class="alert alert-warning m-0" role="alert">
+                Company not found!
+              </div>
+            </li>
+            } -->
           </ul>
         </li>
 
@@ -100,6 +110,15 @@
             role="button"
             data-bs-toggle="dropdown"
             aria-expanded="false"
+            [ngClass]="{
+              active: isDropdownLinkActive([
+                '/tenders/create',
+                '/tenders',
+                '/tender-boxes',
+                '/supplier/tenders',
+                '/supplier/bids'
+              ])
+            }"
           >
             Tenders
           </a>
@@ -139,6 +158,7 @@
                 >List</a
               >
             </li>
+            <!-- @if(companyId) { -->
             <li *appHasRole="['user']">
               <a class="dropdown-item" routerLink="/supplier/tenders"
                 >Open Tenders</a
@@ -147,6 +167,13 @@
             <li *appHasRole="['user']">
               <a class="dropdown-item" routerLink="/supplier/bids">Bids</a>
             </li>
+            <!-- } @else {
+            <li class="p-2" *appHasRole="['user']">
+              <div class="alert alert-warning m-0" role="alert">
+                Company not found!
+              </div>
+            </li>
+            } -->
             <li *appHasRole="['admin']">
               <a class="dropdown-item" routerLink="/tender-boxes"
                 >Tender Boxes</a
@@ -155,9 +182,29 @@
           </ul>
         </li>
 
-        <li class="nav-item" *appHasRole="['admin']">
-          <a class="nav-link" routerLink="/admin/evaluation" role="button">
+        <!-- <li class="nav-item" *appHasRole="['admin']">
+          <a
+            class="nav-link"
+            routerLink="/admin/evaluation"
+            role="button"
+            [ngClass]="{
+              active: isDropdownLinkActive(['/admin/evaluation'])
+            }"
+          >
             Evaluation
+          </a>
+        </li> -->
+
+        <li class="nav-item" *appHasRole="['admin']">
+          <a
+            class="nav-link"
+            routerLink="/admin/companies"
+            role="button"
+            [ngClass]="{
+              active: isDropdownLinkActive(['/admin/companies'])
+            }"
+          >
+            Companies
           </a>
         </li>
 

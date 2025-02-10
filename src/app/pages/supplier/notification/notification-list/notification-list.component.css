@@ -1,0 +1,25 @@
+.input-group {
+  max-width: 300px;
+  border-radius: 0px;
+
+}
+
+.input-group .input-group-text {
+  border-radius: 0px;
+  border-right: none;
+}
+
+.input-group input[type='text'] {
+  border-radius: 0px;
+  border-left: none;
+}
+
+
+.btn-group {
+  border-radius: 0px;
+}
+
+.btn-outline-warning {
+  border-radius: 0px;
+  min-width: 140px;
+}

@@ -1,0 +1,62 @@
+<div class="row mb-3">
+  <div class="col-md-4 text-lg-end">
+    <label *ngIf="label" [attr.for]="id" class="select-label">
+      {{ label }}
+    </label>
+  </div>
+  <div class="col-md-6">
+    <select
+      [id]="id"
+      [formControl]="control"
+      [attr.name]="name"
+      class="form-select"
+      [attr.disabled]="disabled ? '' : null"
+    >
+      <option *ngFor="let option of options" [value]="option.value">
+        {{ option.value }}
+      </option>
+    </select>
+
+    <div *ngIf="showErrors" class="error-messages">
+      <small *ngIf="control.hasError('required')" class="error">
+        This field is required
+      </small>
+      <small *ngIf="control.hasError('minLength')" class="error">
+        Input is too short
+      </small>
+    </div>
+  </div>
+</div>
+<!-- `,
+  styles: [
+    `
+      .select-container {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1rem;
+      }
+      .select-label {
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+      }
+      .select-input {
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 1rem;
+      }
+      .select-input:disabled {
+        background-color: #f4f4f4;
+        cursor: not-allowed;
+      }
+      .error-messages {
+        color: red;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+      }
+      .error {
+        display: block;
+        margin-top: 0.25rem;
+      }
+    `,
+  ], -->

@@ -7,7 +7,7 @@ import AOS from 'aos';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { SubmissionDetailsComponent } from '../../../_components/submission-details/submission-details.component';
+import { AuthService } from '../../../../_services/auth.service';
 
 @Component({
   selector: 'app-bid-list',
@@ -19,6 +19,7 @@ import { SubmissionDetailsComponent } from '../../../_components/submission-deta
 export class BidListComponent implements OnInit {
   private bidService = inject(BidService);
   private toastService = inject(ToastService);
+  private authService = inject(AuthService);
 
   bids: any[] = [];
   selectedBid: any = {};
@@ -33,12 +34,17 @@ export class BidListComponent implements OnInit {
   private unsubscribe$ = new Subject<void>();
 
   searchText: string = '';
+  companyId: string = '';
 
   constructor(private modalService: NgbModal) {}
 
   ngOnInit(): void {
     AOS.init();
-    this.getBids();
+    this.companyId = this.authService.getCompanyId() ?? '';
+    if (this.companyId) {
+      this.filters.company_id = this.companyId;
+      this.getBids();
+    }
   }
 
   ngOnDestroy(): void {

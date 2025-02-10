@@ -238,7 +238,44 @@ export const routes: Routes = [
     runGuardsAndResolvers: 'always',
     canActivate: [authGuard, adminGuard],
   },
-
+  {
+    path: 'tender-boxes',
+    loadComponent: () =>
+      import(
+        './pages/procurement/tender-box/tender-box-list/tender-box-list.component'
+      ).then((c) => c.TenderBoxListComponent),
+    runGuardsAndResolvers: 'always',
+    canActivate: [authGuard, adminGuard],
+  },
+  {
+    path: 'tender-boxes/:id',
+    loadComponent: () =>
+      import(
+        './pages/procurement/tender-box/tender-box-details/tender-box-details.component'
+      ).then((c) => c.TenderBoxDetailsComponent),
+    runGuardsAndResolvers: 'always',
+    resolve: { tender: tenderDetailsResolver },
+    canActivate: [authGuard, adminGuard],
+  },
+  {
+    path: 'tender-boxes/financial-table/:id',
+    loadComponent: () =>
+      import(
+        './pages/procurement/tender-box/financial-table/financial-table.component'
+      ).then((c) => c.FinancialTableComponent),
+    runGuardsAndResolvers: 'always',
+    resolve: { tender: tenderDetailsResolver },
+    canActivate: [authGuard, adminGuard],
+  },
+  {
+    path: 'admin/companies',
+    loadComponent: () =>
+      import('./pages/admin/company/company-list/company-list.component').then(
+        (c) => c.CompanyListComponent
+      ),
+    runGuardsAndResolvers: 'always',
+    canActivate: [adminGuard],
+  },
   {
     path: 'supplier/tenders',
     loadComponent: () =>
@@ -277,6 +314,16 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
+    path: 'supplier/companies/edit/:id',
+    loadComponent: () =>
+      import(
+        './pages/supplier/company/company-edit/company-edit.component'
+      ).then((c) => c.CompanyEditComponent),
+    runGuardsAndResolvers: 'always',
+    resolve: { company: companyDetailsResolver },
+    canActivate: [authGuard],
+  },
+  {
     path: 'supplier/questionnaires',
     loadComponent: () =>
       import(
@@ -291,6 +338,15 @@ export const routes: Routes = [
       import(
         './pages/supplier/prequalification/prequalification-list/prequalification-list.component'
       ).then((c) => c.PrequalificationListComponent),
+    runGuardsAndResolvers: 'always',
+    canActivate: [authGuard],
+  },
+  {
+    path: 'supplier/notifications',
+    loadComponent: () =>
+      import(
+        './pages/supplier/notification/notification-list/notification-list.component'
+      ).then((c) => c.NotificationListComponent),
     runGuardsAndResolvers: 'always',
     canActivate: [authGuard],
   },

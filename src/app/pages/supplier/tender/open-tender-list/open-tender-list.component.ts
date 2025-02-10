@@ -7,11 +7,12 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TenderDetailsComponent } from '../tender-details/tender-details.component';
 import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-open-tender-list',
   standalone: true,
-  imports: [CommonModule, NgxPaginationModule, TenderDetailsComponent],
+  imports: [CommonModule, NgxPaginationModule, TenderDetailsComponent, FormsModule],
   templateUrl: './open-tender-list.component.html',
   styleUrl: './open-tender-list.component.css',
 })
@@ -33,9 +34,12 @@ export class OpenTenderListComponent implements OnInit {
   filters: any = {};
   private unsubscribe$ = new Subject<void>();
 
+  searchText: string = '';
+
   constructor() {}
 
   ngOnInit(): void {
+    this.filters.status = 'Published';
     this.getTenders();
   }
 
@@ -85,6 +89,19 @@ export class OpenTenderListComponent implements OnInit {
       size: 'lg',
       scrollable: true,
     });
+  }
+
+  onSearch(searchText: string): void {
+    this.searchText = searchText;
+    console.log('Search initiated with text:', this.searchText);
+    this.filters.searchTerm = this.searchText;
+    this.getTenders();
+  }
+
+  clearSearch(): void {
+    this.searchText = '';
+    this.filters.searchTerm = this.searchText;
+    this.getTenders();
   }
 
   prepareBid() {

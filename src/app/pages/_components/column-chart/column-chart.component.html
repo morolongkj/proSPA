@@ -1,0 +1,13 @@
+<apx-chart
+  *ngIf="chartOptions.series.length"
+  [series]="chartOptions.series"
+  [chart]="chartOptions.chart"
+  [xaxis]="chartOptions.xaxis"
+  [yaxis]="chartOptions.yaxis"
+  [dataLabels]="chartOptions.dataLabels"
+  [plotOptions]="chartOptions.plotOptions"
+  [title]="chartOptions.title"
+  [tooltip]="chartOptions.tooltip">
+</apx-chart>
+
+<p *ngIf="!chartOptions.series.length" class="text-muted">Loading chart data...</p>

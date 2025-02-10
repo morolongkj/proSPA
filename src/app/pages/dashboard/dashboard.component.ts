@@ -8,17 +8,27 @@ import { RouterLink } from '@angular/router';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarOptions } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import { HasRoleDirective } from '../../_directives/has-role.directive';
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { NotificationService } from '../../_services/notification.service';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink, FullCalendarModule],
+  imports: [
+    CommonModule,
+    RouterLink,
+    FullCalendarModule,
+    HasRoleDirective,
+    NgbTooltipModule,
+  ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent implements OnInit {
   private authService = inject(AuthService);
   private companyService = inject(CompanyService);
+  private notificationService = inject(NotificationService);
 
   company: any = {};
   isLoadingCompany: boolean = true;
@@ -96,12 +106,4 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  // parseExtraData(data: string) {
-  //   try {
-  //     console.log(data);
-  //     return JSON.parse(data);
-  //   } catch (error) {
-  //     return {};
-  //   }
-  // }
 }

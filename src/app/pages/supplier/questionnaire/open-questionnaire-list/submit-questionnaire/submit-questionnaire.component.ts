@@ -43,7 +43,10 @@ export class SubmitQuestionnaireComponent implements OnInit {
 
   @Input() questionnaire: any = {};
   @Input() selectedProduct: any = {};
+  @Input() selectedProducts: any[] = [];
   form: FormGroup;
+
+  products: any[] = [];
 
   public Editor = ClassicEditor;
   public config = {
@@ -98,6 +101,9 @@ export class SubmitQuestionnaireComponent implements OnInit {
   ngOnInit(): void {
     if (this.authService.getCompanyId() !== null) {
       this.companyId = this.authService.getCompanyId() ?? '';
+      this.selectedProducts.forEach((product: any) => {
+        this.products.push(product.product_id);
+      })
     }
   }
 
@@ -132,7 +138,16 @@ export class SubmitQuestionnaireComponent implements OnInit {
         formData.append('questionnaire_id', this.questionnaire.id);
         formData.append('company_id', this.companyId);
         formData.append('message', this.form.value.message);
-        formData.append('product_id', this.selectedProduct.product_id);
+        // console.log(this.products);
+
+        // Append each product separately as an array
+        this.products.forEach((product, index) => {
+          formData.append(`products[]`, product); // Backend will receive an array
+        });
+
+        // Append products array as JSON string
+        // formData.append('products[]', JSON.stringify(this.products));
+        // formData.append('product_id', this.selectedProduct.product_id);
 
         // formData.append('attachments[]',this.form.value.attachments);
         // this.form.value.attachments.forEach(

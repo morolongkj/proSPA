@@ -401,15 +401,22 @@ export class TenderListComponent implements OnInit {
   onSubmit(form: any): void {
     if (form.valid && this.isClosingAfterOpening()) {
       console.log('Form submitted', this.selectedTender);
-      this.selectedTender.current_status_id = this.getStatusId("Published");
-      this.tenderService.updateTender(this.selectedTender.id,this.selectedTender).subscribe({
-        next: (res:any) => {
-          console.log(res);
-        },
-        error: (err: any) => {
-          console.log(err);
-        }
-      })
+      this.selectedTender.current_status_id = this.getStatusId('Published');
+      this.tenderService
+        .updateTender(this.selectedTender.id, this.selectedTender)
+        .subscribe({
+          next: (res: any) => {
+            console.log(res);
+            this.toastService.success('Tender is now public.');
+            this.modalService.dismissAll();
+          },
+          error: (err: any) => {
+            console.log(err);
+            this.toastService.error(
+              'Some errors occured, please contact the administrator.'
+            );
+          },
+        });
     } else {
       console.error('Form is invalid');
     }

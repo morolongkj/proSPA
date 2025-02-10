@@ -31,24 +31,49 @@
           <strong>Message:</strong>
           <span [innerHTML]="submissionData.message"></span>
         </p>
-        <p>
+        <!-- <p>
           <strong>Status:</strong>
           <span
             class="badge ms-3"
             [ngClass]="{
-              'bg-success': submissionData.status.title === 'Approved',
+              'bg-success':
+                submissionData.status.title === 'Approved' ||
+                submissionData.status?.title === 'Sample Passed' ||
+                submissionData.status?.title === 'Qualified',
               'bg-warning': submissionData.status.title === 'Pending',
               'bg-primary': submissionData.status.title === 'Submitted',
-              'bg-danger': submissionData.status.title === 'Rejected',
+              'bg-danger':
+                submissionData.status.title === 'Rejected' ||
+                submissionData.status.title === 'Sample Failed',
               'bg-info': submissionData.status.title === 'Under Review'
             }"
             >{{ submissionData.status?.title }}</span
           >
-        </p>
+        </p> -->
         <p>
           <strong>Company:</strong> {{ submissionData.company?.company_name }}
         </p>
-        <p><strong>Product:</strong> {{ submissionData.product?.title }}</p>
+        <p><strong>Products:</strong></p>
+        <div *ngFor="let item of submissionData.products">
+          <span class="fw-bold">{{ item.product_name }}</span>
+          <br />
+          <span
+            class="badge"
+            [ngClass]="{
+              'bg-success':
+                item.status === 'Approved' ||
+                item.status === 'Sample Passed' ||
+                item.status === 'Qualified',
+              'bg-warning': item.status === 'Pending',
+              'bg-primary': item.status === 'Submitted',
+              'bg-danger':
+                item.status === 'Rejected' || item.status === 'Sample Failed',
+              'bg-info': item.status === 'Under Review'
+            }"
+          >
+            {{ item.status }}</span
+          >
+        </div>
         <p><strong>Created At:</strong> {{ submissionData.created_at }}</p>
       </div>
     </div>

@@ -41,6 +41,8 @@ export class PreQualificationListComponent implements OnInit {
   view: string = 'details';
   currentStatus: string = '';
 
+  searchText: string = '';
+
   constructor(private modalService: NgbModal) {}
 
   ngOnInit(): void {
@@ -87,6 +89,7 @@ export class PreQualificationListComponent implements OnInit {
 
   openModal(content: TemplateRef<any>, submission: any) {
     this.selectedSubmission = submission;
+    this.viewDetails();
     console.log(this.selectedSubmission);
     this.modalService.open(content, {
       centered: false,
@@ -123,5 +126,24 @@ export class PreQualificationListComponent implements OnInit {
   onQualified() {
     this.currentStatus = 'Qualified';
     this.view = 'qualified';
+  }
+
+  receiveMessage(event: string) {
+    this.toastService.success(event);
+    this.getSubmissions();
+    this.modalService.dismissAll();
+  }
+
+  onSearch(searchText: string): void {
+    this.searchText = searchText;
+    console.log('Search initiated with text:', this.searchText);
+    this.filters.searchTerm = this.searchText;
+    this.getSubmissions();
+  }
+
+  clearSearch(): void {
+    this.searchText = '';
+    this.filters.searchTerm = this.searchText;
+    this.getSubmissions();
   }
 }
