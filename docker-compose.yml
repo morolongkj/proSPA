@@ -1,0 +1,44 @@
+version: '3.8'
+services:
+  # MySQL Database
+  db:
+    image: mysql:5.7
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: codeigniter
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql  # Corrected: Use array syntax
+
+  # CodeIgniter 4 RESTful API (PHP 8.2)
+  api:
+    build: ./proWebAPI
+    container_name: codeigniter-api
+    ports:
+      - "8080:80"
+    volumes:
+      - ./proWebAPI:/var/www/html  # Corrected: Use array syntax
+    environment:
+      - DB_HOST=db
+      - DB_DATABASE=codeigniter
+      - DB_USERNAME=user
+      - DB_PASSWORD=password
+    depends_on:
+      - db
+
+  # Angular 19 Frontend (Nginx)
+  frontend:
+    build: ./proSPA
+    container_name: angular-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - api
+
+# Top-level volumes definition
+volumes:
+  mysql-data:  # Define the named volume here
