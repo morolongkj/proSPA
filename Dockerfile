@@ -10,8 +10,8 @@ RUN npm install --force
 COPY . .
 
 # Build the Angular app (output path: dist/pro-spa)
-# RUN npm run build --configuration=production
-RUN ng build --configuration=production
+RUN npm run build --configuration=production
+# RUN ng build --configuration=production
 
 # Debugging: Check if the build directory exists inside the container
 RUN ls -l /proSPA/dist || echo "Build directory missing"
