@@ -1,61 +1,17 @@
 version: '3.8'
 
 services:
-  # MySQL Database
-  db:
-    image: mysql:8.0
-    container_name: mysql-db
-    restart: always
+  angular:
+    build:
+      context: .
+    container_name: angular-app
+    ports:
+      - "4200:4200"
+    working_dir: /app
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm start
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: codeigniter
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
-    ports:
-      - "3307:3306"
-    volumes:
-      - mysql-data:/var/lib/mysql
-
-  # CodeIgniter API (PHP 8.2 with PHP-FPM)
-  api:
-    build: ./proWebAPI
-    container_name: codeigniter-api
-    restart: always
-    volumes:
-      - ./proWebAPI:/var/www/html
-    environment:
-      - DB_HOST=db
-      - DB_DATABASE=codeigniter
-      - DB_USERNAME=user
-      - DB_PASSWORD=password
-    ports:
-      - "9000:9000"
-
-  # Angular 19 Frontend
-  frontend:
-    build: ./proSPA
-    container_name: angular-frontend
-    restart: always
-    depends_on:
-      - api
-    volumes:
-      # - ./proSPA/dist:/usr/share/nginx/html
-      - ./proSPA/dist/pro-spa/browser:/usr/share/nginx/html 
-
-  # Nginx Reverse Proxy
-  nginx:
-    image: nginx:latest
-    container_name: nginx-proxy
-    restart: always
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf  # No :ro here
-      - ./default.conf:/etc/nginx/conf.d/default.conf  # Remove :ro so Nginx can read this properly
-      - ./proSPA/dist/pro-spa/browser:/usr/share/nginx/html
-    ports:
-      - "80:80"
-    depends_on:
-      - frontend
-      - api
-
-volumes:
-  mysql-data:
+      - CHOKIDAR_USEPOLLING=true
+    restart: unless-stopped
