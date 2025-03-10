@@ -45,7 +45,7 @@
             class="nav-link"
             aria-current="page"
             routerLink="/dashboard"
-            *appHasRole="['admin', 'user']"
+            *appHasRole="['superadmin', 'vendor']"
             [ngClass]="{
               active: isDropdownLinkActive(['/dashboard'])
             }"
@@ -72,29 +72,29 @@
             Quality Assurance
           </a>
           <ul class="dropdown-menu">
-            <li *appHasRole="['admin']">
+            <li *appHasRole="['superadmin']">
               <a class="dropdown-item" routerLink="/questionnaires"
                 >Questionnaires</a
               >
             </li>
-            <li *appHasRole="['admin']">
+            <li *appHasRole="['superadmin']">
               <a class="dropdown-item" routerLink="admin/pre-qualification"
                 >Prequalification</a
               >
             </li>
             <!-- @if(companyId) { -->
-            <li *appHasRole="['user']">
+            <li *appHasRole="['vendor']">
               <a class="dropdown-item" routerLink="/supplier/questionnaires"
                 >Questionnaires</a
               >
             </li>
-            <li *appHasRole="['user']">
+            <li *appHasRole="['vendor']">
               <a class="dropdown-item" routerLink="/supplier/prequalification"
                 >Prequalification</a
               >
             </li>
             <!-- } @else {
-            <li class="p-2" *appHasRole="['user']">
+            <li class="p-2" *appHasRole="['vendor']">
               <div class="alert alert-warning m-0" role="alert">
                 Company not found!
               </div>
@@ -123,10 +123,10 @@
             Tenders
           </a>
           <ul class="dropdown-menu">
-            <li *appHasRole="['admin']">
+            <li *appHasRole="['superadmin']">
               <a class="dropdown-item" routerLink="/tenders/create">Create</a>
             </li>
-            <li *appHasRole="['admin']">
+            <li *appHasRole="['superadmin']">
               <a
                 class="dropdown-item"
                 routerLink="/tenders"
@@ -134,7 +134,7 @@
                 >Verification</a
               >
             </li>
-            <li *appHasRole="['admin']">
+            <li *appHasRole="['superadmin']">
               <a
                 class="dropdown-item"
                 routerLink="/tenders"
@@ -142,7 +142,7 @@
                 >Approve Publish</a
               >
             </li>
-            <li *appHasRole="['admin']">
+            <li *appHasRole="['superadmin']">
               <a
                 class="dropdown-item"
                 routerLink="/tenders"
@@ -150,7 +150,7 @@
                 >Publish</a
               >
             </li>
-            <li *appHasRole="['admin']">
+            <li *appHasRole="['superadmin']">
               <a
                 class="dropdown-item"
                 routerLink="/tenders"
@@ -159,22 +159,22 @@
               >
             </li>
             <!-- @if(companyId) { -->
-            <li *appHasRole="['user']">
+            <li *appHasRole="['vendor']">
               <a class="dropdown-item" routerLink="/supplier/tenders"
                 >Open Tenders</a
               >
             </li>
-            <li *appHasRole="['user']">
+            <li *appHasRole="['vendor']">
               <a class="dropdown-item" routerLink="/supplier/bids">Bids</a>
             </li>
             <!-- } @else {
-            <li class="p-2" *appHasRole="['user']">
+            <li class="p-2" *appHasRole="['vendor']">
               <div class="alert alert-warning m-0" role="alert">
                 Company not found!
               </div>
             </li>
             } -->
-            <li *appHasRole="['admin']">
+            <li *appHasRole="['superadmin']">
               <a class="dropdown-item" routerLink="/tender-boxes"
                 >Tender Boxes</a
               >
@@ -182,7 +182,7 @@
           </ul>
         </li>
 
-        <!-- <li class="nav-item" *appHasRole="['admin']">
+        <!-- <li class="nav-item" *appHasRole="['superadmin']">
           <a
             class="nav-link"
             routerLink="/admin/evaluation"
@@ -195,7 +195,7 @@
           </a>
         </li> -->
 
-        <li class="nav-item" *appHasRole="['admin']">
+        <li class="nav-item" *appHasRole="['superadmin']">
           <a
             class="nav-link"
             routerLink="/admin/companies"
@@ -208,7 +208,7 @@
           </a>
         </li>
 
-        <li class="nav-item dropdown" *appHasRole="['admin']">
+        <li class="nav-item dropdown" *appHasRole="['superadmin']">
           <a
             class="nav-link dropdown-toggle"
             href="#"

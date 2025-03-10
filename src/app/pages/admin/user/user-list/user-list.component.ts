@@ -1,41 +1,31 @@
-import { AsyncPipe, CommonModule } from '@angular/common';
-import {
-  Component,
-  inject,
-  OnInit,
-  TemplateRef,
-  ViewChild,
-} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit, TemplateRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import {
   NgbPopoverModule,
   NgbTooltipModule,
   NgbModal,
+  NgbCollapseModule,
 } from '@ng-bootstrap/ng-bootstrap';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { Observable } from 'rxjs';
-import { DynamicFormComponent } from '../../../../_form/dynamic-form/dynamic-form.component';
-import { QuestionBase } from '../../../../_models/question-base';
-import { QuestionService } from '../../../../_services/question.service';
 import { ToastService } from '../../../../_services/toast.service';
 import { ConfirmService } from '../../../../_services/confirm.service';
 import { UserService } from '../../../../_services/user.service';
-
+import { UserFilterComponent } from '../user-filter/user-filter.component';
 
 @Component({
   selector: 'app-user-list',
   standalone: true,
-  providers: [QuestionService],
   imports: [
     NgxPaginationModule,
     FormsModule,
-    AsyncPipe,
-    DynamicFormComponent,
     NgbPopoverModule,
     NgbTooltipModule,
     RouterLink,
     CommonModule,
+    NgbCollapseModule,
+    UserFilterComponent,
   ],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.css',
@@ -45,6 +35,9 @@ export class UserListComponent implements OnInit {
   private toastService = inject(ToastService);
   private modalService = inject(NgbModal);
   private confirmService = inject(ConfirmService);
+
+  isCollapsed = true;
+
   users: any[] = [];
 
   page = 1;
@@ -55,23 +48,16 @@ export class UserListComponent implements OnInit {
 
   filters: any = {};
 
-  questions$: Observable<QuestionBase<any>[]>;
-  roleQuestions$: Observable<QuestionBase<any>[]>;
-  @ViewChild(DynamicFormComponent)
-  dynamicFormComponent!: DynamicFormComponent;
-
   selectedUser: any = {};
 
-  constructor(questionService: QuestionService) {
-    this.questions$ = questionService.getUserFiltersQuestions();
-    this.roleQuestions$ = questionService.getUserAddRoleQuestions();
-  }
+  constructor() {}
 
   ngOnInit(): void {
     this.getUsersWithRoles();
   }
 
   getUsersWithRoles() {
+    this.isLoading = true;
     this.userService
       .getUserWithRoles(this.page, this.perPage, this.filters)
       .subscribe({
@@ -79,6 +65,11 @@ export class UserListComponent implements OnInit {
           this.users = res.data.users;
           this.total = res.data.total;
           console.log(this.users);
+          this.isLoading = false;
+        },
+        error: (err) => {
+          console.log(err);
+          this.isLoading = false;
         },
       });
   }
@@ -94,7 +85,9 @@ export class UserListComponent implements OnInit {
     this.getUsersWithRoles();
   }
 
-  handleFormSubmit(event: any) {
+  onFilterChange(event: any) {
+    console.log(event);
+
     const model = {
       email: event.formData.emailAddress,
       first_name: event.formData.firstName,
@@ -102,6 +95,29 @@ export class UserListComponent implements OnInit {
       gender: event.formData.gender,
     };
     this.filters = model;
+    console.log(this.filters);
+    this.page = 1;
+    this.getUsersWithRoles();
+  }
+
+  handleFilter(filterData: any) {
+    console.log(filterData);
+    const model: any = {
+      email: filterData.email,
+      first_name: filterData.firstName,
+      last_name: filterData.lastName,
+      gender: filterData.gender,
+    };
+    // Remove null or undefined values
+    this.filters = Object.keys(model).reduce(
+      (acc: { [key: string]: any }, key) => {
+        if (model[key] != null && model[key] !== '') {
+          acc[key] = model[key];
+        }
+        return acc;
+      },
+      {} as { [key: string]: any }
+    );
     console.log(this.filters);
     this.page = 1;
     this.getUsersWithRoles();

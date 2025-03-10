@@ -1,1 +1,108 @@
-<p>user-details works!</p>
+<div class="container min-vh-100 my-4">
+  <div class="card main-card">
+    <div class="card-header bg-light d-flex align-items-center">
+      <img
+        *ngIf="user.avatar"
+        [src]="user.avatar"
+        alt="{{ user.first_name }} {{ user.last_name }}"
+        class="avatar me-3"
+      />
+      <div *ngIf="!user.avatar" class="avatar-placeholder me-3">
+        <i class="bi bi-person-circle"></i>
+      </div>
+      <div>
+        <h5 class="mb-0">{{ user.first_name }} {{ user.last_name }}</h5>
+        <small class="text-dark">{{ user.position || "Not specified" }}</small>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <div class="row">
+        <!-- Username -->
+        <div class="col-md-6 mb-3">
+          <strong>Username:</strong> {{ user.username }}
+        </div>
+
+        <!-- Email -->
+        <div class="col-md-6 mb-3">
+          <strong>Email:</strong> {{ user.username }}
+        </div>
+
+        <!-- Phone Number -->
+        <div class="col-md-6 mb-3">
+          <strong>Phone Number:</strong>
+          {{ user.phone_number || "Not specified" }}
+        </div>
+
+        <!-- Gender -->
+        <div class="col-md-6 mb-3">
+          <strong>Gender:</strong>
+          {{ user.gender || "Not specified" }}
+        </div>
+
+        <!-- Date of Birth -->
+        <div class="col-md-6 mb-3">
+          <strong>Date of Birth:</strong>
+          {{ user.date_of_birth || "Not specified" }}
+        </div>
+
+        <!-- Status -->
+        <div class="col-md-6 mb-3">
+          <strong>Status:</strong>
+          <span
+            class="badge"
+            [ngClass]="{
+              'bg-success': user.active,
+              'bg-danger': !user.active
+            }"
+          >
+            {{ user.active ? "Active" : "Inactive" }}
+          </span>
+        </div>
+
+        <!-- Last Active -->
+        <div class="col-md-6 mb-3">
+          <strong>Last Active:</strong>
+          {{ user.last_active?.date | date : "medium" }}
+        </div>
+
+        <!-- Created At -->
+        <div class="col-md-6 mb-3">
+          <strong>Created At:</strong>
+          {{ user.created_at?.date | date : "medium" }}
+        </div>
+
+        <!-- Updated At -->
+        <div class="col-md-6 mb-3">
+          <strong>Updated At:</strong>
+          {{ user.updated_at?.date | date : "medium" }}
+        </div>
+
+        <!-- Roles -->
+        <div class="col-md-12 mb-3">
+          <strong>Roles:</strong>
+          <div *ngIf="user.roles?.length; else noRoles">
+            <span *ngFor="let role of user.roles" class="badge bg-info me-1">
+              {{ role }}
+            </span>
+          </div>
+          <ng-template #noRoles>
+            <span class="text-muted">No roles assigned</span>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-footer d-flex justify-content-between align-items-center">
+      <!-- Back Button (on the left) -->
+      <a class="btn btn-outline-secondary btn-sm" routerLink="/users">
+        <i class="bi bi-arrow-left me-2"></i>Back
+      </a>
+
+      <!-- Edit Button (on the right) -->
+      <a class="btn btn-primary btn-sm" routerLink="/users/edit/{{ user.id }}">
+        <i class="bi bi-pencil-square me-2"></i>Edit User
+      </a>
+    </div>
+  </div>
+</div>

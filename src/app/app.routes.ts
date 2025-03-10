@@ -8,6 +8,7 @@ import { productListResolver } from './_resolvers/product-list.resolver';
 import { companyDetailsResolver } from './_resolvers/company-details.resolver';
 import { documentListResolver } from './_resolvers/document-list.resolver';
 import { tenderDetailsResolver } from './_resolvers/tender-details.resolver';
+import { userDetailsResolver } from './_resolvers/user-details.resolver';
 
 export const routes: Routes = [
   {
@@ -69,6 +70,26 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/admin/user/user-create/user-create.component').then(
         (c) => c.UserCreateComponent
+      ),
+    runGuardsAndResolvers: 'always',
+    canActivate: [authGuard, adminGuard],
+  },
+  {
+    path: 'users/:id',
+    loadComponent: () =>
+      import('./pages/admin/user/user-details/user-details.component').then(
+        (c) => c.UserDetailsComponent
+      ),
+    resolve: { user: userDetailsResolver },
+    runGuardsAndResolvers: 'always',
+    canActivate: [authGuard, adminGuard],
+  },
+
+  {
+    path: 'users/edit/:id',
+    loadComponent: () =>
+      import('./pages/admin/user/user-edit/user-edit.component').then(
+        (c) => c.UserEditComponent
       ),
     runGuardsAndResolvers: 'always',
     canActivate: [authGuard, adminGuard],

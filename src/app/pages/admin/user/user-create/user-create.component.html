@@ -18,18 +18,284 @@
             </ol>
           </nav>
         </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-lg-6">
-              <!-- <h3 class="text-start">Create new User</h3> -->
-              <app-dynamic-form
-                [questions]="questions$ | async"
-                [btnText]="'Save User'"
-                [perPage]="5"
-                (submitEvent)="handleFormSubmit($event)"
-              ></app-dynamic-form>
+        <div class="card-body p-4">
+          <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+            <div class="row">
+              <div class="col-md-7">
+                <div class="row">
+                  <!-- Firstname -->
+                  <div class="col-md-6 mb-3">
+                    <label for="firstname" class="form-label"
+                      >First Name <span class="text-danger">*</span></label
+                    >
+                    <input
+                      type="text"
+                      id="firstname"
+                      class="form-control"
+                      formControlName="firstname"
+                      [class.is-invalid]="
+                        userForm.get('firstname')?.invalid &&
+                        userForm.get('firstname')?.touched
+                      "
+                    />
+                    <div
+                      *ngIf="
+                        userForm.get('firstname')?.invalid &&
+                        userForm.get('firstname')?.touched
+                      "
+                      class="invalid-feedback"
+                    >
+                      First name is required.
+                    </div>
+                  </div>
+
+                  <!-- Lastname -->
+                  <div class="col-md-6 mb-3">
+                    <label for="lastname" class="form-label"
+                      >Last Name <span class="text-danger">*</span></label
+                    >
+                    <input
+                      type="text"
+                      id="lastname"
+                      class="form-control"
+                      formControlName="lastname"
+                      [class.is-invalid]="
+                        userForm.get('lastname')?.invalid &&
+                        userForm.get('lastname')?.touched
+                      "
+                    />
+                    <div
+                      *ngIf="
+                        userForm.get('lastname')?.invalid &&
+                        userForm.get('lastname')?.touched
+                      "
+                      class="invalid-feedback"
+                    >
+                      Last name is required.
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Position -->
+                <div class="mb-3">
+                  <label for="lastname" class="form-label">Position</label>
+                  <input
+                    type="text"
+                    id="position"
+                    class="form-control"
+                    placeholder="e.g Procurement Manager"
+                    formControlName="position"
+                    [class.is-invalid]="
+                      userForm.get('position')?.invalid &&
+                      userForm.get('position')?.touched
+                    "
+                  />
+                  <div
+                    *ngIf="
+                      userForm.get('position')?.invalid &&
+                      userForm.get('position')?.touched
+                    "
+                    class="invalid-feedback"
+                  >
+                    Position is required.
+                  </div>
+                </div>
+
+                <!-- Phone Number -->
+                <div class="mb-3">
+                  <label class="form-label"
+                    >Phone Number <span class="text-danger">*</span></label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="phoneNumber"
+                    [class.is-invalid]="
+                      userForm.get('phoneNumber')?.invalid &&
+                      userForm.get('phoneNumber')?.touched
+                    "
+                  />
+                  <div
+                    *ngIf="
+                      userForm.get('phoneNumber')?.invalid &&
+                      userForm.get('phoneNumber')?.touched
+                    "
+                    class="invalid-feedback"
+                  >
+                    Please enter a valid phone number.
+                  </div>
+                </div>
+
+                <!-- Date of Birth -->
+                <div class="mb-3">
+                  <label class="form-label"
+                    >Date of Birth <span class="text-danger">*</span></label
+                  >
+                  <input
+                    type="date"
+                    class="form-control"
+                    formControlName="dateOfBirth"
+                  />
+                </div>
+
+                <!-- Gender -->
+                <div class="mb-3">
+                  <label class="form-label"
+                    >Gender <span class="text-danger">*</span></label
+                  >
+                  <select class="form-select" formControlName="gender">
+                    <option value="" disabled>Select Gender</option>
+                    <option *ngFor="let gender of genders" [value]="gender">
+                      {{ gender }}
+                    </option>
+                  </select>
+                </div>
+
+                <!-- Email -->
+                <div class="mb-3">
+                  <label for="email" class="form-label"
+                    >Email <span class="text-danger">*</span></label
+                  >
+                  <input
+                    type="email"
+                    id="email"
+                    class="form-control"
+                    formControlName="email"
+                    [class.is-invalid]="
+                      userForm.get('email')?.invalid &&
+                      userForm.get('email')?.touched
+                    "
+                  />
+                  <div
+                    *ngIf="
+                      userForm.get('email')?.invalid &&
+                      userForm.get('email')?.touched
+                    "
+                    class="invalid-feedback"
+                  >
+                    Please enter a valid email.
+                  </div>
+                </div>
+
+                <div class="row">
+                  <!-- Password -->
+                  <div class="col-md-6 mb-3">
+                    <label for="password" class="form-label"
+                      >Password <span class="text-danger">*</span></label
+                    >
+                    <input
+                      type="password"
+                      id="password"
+                      class="form-control"
+                      formControlName="password"
+                      [class.is-invalid]="
+                        userForm.get('password')?.invalid &&
+                        userForm.get('password')?.touched
+                      "
+                    />
+                    <div
+                      *ngIf="
+                        userForm.get('password')?.invalid &&
+                        userForm.get('password')?.touched
+                      "
+                      class="invalid-feedback"
+                    >
+                      Password must be at least 6 characters.
+                    </div>
+                  </div>
+
+                  <!-- Confirm Password -->
+                  <div class="col-md-6 mb-3">
+                    <label for="confirmPassword" class="form-label"
+                      >Confirm Password
+                      <span class="text-danger">*</span></label
+                    >
+                    <input
+                      type="password"
+                      id="confirmPassword"
+                      class="form-control"
+                      formControlName="confirmPassword"
+                      [class.is-invalid]="
+                        userForm.get('confirmPassword')?.invalid &&
+                        userForm.get('confirmPassword')?.touched
+                      "
+                    />
+                    <div
+                      *ngIf="userForm.get('confirmPassword')?.errors?.['passwordMismatch']"
+                      class="invalid-feedback"
+                    >
+                      Passwords do not match.
+                    </div>
+                    <div
+                      *ngIf="
+                        userForm.get('confirmPassword')?.invalid &&
+                        userForm.get('confirmPassword')?.touched
+                      "
+                      class="invalid-feedback"
+                    >
+                      Please confirm your password.
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-5 border-start">
+                <!-- Roles -->
+                <div class="mb-3 ms-3">
+                  <label class="form-label"
+                    >Access Roles <span class="text-danger">*</span></label
+                  >
+                  <div class="form-check" *ngFor="let role of roles">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      [value]="role.value"
+                      (change)="toggleRole(role)"
+                      [checked]="selectedRoles.includes(role)"
+                    />
+                    <label class="form-check-label">{{ role.name }}</label>
+                  </div>
+                  <!-- <div
+                    *ngFor="let role of roles; let i = index"
+                    class="form-check"
+                  >
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      [formControlName]="i"
+                    />
+                    <label class="form-check-label">
+                      {{ role.name }}
+                    </label>
+                  </div> -->
+                  <!-- <div
+                    *ngIf="rolesFormArray.invalid && userForm.touched"
+                    class="text-danger"
+                  >
+                    At least one role must be selected.
+                  </div> -->
+                </div>
+              </div>
             </div>
-          </div>
+
+            <div class="row my-3">
+              <div class="col-md-12 px-5 text-end">
+                <!-- Submit Button -->
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  [disabled]="userForm.invalid || isLoading"
+                >
+                  <span
+                    *ngIf="isLoading"
+                    class="spinner-border spinner-border-sm me-2"
+                    user="status"
+                  ></span>
+                  Create User
+                </button>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>

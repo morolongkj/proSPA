@@ -1,0 +1,39 @@
+.card {
+  /* border-radius: 12px; */
+  overflow: hidden;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+}
+
+.avatar-placeholder {
+  width: 50px;
+  height: 50px;
+  background-color: #e9ecef;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: #6c757d;
+}
+
+.badge {
+  font-size: 14px;
+  padding: 6px 12px;
+}
+
+.card-footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid #dee2e6;
+}

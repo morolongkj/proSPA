@@ -1,0 +1,59 @@
+<div class="card mb-4">
+  <div class="card-body">
+    <form [formGroup]="filterForm" (ngSubmit)="onFilterChange()" class="row g-3">
+
+      <!-- First Name -->
+      <div class="col-md-4">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="First Name"
+          formControlName="firstName"
+        />
+      </div>
+
+      <!-- Last Name -->
+      <div class="col-md-4">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Last Name"
+          formControlName="lastName"
+        />
+      </div>
+
+      <!-- Email -->
+      <div class="col-md-4">
+        <input
+          type="email"
+          class="form-control"
+          placeholder="Email"
+          formControlName="email"
+        />
+      </div>
+
+      <!-- Gender -->
+      <div class="col-md-4">
+        <select class="form-select" formControlName="gender">
+          <option value="">Select Gender</option>
+          <option *ngFor="let gender of genders" [value]="gender">{{ gender }}</option>
+        </select>
+      </div>
+
+      <!-- Role -->
+      <div class="col-md-4">
+        <select class="form-select" formControlName="role">
+          <option value="">Select Role</option>
+          <option *ngFor="let role of roles" [value]="role.value">{{ role.name }}</option>
+        </select>
+      </div>
+
+      <!-- Submit and Reset Buttons -->
+      <div class="col-md-4 d-flex align-items-center justify-content-end">
+        <button type="submit" class="btn btn-primary me-2">Filter</button>
+        <button type="button" class="btn btn-outline-secondary" (click)="resetForm()">Reset</button>
+      </div>
+
+    </form>
+  </div>
+</div>
