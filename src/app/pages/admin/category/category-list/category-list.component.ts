@@ -7,7 +7,7 @@ import { QuestionBase } from '../../../../_models/question-base';
 import { QuestionService } from '../../../../_services/question.service';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { NgbModal, NgbModule, NgbPopoverModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCollapseModule, NgbModal, NgbModule, NgbPopoverModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { RouterLink } from '@angular/router';
 import { ClassicEditor, Heading, Bold, Essentials, Italic, Mention, Paragraph, Undo, Link, List } from 'ckeditor5';
@@ -15,6 +15,7 @@ import { ConfirmService } from '../../../../_services/confirm.service';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { ImageUploadComponent } from "../../../../_shared/image-upload/image-upload.component";
 import { HttpEventType } from '@angular/common/http';
+import { CategoryFilterComponent } from "../category-filter/category-filter.component";
 
 @Component({
   selector: 'app-category-list',
@@ -30,8 +31,9 @@ import { HttpEventType } from '@angular/common/http';
     RouterLink,
     CommonModule,
     CKEditorModule,
-    ImageUploadComponent,
-    NgbModule
+    NgbModule,
+    NgbCollapseModule,
+    CategoryFilterComponent
 ],
   templateUrl: './category-list.component.html',
   styleUrl: './category-list.component.css',
@@ -51,9 +53,6 @@ export class CategoryListComponent implements OnInit {
   isLoading = false;
 
   filters: any = {};
-  questions$: Observable<QuestionBase<any>[]>;
-  @ViewChild(DynamicFormComponent)
-  dynamicFormComponent!: DynamicFormComponent;
 
   currentCategory: any = {};
 
@@ -99,17 +98,16 @@ export class CategoryListComponent implements OnInit {
   };
 
   progress: number = 0;
+  isCollapsed = true;
 
-  constructor(questionService: QuestionService) {
-    this.questions$ = questionService.getCategoryFiltersQuestions();
-
-  }
+  constructor() {}
 
   ngOnInit(): void {
     this.getCategories();
   }
 
   getCategories() {
+    this.isLoading = true;
     this.categoryService
       .getCategories(this.page, this.perPage, this.filters)
       .subscribe({
@@ -117,6 +115,11 @@ export class CategoryListComponent implements OnInit {
           this.categories = res.data.categories;
           this.total = res.data.total;
           console.log(this.categories);
+          this.isLoading = false;
+        },
+        error: (err: any) => {
+          console.log(err);
+          this.isLoading = false;
         },
       });
   }
@@ -135,9 +138,30 @@ export class CategoryListComponent implements OnInit {
   handleFormSubmit(event: any) {
     const model = {
       title: event.formData.title,
-      description: event.formData.description || "",
+      description: event.formData.description || '',
     };
     this.filters = model;
+    console.log(this.filters);
+    this.page = 1;
+    this.getCategories();
+  }
+
+  handleFilter(filterData: any) {
+    console.log(filterData);
+    const model: any = {
+      title: filterData.title,
+      description: filterData.description,
+    };
+    // Remove null or undefined values
+    this.filters = Object.keys(model).reduce(
+      (acc: { [key: string]: any }, key) => {
+        if (model[key] != null && model[key] !== '') {
+          acc[key] = model[key];
+        }
+        return acc;
+      },
+      {} as { [key: string]: any }
+    );
     console.log(this.filters);
     this.page = 1;
     this.getCategories();
@@ -192,10 +216,8 @@ export class CategoryListComponent implements OnInit {
       });
   }
 
-
   openModal(content: TemplateRef<any>, category: any) {
     this.currentCategory = category;
     this.modalService.open(content, { centered: true, size: 'lg' });
   }
-
 }

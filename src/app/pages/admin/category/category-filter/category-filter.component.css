@@ -1,0 +1,16 @@
+.card {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+input, button {
+  font-size: 0.9rem;
+}
+
+button {
+  font-weight: 500;
+}
+
+button:focus {
+  box-shadow: none;
+}

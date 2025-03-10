@@ -1,0 +1,35 @@
+<div class="card shadow-sm">
+  <div class="card-body">
+    <form [formGroup]="filterForm" (ngSubmit)="onFilterChange()" class="row g-3">
+      <!-- Title -->
+      <div class="col-md-6">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Filter by title"
+          formControlName="title"
+        />
+      </div>
+
+      <!-- Description -->
+      <div class="col-md-6">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Filter by description"
+          formControlName="description"
+        />
+      </div>
+
+      <!-- Buttons -->
+      <div class="col-md-12 d-flex justify-content-end">
+        <button type="submit" class="btn btn-primary me-2">
+          <i class="bi bi-search me-2"></i>Search
+        </button>
+        <button type="button" class="btn btn-outline-secondary" (click)="resetForm()">
+          <i class="bi bi-x-circle me-2"></i>Reset
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

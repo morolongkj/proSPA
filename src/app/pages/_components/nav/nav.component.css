@@ -2,8 +2,18 @@
   border-radius: 0px;
 }
 
-.navbar-nav .nav-item .nav-link.active {
+.navbar-dark .navbar-nav .nav-item .nav-link {
+  color: #ffffff;
+}
+
+.navbar-dark .navbar-nav .nav-item .nav-link.active {
   color: #f5c945;
 }
 
+.navbar-dark .navbar-nav .nav-item .nav-link:hover {
+  color: #f5c945;
+}
 
+.navbar-nav .nav-item .nav-link:hover {
+  color: #f5c945;
+}

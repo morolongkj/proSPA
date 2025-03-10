@@ -11,169 +11,200 @@
     </div>
     <div class="card-body">
       <div class="row mb-3">
-        <div class="col-md-3 my-auto">
-          Per Page:
-          <select (change)="handlePageSizeChange($event)" class="p-1">
-            @for(pageSize of pageSizes; track pageSize) {
-            <option [value]="pageSize">
-              {{ pageSize }}
-            </option>
-            }
-          </select>
-        </div>
-        <div class="col-md-9 text-end">
-          <div class="btn-group" role="group" aria-label="Basic example">
+        <div class="col-md-12">
+          <div class="d-flex justify-content-between align-items-center">
+            <!-- Filter Button on the Left -->
             <button
               type="button"
               class="btn btn-light"
-              [ngbPopover]="popContent"
-              [popoverTitle]="'Filter Products'"
-              [autoClose]="'outside'"
+              (click)="isCollapsed = !isCollapsed"
+              [attr.aria-expanded]="!isCollapsed"
             >
               <i class="bi bi-filter me-2"></i>Filter
             </button>
-            <a [routerLink]="['/products/export']" class="btn btn-light">
-              <i class="bi bi-cloud-download me-2"></i>Export
-            </a>
 
-            <a [routerLink]="['/products/import']" class="btn btn-light">
-              <i class="bi bi-cloud-upload me-2"></i>Import
-            </a>
-            <a [routerLink]="['/products/create']" class="btn btn-light">
-              <i class="bi bi-database-add me-2"></i>Add
-            </a>
+            <!-- Other Buttons on the Right -->
+            <div class="btn-group" role="group" aria-label="Basic example">
+              <a [routerLink]="['/products/export']" class="btn btn-light">
+                <i class="bi bi-cloud-download me-2"></i>Export
+              </a>
+
+              <a [routerLink]="['/products/import']" class="btn btn-light">
+                <i class="bi bi-cloud-upload me-2"></i>Import
+              </a>
+              <a [routerLink]="['/products/create']" class="btn btn-light">
+                <i class="bi bi-database-add me-2"></i>Add
+              </a>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="table-responsive">
-            <table class="table">
-              <thead>
-                <tr class="bg-primary">
-                  <th scope="col">Code</th>
-                  <th scope="col">Title</th>
-                  <th scope="col">Description</th>
-                  <th scope="col">Category</th>
-                  <th scope="col" class="text-end">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (product of products | paginate : { id:
-                'Products-pagination', itemsPerPage: perPage, currentPage: page,
-                totalItems: total }; track product.id; let i = $index) {
-                <tr>
-                  <td>
-                    <span *ngIf="!product.isEditing">{{ product.code }}</span>
-                    <input
-                      *ngIf="product.isEditing"
-                      type="text"
-                      class="form-control"
-                      [(ngModel)]="product.code"
-                      [readonly]="!product.isEditing"
-                      required="true"
-                    />
-                  </td>
-                  <td>
-                    <span *ngIf="!product.isEditing">{{ product.title }}</span>
-                    <input
-                      *ngIf="product.isEditing"
-                      type="text"
-                      class="form-control"
-                      [(ngModel)]="product.title"
-                      [readonly]="!product.isEditing"
-                      required="true"
-                    />
-                  </td>
 
-                  <td>
-                    <div
-                      *ngIf="!product.isEditing"
-                      [innerHTML]="product.description"
-                    ></div>
-                    <ckeditor
-                      *ngIf="product.isEditing"
-                      [(ngModel)]="product.description"
-                      [editor]="Editor"
-                      [config]="config"
-                      data="<p>Hello, world!</p>"
-                    ></ckeditor>
-                  </td>
-                  <td>
-                    <span *ngIf="!product.isEditing">{{
-                      product.category
-                    }}</span>
+        <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
+          <div class="card border-0">
+            <div class="card-body">
+              <app-product-filter
+              (filterChanged)="handleFilter($event)"
+              [categories]="categories"
+            ></app-product-filter>
+            </div>
+          </div>
+        </div>
 
-                    <ng-select
-                      *ngIf="product.isEditing"
-                      [(ngModel)]="product.category_id"
-                      [items]="categories"
-                      bindLabel="label"
-                      bindValue="value"
-                      [searchable]="true"
-                      placeholder="Select type"
-                    >
-                    </ng-select>
-                  </td>
-                  <td class="text-end">
-                    <div
-                      class="btn-group"
-                      role="group"
-                      aria-label="Edit and Delete Button Group"
-                    >
-                      <button
-                        *ngIf="!product.isEditing"
-                        type="button"
-                        class="btn btn-primary btn-sm"
-                        (click)="toggleEdit(product)"
-                      >
-                        <i class="bi bi-pencil-square"></i>
-                      </button>
-                      <button
+        <!-- Loading Spinner -->
+        <div *ngIf="isLoading" class="text-center my-4">
+          <div class="spinner-border" user="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+
+        <!-- No Data Available -->
+        <div
+          *ngIf="!isLoading && products.length === 0"
+          class="text-center mt-4"
+        >
+          <div class="alert alert-info" user="alert">
+            <i class="bi bi-info-circle me-2"></i> There are no products
+            available at the moment.
+          </div>
+        </div>
+
+         <div class="row" *ngIf="!isLoading && products.length > 0">
+          <div class="col-lg-12">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr class="bg-primary">
+                    <th scope="col">Code</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Category</th>
+                    <th scope="col" class="text-end">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (product of products | paginate : { id:
+                  'products-pagination', itemsPerPage: perPage, currentPage:
+                  page, totalItems: total }; track product.id; let i = $index) {
+                  <tr>
+                    <td>
+                      <span *ngIf="!product.isEditing">{{ product.code }}</span>
+                      <input
                         *ngIf="product.isEditing"
-                        type="button"
-                        class="btn btn-success btn-sm"
-                        (click)="saveProduct(product)"
+                        type="text"
+                        class="form-control"
+                        [(ngModel)]="product.code"
+                        [readonly]="!product.isEditing"
+                        required="true"
+                      />
+                    </td>
+                    <td>
+                      <span *ngIf="!product.isEditing">{{
+                        product.title
+                      }}</span>
+                      <input
+                        *ngIf="product.isEditing"
+                        type="text"
+                        class="form-control"
+                        [(ngModel)]="product.title"
+                        [readonly]="!product.isEditing"
+                        required="true"
+                      />
+                    </td>
+
+                    <td>
+                      <div
+                        *ngIf="!product.isEditing"
+                        [innerHTML]="product.description"
+                      ></div>
+                      <ckeditor
+                        *ngIf="product.isEditing"
+                        [(ngModel)]="product.description"
+                        [editor]="Editor"
+                        [config]="config"
+                        data="<p>Hello, world!</p>"
+                      ></ckeditor>
+                    </td>
+                    <td>
+                      <span *ngIf="!product.isEditing">{{
+                        product.category
+                      }}</span>
+
+                      <ng-select
+                        *ngIf="product.isEditing"
+                        [(ngModel)]="product.category_id"
+                        [items]="categories"
+                        bindLabel="label"
+                        bindValue="value"
+                        [searchable]="true"
+                        placeholder="Select type"
                       >
-                        <i class="bi bi-check-lg"></i>
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-danger btn-sm"
-                        (click)="deleteProduct(product)"
+                      </ng-select>
+                    </td>
+                    <td class="text-end">
+                      <div
+                        class="btn-group"
+                        role="group"
+                        aria-label="Edit and Delete Button Group"
                       >
-                        <i class="bi bi-trash"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                }
-              </tbody>
-            </table>
+                        <button
+                          *ngIf="!product.isEditing"
+                          type="button"
+                          class="btn btn-primary btn-sm"
+                          placement="top"
+                          ngbTooltip="Edit Product"
+                          (click)="toggleEdit(product)"
+                        >
+                          <i class="bi bi-pencil-square"></i>
+                        </button>
+                        <button
+                          *ngIf="product.isEditing"
+                          type="button"
+                          class="btn btn-success btn-sm"
+                          (click)="saveProduct(product)"
+                        >
+                          <i class="bi bi-check-lg"></i>
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn-danger btn-sm"
+                          placement="top"
+                          ngbTooltip="Remove Product"
+                          (click)="deleteProduct(product)"
+                        >
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="row my-3">
-        <div class="col-lg-10 text-center mx-auto">
-          <pagination-controls
-            id="Products-pagination"
-            previousLabel="Prev"
-            nextLabel="Next"
-            [responsive]="true"
-            (pageChange)="handlePageChange($event)"
-            class="bg-success"
-          ></pagination-controls>
+        <div class="row my-3">
+          <div class="col-md-3">
+            Per Page:
+            <select (change)="handlePageSizeChange($event)">
+              @for(pageSize of pageSizes; track pageSize) {
+              <option [value]="pageSize">
+                {{ pageSize }}
+              </option>
+              }
+            </select>
+          </div>
+          <div class="col-md-9 text-end">
+            <pagination-controls
+              id="products-pagination"
+              previousLabel="Prev"
+              nextLabel="Next"
+              [responsive]="true"
+              (pageChange)="handlePageChange($event)"
+              class="bg-success"
+            ></pagination-controls>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-<ng-template #popContent>
-  <app-dynamic-form
-    [questions]="questions$ | async"
-    [btnText]="'Filter'"
-    [perPage]="2"
-    (submitEvent)="handleFormSubmit($event)"
-  ></app-dynamic-form>
-</ng-template>

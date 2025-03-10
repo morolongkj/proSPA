@@ -40,6 +40,7 @@ import {
 } from 'ckeditor5';
 import { HttpEventType } from '@angular/common/http';
 import { ImageUploadComponent } from '../../../../_shared/image-upload/image-upload.component';
+import { ProductFilterComponent } from "../product-filter/product-filter.component";
 
 @Component({
   selector: 'app-admin-product-list',
@@ -59,6 +60,7 @@ import { ImageUploadComponent } from '../../../../_shared/image-upload/image-upl
     CKEditorModule,
     ImageUploadComponent,
     NgbModule,
+    ProductFilterComponent,
   ],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.css',
@@ -71,6 +73,7 @@ export class ProductListComponent implements OnInit {
   private modalService = inject(NgbModal);
 
   products: any[] = [];
+  isCollapsed = true;
 
   page = 1;
   perPage = 10;
@@ -152,6 +155,7 @@ export class ProductListComponent implements OnInit {
   }
 
   getProducts() {
+    this.isLoading = true;
     this.productService
       .getProducts(this.page, this.perPage, this.filters)
       .subscribe({
@@ -159,6 +163,11 @@ export class ProductListComponent implements OnInit {
           this.products = res.data.products;
           this.total = res.data.total;
           console.log(this.products);
+          this.isLoading = false;
+        },
+        error: (err: any) => {
+          console.log(err);
+          this.isLoading = false;
         },
       });
   }
@@ -180,6 +189,28 @@ export class ProductListComponent implements OnInit {
       description: event.formData.description || '',
     };
     this.filters = model;
+    console.log(this.filters);
+    this.page = 1;
+    this.getProducts();
+  }
+
+  handleFilter(filterData: any) {
+    console.log(filterData);
+    const model: any = {
+      title: filterData.title,
+      description: filterData.description,
+      category_id: filterData.category,
+    };
+    // Remove null or undefined values
+    this.filters = Object.keys(model).reduce(
+      (acc: { [key: string]: any }, key) => {
+        if (model[key] != null && model[key] !== '') {
+          acc[key] = model[key];
+        }
+        return acc;
+      },
+      {} as { [key: string]: any }
+    );
     console.log(this.filters);
     this.page = 1;
     this.getProducts();
@@ -238,5 +269,4 @@ export class ProductListComponent implements OnInit {
     this.currentProduct = product;
     this.modalService.open(content, { centered: true, size: 'lg' });
   }
-
 }

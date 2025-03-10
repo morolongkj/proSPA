@@ -49,9 +49,18 @@
       </div>
 
       <!-- Submit and Reset Buttons -->
-      <div class="col-md-4 d-flex align-items-center justify-content-end">
+      <!-- <div class="col-md-4 d-flex align-items-center justify-content-end">
         <button type="submit" class="btn btn-primary me-2">Filter</button>
         <button type="button" class="btn btn-outline-secondary" (click)="resetForm()">Reset</button>
+      </div> -->
+         <!-- Buttons -->
+      <div class="col-md-12 d-flex justify-content-end">
+        <button type="submit" class="btn btn-primary me-2">
+          <i class="bi bi-search me-2"></i>Search
+        </button>
+        <button type="button" class="btn btn-outline-secondary" (click)="resetForm()">
+          <i class="bi bi-x-circle me-2"></i>Reset
+        </button>
       </div>
 
     </form>
