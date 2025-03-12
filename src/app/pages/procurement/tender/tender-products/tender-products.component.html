@@ -4,7 +4,7 @@
       <h5 class="card-title mb-0">Products</h5>
       <button
         class="btn btn-primary btn-sm"
-        (click)="addproduct(content)"
+        (click)="addProduct(content)"
         *ngIf="
           (!tender.isEditing && tender.current_status === 'Draft') ||
           tender.current_status === 'Initiated' ||
@@ -90,7 +90,7 @@
 
 <ng-template #content let-modal>
   <div class="modal-header">
-    <h5 class="modal-title" id="modal-basic-title">Add a Product</h5>
+    <h5 class="modal-title" id="modal-basic-title">Add Products</h5>
     <button
       type="button"
       class="btn-close"
@@ -99,7 +99,7 @@
     ></button>
   </div>
   <div class="modal-body">
-    <form #productForm="ngForm" (ngSubmit)="onSubmit(productForm)" class="mt-3">
+    <!-- <form #productForm="ngForm" (ngSubmit)="onSubmit(productForm)" class="mt-3">
       <div class="mb-3">
         <label for="product" class="form-label">Product</label>
         <select
@@ -144,6 +144,130 @@
       >
         Add Product
       </button>
+    </form> -->
+
+    <!-- <form [formGroup]="productForm" (ngSubmit)="onSubmit1()" class="mt-3">
+  <div class="mb-3">
+    <label class="form-label">Select Products</label>
+    <div *ngFor="let product of products; let i = index">
+      <input
+        type="checkbox"
+        [value]="product.id"
+        (change)="onProductSelectionChange($event, product)"
+      />
+      {{ product.title }}
+
+
+      <div *ngIf="isProductSelected(product.id)" class="mt-2">
+        <label for="quantity-{{ product.id }}" class="form-label">Quantity:</label>
+        <input
+          type="number"
+          id="quantity-{{ product.id }}"
+          class="form-control"
+          formControlName="{{ product.id }}"
+          min="1"
+          required
+        />
+        <div
+          *ngIf="
+            productForm.controls[product.id]?.invalid &&
+            productForm.controls[product.id]?.touched
+          "
+          class="text-danger"
+        >
+          Quantity is required and must be greater than zero.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button
+    type="submit"
+    class="btn btn-primary"
+    [disabled]="productForm.invalid || selectedProducts.length === 0"
+  >
+    Add Products
+  </button>
+</form> -->
+    <!-- ✅ Search Field -->
+    <div class="mb-3">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Search products..."
+        [(ngModel)]="searchTerm"
+        name="searchTerm"
+        (input)="filterProducts()"
+      />
+    </div>
+
+    <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="mt-3">
+      <!-- ✅ Products List -->
+      <div class="mb-3">
+        <div *ngFor="let product of paginatedProducts" class="form-check">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            id="product{{ product.id }}"
+            [value]="product.id"
+            [checked]="isProductSelected(product.id)"
+            (change)="toggleProductSelection(product.id, $event)"
+          />
+          <label for="product{{ product.id }}">{{ product.title }}</label>
+
+          <!-- ✅ Quantity Input -->
+          <div *ngIf="isProductSelected(product.id)" class="mt-2">
+            <input
+              type="number"
+              class="form-control"
+              formControlName="{{ product.id }}"
+              min="1"
+              required
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-5">
+        <div class="col-md-8">
+          <!-- Pagination Controls -->
+          <nav aria-label="Page navigation">
+            <ul class="pagination">
+              <li
+                class="page-item"
+                [class.disabled]="currentPage === 1"
+                (click)="previousPage()"
+              >
+                <a class="page-link" href="javascript:void(0)">Previous</a>
+              </li>
+              <li
+                class="page-item"
+                *ngFor="let page of totalPagesArray; let i = index"
+                [class.active]="currentPage === i + 1"
+                (click)="setPage(i + 1)"
+              >
+                <a class="page-link" href="javascript:void(0)">{{ i + 1 }}</a>
+              </li>
+              <li
+                class="page-item"
+                [class.disabled]="currentPage === totalPages"
+                (click)="nextPage()"
+              >
+                <a class="page-link" href="javascript:void(0)">Next</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <div class="col-md-4 text-end">
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="selectedProducts.length === 0"
+          >
+            Add Products
+          </button>
+        </div>
+      </div>
     </form>
   </div>
 </ng-template>

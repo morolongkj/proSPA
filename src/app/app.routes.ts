@@ -119,7 +119,7 @@ export const routes: Routes = [
         './pages/admin/category/category-list/category-list.component'
       ).then((c) => c.CategoryListComponent),
     runGuardsAndResolvers: 'always',
-    canActivate: [adminGuard],
+    canActivate: [authGuard,adminGuard],
   },
   {
     path: 'categories/create',
@@ -128,7 +128,7 @@ export const routes: Routes = [
         './pages/admin/category/category-create/category-create.component'
       ).then((c) => c.CategoryCreateComponent),
     runGuardsAndResolvers: 'always',
-    canActivate: [adminGuard],
+    canActivate: [authGuard,adminGuard],
   },
   {
     path: 'categories/import',
@@ -137,7 +137,7 @@ export const routes: Routes = [
         './pages/admin/category/category-import/category-import.component'
       ).then((c) => c.CategoryImportComponent),
     runGuardsAndResolvers: 'always',
-    canActivate: [adminGuard],
+    canActivate: [authGuard,adminGuard],
   },
   {
     path: 'categories/export',
@@ -147,7 +147,7 @@ export const routes: Routes = [
       ).then((c) => c.CategoryExportComponent),
     runGuardsAndResolvers: 'always',
     resolve: { categories: categoryListResolver },
-    canActivate: [adminGuard],
+    canActivate: [authGuard,adminGuard],
   },
   {
     path: 'products',
@@ -156,7 +156,7 @@ export const routes: Routes = [
         (c) => c.ProductListComponent
       ),
     runGuardsAndResolvers: 'always',
-    canActivate: [adminGuard],
+    canActivate: [authGuard,adminGuard],
   },
   {
     path: 'products/create',
@@ -165,7 +165,7 @@ export const routes: Routes = [
         './pages/admin/product/product-create/product-create.component'
       ).then((c) => c.ProductCreateComponent),
     runGuardsAndResolvers: 'always',
-    canActivate: [adminGuard],
+    canActivate: [authGuard,adminGuard],
   },
   {
     path: 'products/import',
@@ -174,7 +174,7 @@ export const routes: Routes = [
         './pages/admin/product/product-import/product-import.component'
       ).then((c) => c.ProductImportComponent),
     runGuardsAndResolvers: 'always',
-    canActivate: [adminGuard],
+    canActivate: [authGuard,adminGuard],
   },
   {
     path: 'products/export',
@@ -184,7 +184,7 @@ export const routes: Routes = [
       ).then((c) => c.ProductExportComponent),
     runGuardsAndResolvers: 'always',
     resolve: { products: productListResolver },
-    canActivate: [adminGuard],
+    canActivate: [authGuard,adminGuard],
   },
   {
     path: 'documents',
@@ -193,7 +193,7 @@ export const routes: Routes = [
         './pages/admin/document/document-list/document-list.component'
       ).then((c) => c.DocumentListComponent),
     runGuardsAndResolvers: 'always',
-    canActivate: [adminGuard],
+    canActivate: [authGuard,adminGuard],
   },
   {
     path: 'documents/create',
@@ -202,7 +202,7 @@ export const routes: Routes = [
         './pages/admin/document/document-create/document-create.component'
       ).then((c) => c.DocumentCreateComponent),
     runGuardsAndResolvers: 'always',
-    canActivate: [adminGuard],
+    canActivate: [authGuard,adminGuard],
   },
   {
     path: 'documents/import',
@@ -211,7 +211,7 @@ export const routes: Routes = [
         './pages/admin/document/document-import/document-import.component'
       ).then((c) => c.DocumentImportComponent),
     runGuardsAndResolvers: 'always',
-    canActivate: [adminGuard],
+    canActivate: [authGuard,adminGuard],
   },
   {
     path: 'documents/export',
@@ -221,7 +221,7 @@ export const routes: Routes = [
       ).then((c) => c.DocumentExportComponent),
     runGuardsAndResolvers: 'always',
     resolve: { documents: documentListResolver },
-    canActivate: [adminGuard],
+    canActivate: [authGuard,adminGuard],
   },
   {
     path: 'tenders',
@@ -239,7 +239,7 @@ export const routes: Routes = [
         './pages/procurement/tender/tender-create/tender-create.component'
       ).then((c) => c.TenderCreateComponent),
     runGuardsAndResolvers: 'always',
-    canActivate: [adminGuard],
+    canActivate: [authGuard,adminGuard],
   },
   {
     path: 'questionnaires',
@@ -313,7 +313,7 @@ export const routes: Routes = [
         (c) => c.CompanyListComponent
       ),
     runGuardsAndResolvers: 'always',
-    canActivate: [adminGuard],
+    canActivate: [authGuard,adminGuard],
   },
   {
     path: 'supplier/tenders',

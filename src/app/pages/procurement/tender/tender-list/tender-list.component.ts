@@ -42,6 +42,7 @@ import { HttpEventType } from '@angular/common/http';
 import { ImageUploadComponent } from '../../../../_shared/image-upload/image-upload.component';
 import { TenderProductsComponent } from '../tender-products/tender-products.component';
 import { TenderAttachmentsComponent } from '../tender-attachments/tender-attachments.component';
+import { HasRoleDirective } from '../../../../_directives/has-role.directive';
 
 @Component({
   selector: 'app-admin-tender-list',
@@ -59,11 +60,11 @@ import { TenderAttachmentsComponent } from '../tender-attachments/tender-attachm
     NgSelectModule,
     NgOptionHighlightModule,
     CKEditorModule,
-    ImageUploadComponent,
     NgbModule,
     TenderProductsComponent,
     TenderAttachmentsComponent,
-  ],
+    HasRoleDirective
+],
   templateUrl: './tender-list.component.html',
   styleUrl: './tender-list.component.css',
 })
@@ -352,8 +353,8 @@ export class TenderListComponent implements OnInit {
       reference_number: tender.reference_number,
       title: tender.title,
       description: tender.description,
-      opening_date: tender.opening_date,
-      opening_time: tender.opening_time,
+      floating_date: tender.floating_date,
+      floating_time: tender.floating_time,
       closing_date: tender.closing_date,
       closing_time: tender.closing_time,
       products: tender.products,
@@ -380,26 +381,26 @@ export class TenderListComponent implements OnInit {
     this.modalService.open(content, { centered: true, size: 'lg' });
   }
 
-  isClosingAfterOpening(): boolean {
-    const openingDateTime = new Date(
-      `${this.selectedTender.opening_date}T${this.selectedTender.opening_time}`
+  isClosingAfterFloating(): boolean {
+    const floatingDateTime = new Date(
+      `${this.selectedTender.floating_date}T${this.selectedTender.floating_time}`
     );
     const closingDateTime = new Date(
       `${this.selectedTender.closing_date}T${this.selectedTender.closing_time}`
     );
 
-    // Check if both opening and closing date/time values are valid
+    // Check if both floating and closing date/time values are valid
     if (
-      !isNaN(openingDateTime.getTime()) &&
+      !isNaN(floatingDateTime.getTime()) &&
       !isNaN(closingDateTime.getTime())
     ) {
-      return closingDateTime > openingDateTime;
+      return closingDateTime > floatingDateTime;
     }
     return false;
   }
 
   onSubmit(form: any): void {
-    if (form.valid && this.isClosingAfterOpening()) {
+    if (form.valid && this.isClosingAfterFloating()) {
       console.log('Form submitted', this.selectedTender);
       this.selectedTender.current_status_id = this.getStatusId('Published');
       this.tenderService

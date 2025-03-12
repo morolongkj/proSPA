@@ -147,7 +147,7 @@
   <div class="modal-body">
     <app-tender-details [tender]="selectedTender"></app-tender-details>
   </div>
-  <div class="modal-footer">
+  <div class="modal-footer" *appHasRole="['vendor']">
     <div class="container">
       <div class="d-flex justify-content-center align-items-center">
         <button class="btn btn-success me-3" (click)="prepareBid()">

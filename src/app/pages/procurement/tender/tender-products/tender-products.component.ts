@@ -1,30 +1,35 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input, OnInit, TemplateRef } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, OnInit, TemplateRef, inject } from '@angular/core';
+import {
+  ReactiveFormsModule,
+  FormGroup,
+  FormBuilder,
+  Validators,
+  FormsModule,
+} from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import {
-  NgbModal,
   NgbPopoverModule,
   NgbTooltipModule,
+  NgbModal,
 } from '@ng-bootstrap/ng-bootstrap';
-import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
-import { NgSelectModule } from '@ng-select/ng-select';
+import { Input } from '@angular/core';
+import { ApiService } from '../../../../_services/api.service';
+import { ConfirmService } from '../../../../_services/confirm.service';
 import { ProductService } from '../../../../_services/product.service';
 import { TenderService } from '../../../../_services/tender.service';
 import { ToastService } from '../../../../_services/toast.service';
-import { ConfirmService } from '../../../../_services/confirm.service';
 
 @Component({
   selector: 'app-tender-products',
   standalone: true,
   imports: [
-    FormsModule,
+    CommonModule,
+    ReactiveFormsModule,
     NgbPopoverModule,
     NgbTooltipModule,
     RouterLink,
-    CommonModule,
-    NgSelectModule,
-    NgOptionHighlightModule,
+    FormsModule,
   ],
   templateUrl: './tender-products.component.html',
   styleUrl: './tender-products.component.css',
@@ -35,80 +40,186 @@ export class TenderProductsComponent implements OnInit {
   private tenderService = inject(TenderService);
   private toastService = inject(ToastService);
   private confirmService = inject(ConfirmService);
+  private apiService = inject(ApiService);
+
   @Input() tender: any;
 
-  productModel = {
-    product_id: '',
-    tender_id: '',
-    quantity: 0,
-  };
-
+  productForm!: FormGroup;
   products: any[] = [];
+  filteredProducts: any[] = [];
+  paginatedProducts: any[] = [];
 
-  constructor() {}
+  searchTerm = '';
+  currentPage = 1;
+  pageSize = 50;
+  totalPages = 0;
+
+  isLoading = false;
+  selectedProducts: string[] = [];
+
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
-    this.productModel.tender_id = this.tender.id;
+    this.initForm();
     this.loadProducts();
   }
 
+  // ✅ Initialize Reactive Form
+  initForm(): void {
+    this.productForm = this.fb.group({});
+  }
+
+  // ✅ Load Products from API
   loadProducts() {
+    this.isLoading = true;
     this.productService.getProducts().subscribe({
       next: (res: any) => {
         this.products = res.data.products;
-        console.log(this.products);
+        this.filteredProducts = [...this.products];
+        this.updatePagination();
+        this.isLoading = false;
+      },
+      error: (err: any) => {
+        console.error('Error loading products:', err);
+        this.isLoading = false;
       },
     });
   }
 
-  addproduct(content: TemplateRef<any>) {
-    this.modalService.open(content, { centered: true });
+  addProduct(content: TemplateRef<any>) {
+    this.modalService.open(content, { centered: true, size: 'lg' });
   }
 
-  // Method to handle form submission
-  onSubmit(form: any) {
-    if (form.valid) {
-      console.log('Form Submitted!', this.productModel);
-      // Perform any action you need with the form data here
-      this.tenderService.addTenderProduct(this.productModel).subscribe({
-        next: (res: any) => {
-          console.log(res);
-          this.toastService.success(res.message);
-          this.productModel = {
-            product_id: '',
-            tender_id: this.tender.id,
-            quantity: 0,
-          };
-          this.modalService.dismissAll();
-          this.tender.products.push(res.tenderProduct);
-        },
-        error: (err: any) => {
-          console.log(err);
-        },
-      });
+  // ✅ Handle Search Logic
+  filterProducts() {
+    console.log('Search Term:', this.searchTerm);
+    this.filteredProducts = this.products.filter((product) =>
+      product.title.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+    this.currentPage = 1;
+    this.updatePagination();
+  }
+
+  // ✅ Update Pagination
+  updatePagination() {
+    this.totalPages = Math.ceil(this.filteredProducts.length / this.pageSize);
+    this.paginatedProducts = this.filteredProducts.slice(
+      (this.currentPage - 1) * this.pageSize,
+      this.currentPage * this.pageSize
+    );
+  }
+
+  // ✅ Handle Pagination
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.updatePagination();
     }
   }
 
-  // Method to delete a product
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.updatePagination();
+    }
+  }
+
+  setPage(page: number) {
+    this.currentPage = page;
+    this.updatePagination();
+  }
+
+  get totalPagesArray() {
+    return Array(this.totalPages)
+      .fill(0)
+      .map((_, i) => i + 1);
+  }
+
+  // ✅ Handle Product Selection
+  toggleProductSelection(productId: string, event: any) {
+    if (event.target.checked) {
+      if (!this.selectedProducts.includes(productId)) {
+        this.selectedProducts.push(productId);
+        this.productForm.addControl(
+          productId,
+          this.fb.control('', [Validators.required, Validators.min(1)])
+        );
+      }
+    } else {
+      this.selectedProducts = this.selectedProducts.filter(
+        (id) => id !== productId
+      );
+      this.productForm.removeControl(productId);
+    }
+  }
+
+  // ✅ Check if Product is Selected
+  isProductSelected(productId: string): boolean {
+    return this.selectedProducts.includes(productId);
+  }
+
+  // ✅ Handle Form Submission
+  onSubmit() {
+    if (this.productForm.valid && this.selectedProducts.length > 0) {
+      const formData = this.selectedProducts.map((productId) => ({
+        product_id: productId,
+        quantity: this.productForm.value[productId],
+        tender_id: this.tender.id,
+      }));
+
+      console.log('Form Data:', formData);
+
+      this.apiService.post('/tender-products', formData).subscribe({
+        next: (res: any) => {
+          console.log('Form submitted successfully:', res);
+          this.toastService.success('Products added successfully');
+
+          // ✅ Refresh product state
+          this.resetFormState();
+          this.selectedProducts = [];
+          this.productForm.reset();
+          this.loadProducts();
+          console.log(this.tender.products);
+          console.log("Res here: ",res);
+          this.tender.products = [...this.tender.products, ...res.tenderProducts];
+          this.modalService.dismissAll();
+        },
+        error: (error) => {
+          console.error('Error submitting form:', error);
+          this.toastService.error('Error submitting form');
+        },
+      });
+    } else {
+      console.log('Form is invalid');
+    }
+  }
+
+  // ✅ Reset State after Submission
+  resetFormState() {
+    this.selectedProducts = [];
+    this.productForm.reset();
+    this.loadProducts(); // ✅ Refresh products list
+  }
+
+  // ✅ Delete Tender Product
   deleteTenderProduct(product: any) {
     this.confirmService
       .confirm(
         'Confirm Deletion',
         `Are you sure you want to delete ${product.code}?`
       )
-      .then((confirmed: any) => {
+      .then((confirmed) => {
         if (confirmed) {
           this.tenderService.deleteTenderProduct(product.id).subscribe({
-            next: (response: any) => {
-              console.log('Delete successful', response);
-              this.toastService.success('Delete successful');
+            next: () => {
+              this.toastService.success('Product deleted successfully');
               this.tender.products = this.tender.products.filter(
                 (item: any) => item.id !== product.id
               );
             },
-            error: (err: any) => {
-              console.error('Error deleting product', err);
-              this.toastService.success('Error deleting product');
+            error: (err) => {
+              console.error('Error deleting product:', err);
+              this.toastService.error('Error deleting product');
             },
           });
         }

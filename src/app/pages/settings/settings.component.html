@@ -1,1 +1,109 @@
-<p>settings works!</p>
+<div class="container mt-5">
+  <h1>Account Settings</h1>
+
+  <!-- Change Password Section -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title"><i class="fas fa-key"></i> Change Password</h5>
+      <form [formGroup]="passwordForm" (ngSubmit)="onSubmitPassword()">
+        <div class="mb-3">
+          <label for="currentPassword" class="form-label">Current Password</label>
+          <input
+            type="password"
+            id="currentPassword"
+            class="form-control"
+            formControlName="currentPassword"
+            required
+          />
+        </div>
+        <div class="mb-3 position-relative">
+          <label for="newPassword" class="form-label">New Password</label>
+          <input
+            [type]="showNewPassword ? 'text' : 'password'"
+            id="newPassword"
+            class="form-control"
+            formControlName="newPassword"
+            required
+          />
+          <button
+            type="button"
+            class="btn btn-outline-secondary position-absolute end-0 top-0"
+            (click)="togglePasswordVisibility('new')"
+          >
+            {{ showNewPassword ? 'Hide' : 'Show' }}
+          </button>
+        </div>
+        <div class="mb-3 position-relative">
+          <label for="confirmPassword" class="form-label">Confirm Password</label>
+          <input
+            [type]="showConfirmPassword ? 'text' : 'password'"
+            id="confirmPassword"
+            class="form-control"
+            formControlName="confirmPassword"
+            required
+          />
+          <button
+            type="button"
+            class="btn btn-outline-secondary position-absolute end-0 top-0"
+            (click)="togglePasswordVisibility('confirm')"
+          >
+            {{ showConfirmPassword ? 'Hide' : 'Show' }}
+          </button>
+        </div>
+        <button type="submit" class="btn btn-primary" [disabled]="passwordForm.invalid">
+          Save Password
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Change Currency Section -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title"><i class="fas fa-dollar-sign"></i> Change Currency</h5>
+      <form [formGroup]="currencyForm" (ngSubmit)="onSubmitCurrency()">
+        <div class="mb-3">
+          <label for="currency" class="form-label">Preferred Currency</label>
+          <select class="form-select" id="currency" formControlName="currency" required>
+            <option value="USD">USD - United States Dollar</option>
+            <option value="EUR">EUR - Euro</option>
+            <option value="GBP">GBP - British Pound</option>
+            <option value="JPY">JPY - Japanese Yen</option>
+            <option value="AUD">AUD - Australian Dollar</option>
+            <option value="INR">INR - Indian Rupee</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary" [disabled]="currencyForm.invalid">
+          Save Currency
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Two-Factor Authentication -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title"><i class="fas fa-lock"></i> Two-Factor Authentication</h5>
+      <form [formGroup]="securityForm" (ngSubmit)="onSubmitSecurity()">
+        <div class="form-check mb-3">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            id="enable2FA"
+            formControlName="enable2FA"
+          />
+          <label for="enable2FA" class="form-check-label">Enable Two-Factor Authentication</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Save Settings</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Account Deactivation -->
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title"><i class="fas fa-trash-alt"></i> Account Deactivation</h5>
+      <button class="btn btn-danger" (click)="deactivateAccount()">Deactivate Account</button>
+    </div>
+  </div>
+</div>

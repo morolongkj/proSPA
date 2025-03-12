@@ -8,11 +8,18 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TenderDetailsComponent } from '../tender-details/tender-details.component';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { HasRoleDirective } from '../../../../_directives/has-role.directive';
 
 @Component({
   selector: 'app-open-tender-list',
   standalone: true,
-  imports: [CommonModule, NgxPaginationModule, TenderDetailsComponent, FormsModule],
+  imports: [
+    CommonModule,
+    NgxPaginationModule,
+    TenderDetailsComponent,
+    FormsModule,
+    HasRoleDirective,
+  ],
   templateUrl: './open-tender-list.component.html',
   styleUrl: './open-tender-list.component.css',
 })

@@ -247,7 +247,7 @@ export class QuestionService {
         ],
         order: 4,
       }),
-      
+
     ];
     return of(questions.sort((a, b) => a.order - b.order));
   }
@@ -336,15 +336,15 @@ export class QuestionService {
         order: 3,
       }),
       new TextboxQuestion({
-        key: 'openingDate',
-        label: 'Opening Date',
+        key: 'floatingDate',
+        label: 'Floating Date',
         type: 'date',
         required: true,
         order: 4,
       }),
       new TextboxQuestion({
-        key: 'openingTime',
-        label: 'Opening Time',
+        key: 'floatingTime',
+        label: 'Floating Time',
         type: 'time',
         required: true,
         order: 5,

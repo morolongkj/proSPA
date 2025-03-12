@@ -20,7 +20,8 @@
   </div>
 
   <!-- Profile Form -->
-  <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="profileForm" (ngSubmit)="onSubmit()" novalidate>
+
     <div class="form-group">
       <label for="firstname">First Name:</label>
       <input type="text" id="firstname" formControlName="firstname" />
@@ -60,7 +61,14 @@
       <input type="text" id="username" formControlName="username" readonly />
     </div>
 
-    <button type="submit" class="submit-btn" [disabled]="profileForm.invalid">
+    <!-- <button type="submit" class="submit-btn" [disabled]="profileForm.invalid">
+      Save Changes
+    </button> -->
+    <button
+      type="submit"
+      class="submit-btn"
+      [disabled]="!profileForm.valid"
+    >
       Save Changes
     </button>
   </form>

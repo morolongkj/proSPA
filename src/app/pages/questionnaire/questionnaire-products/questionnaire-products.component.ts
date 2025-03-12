@@ -49,7 +49,7 @@ export class QuestionnaireProductsComponent implements OnInit {
   paginatedProducts: any[] = []; // Products for the current page
   searchTerm: string = '';
   currentPage: number = 1;
-  pageSize: number = 5; // Number of products per page
+  pageSize: number = 50; // Number of products per page
   totalPages: number = 0;
 
   isLoading = false;
@@ -75,7 +75,7 @@ export class QuestionnaireProductsComponent implements OnInit {
       error: (err: any) => {
         console.error(err);
         this.isLoading = false;
-      }
+      },
     });
   }
 
@@ -154,19 +154,36 @@ export class QuestionnaireProductsComponent implements OnInit {
   onSubmit(form: any) {
     if (form.valid) {
       console.log('Form Submitted!', this.productModel);
-      // Perform any action you need with the form data here
+
       this.questionnaireService
         .addQuestionnaireProduct(this.productModel)
         .subscribe({
           next: (res: any) => {
             console.log(res);
             this.toastService.success(res.message);
+
+            // ✅ Remove duplicates based on product_id
+            const newProducts = res.questionnaireProducts.filter(
+              (newProduct: any) =>
+                !this.questionnaire.products.some(
+                  (existing: any) =>
+                    existing.product_id === newProduct.product_id
+                )
+            );
+
+            this.questionnaire.products = [
+              ...this.questionnaire.products,
+              ...newProducts,
+            ];
+
+            // ✅ Reset the product model
             this.productModel = {
               product_ids: [],
               questionnaire_id: this.questionnaire.id,
             };
+
+            // ✅ Close the modal
             this.modalService.dismissAll();
-            // this.questionnaire.products.push(res.questionnaireProducts);
           },
           error: (err: any) => {
             console.log(err);
@@ -174,6 +191,34 @@ export class QuestionnaireProductsComponent implements OnInit {
         });
     }
   }
+
+  // onSubmit(form: any) {
+  //   if (form.valid) {
+  //     console.log('Form Submitted!', this.productModel);
+  //     // Perform any action you need with the form data here
+  //     this.questionnaireService
+  //       .addQuestionnaireProduct(this.productModel)
+  //       .subscribe({
+  //         next: (res: any) => {
+  //           console.log(res);
+  //           this.toastService.success(res.message);
+  //           this.productModel = {
+  //             product_ids: [],
+  //             questionnaire_id: this.questionnaire.id,
+  //           };
+  //           this.questionnaire.products = [
+  //             ...this.questionnaire.products,
+  //             ...res.questionnaireProducts,
+  //           ];
+  //           this.modalService.dismissAll();
+  //           // this.questionnaire.products.push(res.questionnaireProducts);
+  //         },
+  //         error: (err: any) => {
+  //           console.log(err);
+  //         },
+  //       });
+  //   }
+  // }
 
   // Method to delete a product
   deleteQuestionnaireProduct(product: any) {

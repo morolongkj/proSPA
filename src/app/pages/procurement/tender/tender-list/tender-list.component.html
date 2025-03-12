@@ -51,8 +51,8 @@
                       <th scope="col">Reference Number</th>
                       <th scope="col">Title</th>
                       <th scope="col">Description</th>
-                      <th scope="col">Opening Date</th>
-                      <th scope="col">Opening Time</th>
+                      <th scope="col">Floating Date</th>
+                      <th scope="col">Floating Time</th>
                       <th scope="col">Closing Date</th>
 
                       <th scope="col">Closing Time</th>
@@ -110,26 +110,26 @@
                         </td>
                         <td>
                           <span *ngIf="!tender.isEditing">{{
-                            tender.opening_date
+                            tender.floating_date
                           }}</span>
                           <input
                             *ngIf="tender.isEditing"
                             type="date"
                             class="form-control"
-                            [(ngModel)]="tender.opening_date"
+                            [(ngModel)]="tender.floating_date"
                             [readonly]="!tender.isEditing"
                             required="true"
                           />
                         </td>
                         <td>
                           <span *ngIf="!tender.isEditing">{{
-                            tender.opening_time
+                            tender.floating_time
                           }}</span>
                           <input
                             *ngIf="tender.isEditing"
                             type="time"
                             class="form-control"
-                            [(ngModel)]="tender.opening_time"
+                            [(ngModel)]="tender.floating_time"
                             [readonly]="!tender.isEditing"
                             required="true"
                           />
@@ -241,15 +241,28 @@
                         </td>
                         <td colspan="8" class="bg-light text-end">
                           <div class="d-flex justify-content-end gap-2">
-                            <button
+                            <ng-container
+                              *ngIf="tender.current_status === 'Draft'"
+                            >
+                              <button
+                                type="button"
+                                class="btn btn-primary"
+                                (click)="updateStatus(tender.id, 'Submitted')"
+                                *appHasRole="['procurement_assistant']"
+                              >
+                                Submit for Verification
+                              </button>
+                            </ng-container>
+
+                            <!-- <button
                               type="button"
                               class="btn btn-primary"
                               (click)="updateStatus(tender.id, 'Submitted')"
                               *ngIf="tender.current_status === 'Draft'"
                             >
                               Submit for Verification
-                            </button>
-                            <button
+                            </button> -->
+                            <!-- <button
                               type="button"
                               class="btn btn-primary"
                               (click)="reCreateTender(tender)"
@@ -267,7 +280,38 @@
                               (click)="showRemarksInput = !showRemarksInput"
                             >
                               Reject for Modifications
-                            </button>
+                            </button> -->
+                            <!-- Button for modifying and re-submitting a rejected tender -->
+                            <ng-container
+                              *ngIf="tender.current_status === 'Rejected'"
+                            >
+                              <button
+                                type="button"
+                                class="btn btn-primary"
+                                (click)="reCreateTender(tender)"
+                                *appHasRole="['procurement_assistant']"
+                              >
+                                Modify and Re-submit Tender
+                              </button>
+                            </ng-container>
+
+                            <!-- Button for rejecting a submitted tender -->
+                            <ng-container
+                              *ngIf="
+                                tender.current_status === 'Submitted' &&
+                                !showRemarksInput
+                              "
+                            >
+                              <button
+                                type="button"
+                                class="btn btn-danger"
+                                (click)="showRemarksInput = !showRemarksInput"
+                                *appHasRole="['procurement_manager']"
+                              >
+                                Reject for Modifications
+                              </button>
+                            </ng-container>
+
                             <div
                               *ngIf="showRemarksInput"
                               class="d-flex flex-column"
@@ -288,7 +332,7 @@
                                 Confirm Reject
                               </button>
                             </div>
-                            <button
+                            <!-- <button
                               type="button"
                               class="btn btn-warning"
                               (click)="updateStatus(tender.id, 'Verified')"
@@ -328,7 +372,71 @@
                               (click)="publishTender(publish, tender)"
                             >
                               Publish Tender
-                            </button>
+                            </button> -->
+
+                            <!-- Button to verify tender -->
+                            <ng-container
+                              *ngIf="
+                                tender.current_status === 'Submitted' &&
+                                !showRemarksInput
+                              "
+                            >
+                              <button
+                                type="button"
+                                class="btn btn-warning"
+                                (click)="updateStatus(tender.id, 'Verified')"
+                                *appHasRole="['procurement_manager']"
+                              >
+                                Verify Tender
+                              </button>
+                            </ng-container>
+
+                            <!-- Button to reject tender -->
+                            <ng-container
+                              *ngIf="tender.current_status === 'Verified'"
+                            >
+                              <button
+                                type="button"
+                                class="btn btn-danger"
+                                (click)="submitApproval(tender.id, 'rejected')"
+                                *appHasRole="['tender_board_member']"
+                              >
+                                <span class="badge bg-light text-dark me-2">
+                                  {{ tender.total_rejections }}
+                                </span>
+                                Reject Tender
+                              </button>
+
+                              <!-- Button to approve tender -->
+                              <button
+                                type="button"
+                                class="btn btn-success"
+                                (click)="submitApproval(tender.id, 'approved')"
+                                *appHasRole="['tender_board_member']"
+                              >
+                                <span class="badge bg-light text-dark me-2">
+                                  {{ tender.total_approvals }}
+                                </span>
+                                Approve Tender
+                              </button>
+                            </ng-container>
+
+                            <!-- Button to publish tender -->
+                            <ng-container
+                              *ngIf="tender.current_status === 'Approved'"
+                            >
+                              <button
+                                type="button"
+                                class="btn btn-info"
+                                (click)="publishTender(publish, tender)"
+                                *appHasRole="[
+                                  'procurement_assistant',
+                                  'procurement_manager'
+                                ]"
+                              >
+                                Publish Tender
+                              </button>
+                            </ng-container>
 
                             <!-- <button
                               type="button"
@@ -399,34 +507,40 @@
     <form #tenderForm="ngForm" (ngSubmit)="onSubmit(tenderForm)" novalidate>
       <div class="row mb-3">
         <div class="col-lg-6">
-          <label for="openingDate">Opening Date</label>
+          <label for="floatingDate">Floating Date</label>
           <input
             type="date"
-            id="openingDate"
-            name="openingDate"
+            id="floatingDate"
+            name="floatingDate"
             class="form-control"
-            [(ngModel)]="selectedTender.opening_date"
-            #openingDate="ngModel"
+            [(ngModel)]="selectedTender.floating_date"
+            #floatingDate="ngModel"
             required
           />
-          <div *ngIf="openingDate.invalid && openingDate.touched" class="error">
-            Opening Date is required
+          <div
+            *ngIf="floatingDate.invalid && floatingDate.touched"
+            class="error"
+          >
+            Floating Date is required
           </div>
         </div>
 
         <div class="col-lg-6">
-          <label for="openingTime">Opening Time</label>
+          <label for="floatingTime">Floating Time</label>
           <input
             type="time"
-            id="openingTime"
-            name="openingTime"
+            id="floatingTime"
+            name="floatingTime"
             class="form-control"
-            [(ngModel)]="selectedTender.opening_time"
-            #openingTime="ngModel"
+            [(ngModel)]="selectedTender.floating_time"
+            #floatingTime="ngModel"
             required
           />
-          <div *ngIf="openingTime.invalid && openingTime.touched" class="error">
-            Opening Time is required
+          <div
+            *ngIf="floatingTime.invalid && floatingTime.touched"
+            class="error"
+          >
+            Floating Time is required
           </div>
         </div>
       </div>
@@ -466,14 +580,14 @@
       </div>
 
       <div *ngIf="tenderForm.invalid && tenderForm.touched" class="error">
-        Ensure that the closing date/time is after the opening date/time.
+        Ensure that the closing date/time is after the floating date/time.
       </div>
 
       <div class="row my-3">
         <div class="col-lg-12 text-end">
           <button
             type="submit"
-            [disabled]="!tenderForm.valid || !isClosingAfterOpening()"
+            [disabled]="!tenderForm.valid || !isClosingAfterFloating()"
             class="btn btn-primary"
           >
             Publish Tender

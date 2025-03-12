@@ -8,6 +8,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ToastService } from '../../_services/toast.service';
 
 @Component({
   selector: 'app-profile',
@@ -18,6 +19,7 @@ import { CommonModule } from '@angular/common';
 })
 export class ProfileComponent implements OnInit {
   private apiService = inject(ApiService);
+  private toastService = inject(ToastService);
 
   profile: any = {};
   isLoading = false;
@@ -77,12 +79,14 @@ export class ProfileComponent implements OnInit {
       const formData = this.profileForm.getRawValue(); // Get all fields, including disabled
       console.log('Submitting form:', formData);
 
-      this.apiService.post('profile/update', formData).subscribe({
+      this.apiService.put('profile', formData).subscribe({
         next: (response) => {
           console.log('Profile updated:', response);
+          this.toastService.success('Profile updated successfully');
         },
         error: (error) => {
           console.error('Error updating profile:', error);
+          this.toastService.error('Error updating profile');
         },
       });
     } else {

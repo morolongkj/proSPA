@@ -33,8 +33,8 @@ export class TenderCreateComponent {
       reference_number: event.formData.referenceNumber,
       title: event.formData.title,
       description: event.formData.description,
-      opening_date: event.formData.openingDate,
-      opening_time: event.formData.openingTime,
+      floating_date: event.formData.floatingDate,
+      floating_time: event.formData.floatingTime,
       closing_date: event.formData.closingDate,
       closing_time: event.formData.closingTime,
     };

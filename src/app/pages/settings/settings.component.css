@@ -1,0 +1,20 @@
+.container {
+  max-width: 600px;
+}
+
+.card {
+  border-radius: 12px;
+}
+
+.btn {
+  margin-top: 10px;
+}
+
+.position-absolute {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.form-label {
+  font-weight: 500;
+}
