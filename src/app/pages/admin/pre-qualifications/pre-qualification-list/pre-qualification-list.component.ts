@@ -28,6 +28,7 @@ export class PreQualificationListComponent implements OnInit {
 
   submissions: any[] = [];
   selectedSubmission: any = {};
+  selectedProducts: any[] = [];
 
   page = 1;
   perPage = 10;
@@ -93,9 +94,16 @@ export class PreQualificationListComponent implements OnInit {
     console.log(this.selectedSubmission);
     this.modalService.open(content, {
       centered: false,
-      size: 'lg',
+      size: 'xl',
       scrollable: true,
+      // fullscreen: true,
     });
+  }
+
+  handleSelectedProducts(selectedProducts: any[]) {
+    console.log('Selected products:', selectedProducts);
+    // Handle the selected products (e.g., send to API or update state)
+    this.selectedProducts = selectedProducts;
   }
 
   onApprove() {

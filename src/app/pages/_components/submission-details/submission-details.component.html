@@ -54,7 +54,7 @@
           <strong>Company:</strong> {{ submissionData.company?.company_name }}
         </p>
         <p><strong>Products:</strong></p>
-        <div *ngFor="let item of submissionData.products">
+        <!-- <div *ngFor="let item of submissionData.products">
           <span class="fw-bold">{{ item.product_name }}</span>
           <br />
           <span
@@ -73,8 +73,42 @@
           >
             {{ item.status }}</span
           >
+        </div> -->
+
+        <div *ngFor="let item of submissionData.products" class="form-check">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            id="product{{ item.product_id }}"
+            [value]="item.product_id"
+            [checked]="selectedProducts.includes(item.product_id)"
+            (change)="toggleProductSelection(item, $event)"
+          />
+          <label class="form-check-label" for="product{{ item.product_id }}">
+            <span class="fw-bold">{{ item.product_name }}</span>
+            <span
+              class="badge ms-2"
+              [ngClass]="{
+                'bg-success':
+                  item.status === 'Approved' ||
+                  item.status === 'Sample Passed' ||
+                  item.status === 'Qualified',
+                'bg-warning': item.status === 'Pending',
+                'bg-primary': item.status === 'Submitted',
+                'bg-danger':
+                  item.status === 'Rejected' || item.status === 'Sample Failed',
+                'bg-info': item.status === 'Under Review'
+              }"
+            >
+              {{ item.status }}
+            </span>
+          </label>
         </div>
-        <p><strong>Created At:</strong> {{ submissionData.created_at }}</p>
+
+        <p class="mt-3">
+          <strong>Created At:</strong>
+          {{ submissionData.created_at | date : "medium" }}
+        </p>
       </div>
     </div>
 

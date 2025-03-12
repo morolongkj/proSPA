@@ -3,7 +3,7 @@ import { Component, OnInit, inject, ViewChild, TemplateRef } from "@angular/core
 import { FormsModule } from "@angular/forms";
 import { RouterLink } from "@angular/router";
 import { CKEditorModule } from "@ckeditor/ckeditor5-angular";
-import { NgbPopoverModule, NgbTooltipModule, NgbModule, NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { NgbPopoverModule, NgbTooltipModule, NgbModule, NgbModal, NgbCollapseModule } from "@ng-bootstrap/ng-bootstrap";
 import { NgOptionHighlightModule } from "@ng-select/ng-option-highlight";
 import { NgSelectModule } from "@ng-select/ng-select";
 import { ClassicEditor, Heading, Bold, Essentials, Italic, Mention, Paragraph, Undo, Link, List } from "ckeditor5";
@@ -16,9 +16,9 @@ import { ConfirmService } from "../../../_services/confirm.service";
 import { QuestionService } from "../../../_services/question.service";
 import { QuestionnaireService } from "../../../_services/questionnaire.service";
 import { ToastService } from "../../../_services/toast.service";
-import { ImageUploadComponent } from "../../../_shared/image-upload/image-upload.component";
 import { QuestionnaireDocumentsComponent } from "../questionnaire-documents/questionnaire-documents.component";
 import { QuestionnaireProductsComponent } from "../questionnaire-products/questionnaire-products.component";
+import { QuestionnaireFilterComponent } from "../questionnaire-filter/questionnaire-filter.component";
 
 @Component({
   selector: 'app-admin-questionnaire-list',
@@ -36,11 +36,12 @@ import { QuestionnaireProductsComponent } from "../questionnaire-products/questi
     NgSelectModule,
     NgOptionHighlightModule,
     CKEditorModule,
-    ImageUploadComponent,
+    NgbCollapseModule,
     NgbModule,
     QuestionnaireDocumentsComponent,
-    QuestionnaireProductsComponent
-],
+    QuestionnaireProductsComponent,
+    QuestionnaireFilterComponent,
+  ],
   templateUrl: './questionnaire-list.component.html',
   styleUrl: './questionnaire-list.component.css',
 })
@@ -108,6 +109,7 @@ export class QuestionnaireListComponent implements OnInit {
   };
 
   progress: number = 0;
+  isCollapsed = true;
 
   constructor(questionService: QuestionService) {
     this.questions$ = questionService.getCategoryFiltersQuestions();
@@ -118,13 +120,20 @@ export class QuestionnaireListComponent implements OnInit {
   }
 
   getQuestionnaires() {
+    this.isLoading = true;
     this.questionnaireService
       .getQuestionnaires(this.page, this.perPage, this.filters)
       .subscribe({
         next: (res: any) => {
+          console.log(res);
           this.questionnaires = res.data.questionnaires;
           this.total = res.data.total;
-          console.log(this.questionnaires);
+          // console.log(this.questionnaires);
+          this.isLoading = false;
+        },
+        error: (err: any) => {
+          console.error('Error fetching questionnaires', err);
+          this.isLoading = false;
         },
       });
   }
@@ -151,6 +160,27 @@ export class QuestionnaireListComponent implements OnInit {
     this.getQuestionnaires();
   }
 
+  handleFilter(filterData: any) {
+    console.log(filterData);
+    const model: any = {
+      title: filterData.title,
+      description: filterData.description,
+    };
+    // Remove null or undefined values
+    this.filters = Object.keys(model).reduce(
+      (acc: { [key: string]: any }, key) => {
+        if (model[key] != null && model[key] !== '') {
+          acc[key] = model[key];
+        }
+        return acc;
+      },
+      {} as { [key: string]: any }
+    );
+    console.log(this.filters);
+    this.page = 1;
+    this.getQuestionnaires();
+  }
+
   toggleEdit(questionnaire: any) {
     questionnaire.isEditing = !questionnaire.isEditing;
   }
@@ -158,21 +188,23 @@ export class QuestionnaireListComponent implements OnInit {
   saveQuestionnaire(questionnaire: any) {
     questionnaire.isEditing = false;
     console.log(questionnaire);
-    this.questionnaireService.updateQuestionnaire(questionnaire.id, questionnaire).subscribe({
-      next: (res: any) => {
-        Object.assign(questionnaire, res);
-        const index = this.questionnaires.findIndex(
-          (attr: any) => attr.id === questionnaire.id
-        );
-        if (index !== -1) {
-          this.questionnaires[index] = questionnaire;
-        }
-        this.toastService.success('Updated successfully');
-      },
-      error: (err: any) => {
-        console.log(err);
-      },
-    });
+    this.questionnaireService
+      .updateQuestionnaire(questionnaire.id, questionnaire)
+      .subscribe({
+        next: (res: any) => {
+          Object.assign(questionnaire, res);
+          const index = this.questionnaires.findIndex(
+            (attr: any) => attr.id === questionnaire.id
+          );
+          if (index !== -1) {
+            this.questionnaires[index] = questionnaire;
+          }
+          this.toastService.success('Updated successfully');
+        },
+        error: (err: any) => {
+          console.log(err);
+        },
+      });
   }
 
   deleteQuestionnaire(questionnaire: any) {
@@ -183,19 +215,21 @@ export class QuestionnaireListComponent implements OnInit {
       )
       .then((confirmed: any) => {
         if (confirmed) {
-          this.questionnaireService.deleteQuestionnaire(questionnaire.id).subscribe({
-            next: (response: any) => {
-              console.log('Delete successful', response);
-              this.toastService.success('Delete successful');
-              this.questionnaires = this.questionnaires.filter(
-                (item: any) => item.id !== questionnaire.id
-              );
-            },
-            error: (err: any) => {
-              console.error('Error deleting questionnaire', err);
-              this.toastService.success('Error deleting questionnaire');
-            },
-          });
+          this.questionnaireService
+            .deleteQuestionnaire(questionnaire.id)
+            .subscribe({
+              next: (response: any) => {
+                console.log('Delete successful', response);
+                this.toastService.success('Delete successful');
+                this.questionnaires = this.questionnaires.filter(
+                  (item: any) => item.id !== questionnaire.id
+                );
+              },
+              error: (err: any) => {
+                console.error('Error deleting questionnaire', err);
+                this.toastService.success('Error deleting questionnaire');
+              },
+            });
         }
       });
   }

@@ -29,6 +29,24 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
+    path: 'profile',
+    loadComponent: () =>
+      import('./pages/profile/profile.component').then(
+        (c) => c.ProfileComponent
+      ),
+    runGuardsAndResolvers: 'always',
+    canActivate: [authGuard],
+  },
+  {
+    path: 'settings',
+    loadComponent: () =>
+      import('./pages/settings/settings.component').then(
+        (c) => c.SettingsComponent
+      ),
+    runGuardsAndResolvers: 'always',
+    canActivate: [authGuard],
+  },
+  {
     path: 'auth/register',
     loadComponent: () =>
       import('./pages/auth/register/register.component').then(

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-submission-details',
@@ -10,7 +10,31 @@ import { Component, Input } from '@angular/core';
 })
 export class SubmissionDetailsComponent {
   @Input() submissionData: any = {};
+  @Output() selectionChanged = new EventEmitter<string[]>();
   errorMessage: string = '';
+
+  selectedProducts: any[] = [];
+
+  toggleProductSelection(product: any, event: any) {
+    if (event.target.checked) {
+      // Add product if not already in the list
+      if (!this.selectedProducts.find((p) => p.id === product.id)) {
+        this.selectedProducts.push(product);
+      }
+    } else {
+      // Remove product if unchecked
+      this.selectedProducts = this.selectedProducts.filter(
+        (p) => p.id !== product.id
+      );
+    }
+
+    // Emit the selected products to parent component
+    this.emitSelection();
+  }
+
+  emitSelection() {
+    this.selectionChanged.emit(this.selectedProducts);
+  }
 
   downloadFile(filePath: string, fileName: string): void {
     const link = document.createElement('a');

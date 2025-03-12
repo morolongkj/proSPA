@@ -1,0 +1,67 @@
+<!-- Loading Spinner -->
+<div *ngIf="isLoading" class="text-center my-4">
+  <div class="spinner-border" user="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+
+<!-- Profile Section -->
+<div class="profile-container">
+  <div class="profile-header">
+    <h1>Profile</h1>
+    <ng-container *ngIf="profile?.avatar; else showInitials">
+      <img [src]="profile.avatar" alt="Profile Picture" class="profile-pic" />
+    </ng-container>
+    <ng-template #showInitials>
+      <div class="profile-initials bg-brown mt-3 mx-auto">
+        {{ getInitials(profile?.first_name, profile?.last_name) }}
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- Profile Form -->
+  <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="firstname">First Name:</label>
+      <input type="text" id="firstname" formControlName="firstname" />
+    </div>
+
+    <div class="form-group">
+      <label for="lastname">Last Name:</label>
+      <input type="text" id="lastname" formControlName="lastname" />
+    </div>
+
+    <div class="form-group">
+      <label for="position">Position of Work:</label>
+      <input type="text" id="position" formControlName="position" />
+    </div>
+
+    <div class="form-group">
+      <label for="phone">Phone Number:</label>
+      <input type="tel" id="phone" formControlName="phone" />
+    </div>
+
+    <div class="form-group">
+      <label for="dob">Date of Birth:</label>
+      <input type="date" id="dob" formControlName="dob" />
+    </div>
+
+    <div class="form-group">
+      <label for="gender">Gender:</label>
+      <select id="gender" formControlName="gender">
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="username">Username:</label>
+      <input type="text" id="username" formControlName="username" readonly />
+    </div>
+
+    <button type="submit" class="submit-btn" [disabled]="profileForm.invalid">
+      Save Changes
+    </button>
+  </form>
+</div>

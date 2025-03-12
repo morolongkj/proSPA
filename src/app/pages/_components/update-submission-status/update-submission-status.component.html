@@ -57,8 +57,11 @@
       type="submit"
       class="btn"
       [ngClass]="{
-                    'btn-success': (status === 'Approved' || status === 'Sample Passed' || status === 'Qualified'),
-                    'btn-danger': (status === 'Rejected' || status === 'Sample Failed'),
+                    'btn-info': (status === 'Approved'),
+                    'btn-primary': (status === 'Sample Passed'),
+                    'btn-success': (status === 'Qualified'),
+                    'btn-danger': (status === 'Rejected'),
+                    'btn-warning': (status === 'Sample Failed'),
                         }"
       [disabled]="messageForm.invalid"
     >
@@ -70,9 +73,7 @@
       <span *ngIf="status === 'Sample Failed'"
         >Update and Send Notification</span
       >
-          <span *ngIf="status === 'Qualified'"
-        >Update and Send Notification</span
-      >
+      <span *ngIf="status === 'Qualified'">Update and Send Notification</span>
     </button>
   </form>
 </div>

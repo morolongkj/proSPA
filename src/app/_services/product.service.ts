@@ -13,9 +13,13 @@ export class ProductService {
   constructor() {}
 
   getProducts(page: number = 1, perPage: number = 0, filters: any = {}): any {
-    let params = new HttpParams()
-      .set('page', page.toString())
-      .set('perPage', perPage.toString());
+    let params = new HttpParams().set('page', page.toString());
+
+    // Send perPage only if greater than 0
+    if (perPage > 0) {
+      params = params.set('perPage', perPage.toString());
+    }
+
     // Append additional filters from the filters object
     Object.keys(filters).forEach((key) => {
       params = params.append(key, filters[key]);

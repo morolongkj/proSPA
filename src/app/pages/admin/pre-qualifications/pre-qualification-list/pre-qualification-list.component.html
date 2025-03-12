@@ -63,35 +63,30 @@
                     </td>
                     <td>
                       <!-- <span>{{ submission.product.title }}</span> -->
-                         <div *ngFor="let item of submission.products">
-  <span class="fw-bold">{{
-                            item.product_name
-                          }}</span>
-                          <br />
-                      <span
-                            class="badge"
-                            [ngClass]="{
-                              'bg-success':
-                                item.status === 'Approved' ||
-                                item.status === 'Sample Passed' ||
-                                item.status === 'Qualified',
-                              'bg-warning':
-                                item.status === 'Pending',
-                              'bg-primary':
-                                item.status === 'Submitted',
-                              'bg-danger':
-                                item.status === 'Rejected' ||
-                                item.status === 'Sample Failed',
-                              'bg-info':
-                                item.status === 'Under Review'
-                            }"
-                          >
-                            {{ item.status }}</span
-                          >
-                        </div>
+                      <div *ngFor="let item of submission.products">
+                        <span class="fw-bold">{{ item.product_name }}</span>
+                        <br />
+                        <span
+                          class="badge"
+                          [ngClass]="{
+                            'bg-success':
+                              item.status === 'Approved' ||
+                              item.status === 'Sample Passed' ||
+                              item.status === 'Qualified',
+                            'bg-warning': item.status === 'Pending',
+                            'bg-primary': item.status === 'Submitted',
+                            'bg-danger':
+                              item.status === 'Rejected' ||
+                              item.status === 'Sample Failed',
+                            'bg-info': item.status === 'Under Review'
+                          }"
+                        >
+                          {{ item.status }}</span
+                        >
+                      </div>
                     </td>
                     <td>{{ submission.created_at }}</td>
-               
+
                     <td class="text-end">
                       <button
                         class="btn btn-primary btn-sm"
@@ -185,29 +180,21 @@
     <app-submission-details
       *ngIf="view === 'details'"
       [submissionData]="selectedSubmission"
+      (selectionChanged)="handleSelectedProducts($event)"
     ></app-submission-details>
 
     <app-update-submission-status
       *ngIf="view !== 'details'"
       [submissionData]="selectedSubmission"
       [status]="currentStatus"
+      [selectedProducts]="selectedProducts"
       (messageEvent)="receiveMessage($event)"
     ></app-update-submission-status>
   </div>
 
-  <div class="modal-footer">
+  <div class="modal-footer" *ngIf="view === 'details'">
     <div class="container">
       <div class="d-flex justify-content-between align-items-center">
-        <button
-          class="btn btn-success me-3"
-          (click)="onApprove()"
-          *ngIf="
-            view === 'details' &&
-            selectedSubmission.status?.title === 'Submitted'
-          "
-        >
-          <i class="bi bi-check-circle me-2"></i> Approve, waiting for Sample
-        </button>
         <button
           class="btn btn-primary me-3"
           (click)="viewDetails()"
@@ -216,44 +203,37 @@
           <i class="bi bi-view-list me-2"></i> View Details
         </button>
         <button
-          class="btn btn-success me-3"
+          class="btn btn-info me-3"
+          (click)="onApprove()"
+          *ngIf="selectedProducts.length > 0"
+        >
+          <i class="bi bi-check-circle me-2"></i> Approve, waiting for Sample
+        </button>
+        <button
+          class="btn btn-primary me-3"
           (click)="onSamplePassed()"
-          *ngIf="
-            view === 'details' &&
-            selectedSubmission.status?.title === 'Approved'
-          "
+          *ngIf="selectedProducts.length > 0"
         >
           <i class="bi bi-check-circle me-2"></i> Sample Passed
         </button>
         <button
           class="btn btn-success me-3"
           (click)="onQualified()"
-          *ngIf="
-            view === 'details' &&
-            selectedSubmission.status?.title === 'Sample Passed'
-          "
+          *ngIf="selectedProducts.length > 0"
         >
           <i class="bi bi-check-circle me-2"></i> Mark as Qualified
         </button>
         <button
           class="btn btn-danger"
           (click)="onReject()"
-          *ngIf="
-            (view === 'details' &&
-              selectedSubmission.status?.title === 'Submitted') ||
-            (view === 'details' &&
-              selectedSubmission.status?.title === 'Sample Passed')
-          "
+          *ngIf="selectedProducts.length > 0"
         >
           <i class="bi bi-x-circle me-2"></i> Reject
         </button>
         <button
-          class="btn btn-danger"
+          class="btn btn-warning"
           (click)="onSampleFailed()"
-          *ngIf="
-            view === 'details' &&
-            selectedSubmission.status?.title === 'Approved'
-          "
+          *ngIf="selectedProducts.length > 0"
         >
           <i class="bi bi-x-circle me-2"></i> Sample Failed
         </button>

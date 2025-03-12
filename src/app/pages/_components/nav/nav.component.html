@@ -72,12 +72,12 @@
             Quality Assurance
           </a>
           <ul class="dropdown-menu">
-            <li *appHasRole="['superadmin']">
+            <li *appHasRole="['quality_assurance_manager', 'quality_assurance_assistance']">
               <a class="dropdown-item" routerLink="/questionnaires"
                 >Questionnaires</a
               >
             </li>
-            <li *appHasRole="['superadmin']">
+            <li *appHasRole="['quality_assurance_manager', 'quality_assurance_assistance']">
               <a class="dropdown-item" routerLink="admin/pre-qualification"
                 >Prequalification</a
               >
@@ -123,10 +123,10 @@
             Tenders
           </a>
           <ul class="dropdown-menu">
-            <li *appHasRole="['superadmin']">
+            <li *appHasRole="['procurement_manager', 'procurement_assistant']">
               <a class="dropdown-item" routerLink="/tenders/create">Create</a>
             </li>
-            <li *appHasRole="['superadmin']">
+            <li *appHasRole="['procurement_manager']">
               <a
                 class="dropdown-item"
                 routerLink="/tenders"
@@ -134,7 +134,7 @@
                 >Verification</a
               >
             </li>
-            <li *appHasRole="['superadmin']">
+            <li *appHasRole="['tender_board_member']">
               <a
                 class="dropdown-item"
                 routerLink="/tenders"
@@ -142,7 +142,7 @@
                 >Approve Publish</a
               >
             </li>
-            <li *appHasRole="['superadmin']">
+            <li *appHasRole="['procurement_manager', 'procurement_assistant']">
               <a
                 class="dropdown-item"
                 routerLink="/tenders"
@@ -150,7 +150,7 @@
                 >Publish</a
               >
             </li>
-            <li *appHasRole="['superadmin']">
+            <li *appHasRole="['procurement_manager', 'procurement_assistant', 'tender_board_member']">
               <a
                 class="dropdown-item"
                 routerLink="/tenders"
@@ -174,7 +174,7 @@
               </div>
             </li>
             } -->
-            <li *appHasRole="['superadmin']">
+            <li *appHasRole="['tender_board_member', 'procurement_manager', 'procurement_assistant']">
               <a class="dropdown-item" routerLink="/tender-boxes"
                 >Tender Boxes</a
               >
