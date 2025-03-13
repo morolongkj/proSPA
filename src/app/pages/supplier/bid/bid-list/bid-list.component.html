@@ -152,9 +152,140 @@
     ></button>
   </div>
   <div class="modal-body">
-    <!-- Show bid details if view is 'details' -->
-    <!-- <app-bid-details
-      [bidData]="selectedBid"
-    ></app-bid-details> -->
+    <h2>{{ selectedBid.title }} ({{ selectedBid.reference_number }})</h2>
+    <p><strong>Company:</strong> {{ selectedBid.company_name }}</p>
+    <p><strong>Status:</strong> {{ selectedBid.status.title }}</p>
+    <p>
+      <strong>Submission Date:</strong>
+      {{ selectedBid.submission_date | date : "medium" }}
+    </p>
+
+    <div ngbAccordion [closeOthers]="true" class="my-4">
+      <div ngbAccordionItem [collapsed]="true">
+        <h2 ngbAccordionHeader>
+          <button ngbAccordionButton>Company Information</button>
+        </h2>
+        <div ngbAccordionCollapse>
+          <div ngbAccordionBody>
+            <ng-template>
+              <div class="mt-3">
+                <p>
+                  <strong>Name:</strong> {{ selectedBid.company.company_name }}
+                </p>
+                <p>
+                  <strong>Year Established:</strong>
+                  {{ selectedBid.company.year_established }}
+                </p>
+                <p>
+                  <strong>Legal Status:</strong>
+                  {{ selectedBid.company.legal_status }}
+                </p>
+                <p>
+                  <strong>Address:</strong> {{ selectedBid.company.address }}
+                </p>
+                <p><strong>Email:</strong> {{ selectedBid.company.email }}</p>
+                <p>
+                  <strong>Country:</strong> {{ selectedBid.company.country }}
+                </p>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+
+      <div ngbAccordionItem [collapsed]="true">
+        <h2 ngbAccordionHeader>
+          <button ngbAccordionButton>Products</button>
+        </h2>
+        <div ngbAccordionCollapse>
+          <div ngbAccordionBody>
+            <ng-template>
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Name</th>
+                      <th>Quantity</th>
+                      <th>Unit Price</th>
+                      <th>Total Price</th>
+                      <th>Lead Time</th>
+                      <th>Country of Origin</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let product of selectedBid.products">
+                      <td>{{ product.product_name }}</td>
+                      <td>{{ product.quantity_offered }}</td>
+                      <td>{{ product.unit_price }}</td>
+                      <td>{{ product.total_price }}</td>
+                      <td>{{ product.lead_time }} days</td>
+                      <td>{{ product.country_of_origin }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+
+      <div ngbAccordionItem [collapsed]="true">
+        <h2 ngbAccordionHeader>
+          <button ngbAccordionButton>Attachments</button>
+        </h2>
+        <div ngbAccordionCollapse>
+          <div ngbAccordionBody>
+            <ng-template>
+              <ul class="list-group mt-3">
+                <li
+                  class="list-group-item d-flex justify-content-between align-items-center"
+                  *ngFor="let attachment of selectedBid.attachments"
+                >
+                  <span
+                    >{{ attachment.attachment_name }} ({{
+                      attachment.file_size | number
+                    }}
+                    bytes)</span
+                  >
+                  <button class="btn btn-outline-primary btn-sm">
+                    Download
+                  </button>
+                </li>
+              </ul>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+
+      <div ngbAccordionItem [collapsed]="true">
+        <h2 ngbAccordionHeader>
+          <button ngbAccordionButton>Status History</button>
+        </h2>
+        <div ngbAccordionCollapse>
+          <div ngbAccordionBody>
+            <ng-template>
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Status</th>
+                      <th>Changed By</th>
+                      <th>Change Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let status of selectedBid.status_history">
+                      <td>{{ status.status }}</td>
+                      <td>{{ status.changed_by_name }}</td>
+                      <td>{{ status.change_date | date : "medium" }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </ng-template>

@@ -1,20 +1,23 @@
-.container {
-  max-width: 600px;
+.btn-outline-secondary {
+  top: 5px;
+  right: 10px;
+  z-index: 5;
 }
 
-.card {
-  border-radius: 12px;
+.ngb-panel-title {
+  font-weight: 600;
+  font-size: 1.1rem;
 }
 
-.btn {
-  margin-top: 10px;
+.form-control {
+  padding-right: 40px;
 }
 
-.position-absolute {
-  top: 50%;
-  transform: translateY(-50%);
+.ngb-accordion {
+  border: none;
 }
 
-.form-label {
-  font-weight: 500;
+h1 {
+  font-size: 1.75rem;
+  font-weight: bold;
 }

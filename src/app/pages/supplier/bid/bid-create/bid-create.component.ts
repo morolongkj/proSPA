@@ -35,6 +35,17 @@ export class BidCreateComponent implements OnInit {
 
   companyId: string = '';
 
+  currencies = [
+    { code: 'LSL', name: 'Lesotho Luti' },
+    { code: 'ZAR', name: 'South Africa Rand' },
+    { code: 'USD', name: 'United States Dollar' },
+    { code: 'EUR', name: 'Euro' },
+    { code: 'GBP', name: 'British Pound' },
+    { code: 'JPY', name: 'Japanese Yen' },
+    { code: 'AUD', name: 'Australian Dollar' },
+    { code: 'INR', name: 'Indian Rupee' },
+  ];
+
   constructor(private fb: FormBuilder) {
     this.bidForm = this.fb.group({
       selectedProducts: this.fb.array([]),
@@ -75,6 +86,7 @@ export class BidCreateComponent implements OnInit {
         ...product,
         unitPack: 1,
         quantityOffered: 0,
+        currency: 'LSL',
         unitPrice: 0,
         totalPrice: 0,
         leadTime: 0,
@@ -166,6 +178,7 @@ export class BidCreateComponent implements OnInit {
           `products[${index}][quantity_offered]`,
           product.quantityOffered
         );
+        formData.append(`products[${index}][currency]`, product.currency);
         formData.append(`products[${index}][unit_price]`, product.unitPrice);
         formData.append(`products[${index}][total_price]`, product.totalPrice);
         formData.append(`products[${index}][lead_time]`, product.leadTime);

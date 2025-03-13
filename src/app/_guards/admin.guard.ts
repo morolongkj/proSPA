@@ -10,7 +10,12 @@ export const adminGuard: CanActivateFn = (route, state) => {
 
   if (
     authService.getUserRoles().includes('admin') ||
-    authService.getUserRoles().includes('superadmin')
+    authService.getUserRoles().includes('superadmin') ||
+    authService.getUserRoles().includes('tender_board_member') ||
+    authService.getUserRoles().includes('procurement_manager') ||
+    authService.getUserRoles().includes('procurement_assistant') ||
+    authService.getUserRoles().includes('quality_assurance_manager') ||
+    authService.getUserRoles().includes('quality_assurance_assistant')
   ) {
     return true;
   } else {

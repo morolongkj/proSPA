@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, TemplateRef } from '@angular/core';
 import { BidService } from '../../../../_services/bid.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbAccordionModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject, tap, finalize, takeUntil } from 'rxjs';
 import { ToastService } from '../../../../_services/toast.service';
 import AOS from 'aos';
@@ -12,7 +12,7 @@ import { AuthService } from '../../../../_services/auth.service';
 @Component({
   selector: 'app-bid-list',
   standalone: true,
-  imports: [NgxPaginationModule, CommonModule, FormsModule],
+  imports: [NgxPaginationModule, CommonModule, FormsModule, NgbAccordionModule],
   templateUrl: './bid-list.component.html',
   styleUrl: './bid-list.component.css',
 })
