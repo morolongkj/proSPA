@@ -244,7 +244,7 @@ export class ProductListComponent implements OnInit {
     this.confirmService
       .confirm(
         'Confirm Deletion',
-        `Are you sure you want to delete ${product.type}?`
+        `Are you sure you want to delete ${product.title}?`
       )
       .then((confirmed: any) => {
         if (confirmed) {

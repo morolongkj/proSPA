@@ -1,157 +1,28 @@
-/* Quick Access Cards */
-.quick-access-cards .card {
-  /* border: none; */
-  border-radius: 0px;
-  /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); */
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+.breadcrumb-minimal .breadcrumb {
+  background: transparent;
+  padding: 0;
+  font-size: 0.9rem;
 }
 
-.quick-access-cards .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+.breadcrumb-minimal .breadcrumb-item + .breadcrumb-item::before {
+  content: "›";
+  color: #6c757d;
+  font-size: 1.2rem;
+  line-height: 1;
+  padding: 0 0.5rem;
 }
 
-.quick-access-cards .card-body {
-  text-align: center;
-  padding: 20px;
-  position: relative;
+.breadcrumb-minimal .breadcrumb-item a {
+  color: #6c757d;
+  text-decoration: none;
+  transition: all 0.3s ease;
 }
 
-.quick-access-cards .card-icon {
-  font-size: 40px;
-  color: #a0522d; /* Brown Theme Color */
-  margin-bottom: 15px;
+.breadcrumb-minimal .breadcrumb-item a:hover {
+  color: #a0522d;
 }
 
-.quick-access-cards h6 {
-  font-size: 14px;
-  text-transform: uppercase;
-  font-weight: bold;
-  color: #555;
-  margin-bottom: 10px;
-}
-
-.quick-access-cards h3 {
-  font-size: 28px;
-  font-weight: bold;
-  margin: 0;
-  color: #333;
-}
-
-/* Responsive Behavior */
-@media (max-width: 768px) {
-  .quick-access-cards .col-lg-4 {
-    margin-bottom: 20px;
-  }
-}
-
-/* dashboard.component.css */
-
-/* Custom styling for the custom text in the header toolbar */
-.fc-toolbar .fc-eventsTitle-button {
-  font-size: 16px; /* Set the font size for the text */
-  font-weight: bold; /* Make the text bold */
-  color: #333; /* Set text color (e.g., dark gray) */
-  background: none; /* Remove background to make it plain */
-  border: none; /* Remove button border */
-  box-shadow: none; /* Remove button shadow */
-  padding: 0; /* Remove padding to make it look like plain text */
-  pointer-events: none; /* Disable any interaction with the text */
-  cursor: default; /* Set default cursor to indicate non-clickable text */
-  text-transform: none; /* Ensure no unwanted capitalization */
-}
-
-/* Custom styling for the custom text in the header toolbar */
-
-
-/* // Card styling */
-.card {
-  border-radius: 16px;
-  transition: transform 0.3s ease-in-out;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  cursor: pointer;
-
-  &:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  }
-}
-
-/* // Icon styling with soft background */
-.tool-icon {
-  width: 60px;
-  height: 60px;
-  background-color: rgba(255, 255, 255, 0.2);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 32px;
-  border-radius: 50%;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* // Heading and text styling */
-h5 {
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-
-p {
-  font-size: 16px;
-  font-weight: 400;
-}
-
-/* // Badge styling */
-.badge {
-  font-size: 14px;
-  font-weight: 600;
-  padding: 6px 12px;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* // Button styling */
-.btn {
-  font-size: 14px;
-  font-weight: 600;
-  padding: 8px 16px;
-  border-radius: 20px;
-  transition: all 0.2s ease-in-out;
-
-  &:hover {
-    transform: translateY(-2px);
-  }
-}
-
-/* // Brown gradient */
-.bg-brown {
-  background: linear-gradient(135deg, #8c3b0b 0%, #b55d21 100%) !important;
-  color: #fff;
-}
-
-/* // Yellow gradient */
-.bg-yellow {
-  background: linear-gradient(135deg, #f5c945 0%, #ffd760 100%) !important;
-  color: #212529;
-}
-
-/* // Other gradients */
-.bg-primary {
-  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%) !important;
-}
-
-.bg-success {
-  background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%) !important;
-}
-
-.bg-warning {
-  background: linear-gradient(135deg, #ffc107 0%, #ffca28 100%) !important;
-  color: #212529 !important;
-}
-
-.bg-danger {
-  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+.breadcrumb-minimal .breadcrumb-item.active {
+  color: #a0522d;
+  font-weight: 500;
 }

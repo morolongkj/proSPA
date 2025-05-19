@@ -11,6 +11,8 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import { HasRoleDirective } from '../../_directives/has-role.directive';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { NotificationService } from '../../_services/notification.service';
+import { AdminStatsComponent } from "./admin-stats/admin-stats.component";
+import { VendorStatsComponent } from "./vendor-stats/vendor-stats.component";
 
 @Component({
   selector: 'app-dashboard',
@@ -21,7 +23,9 @@ import { NotificationService } from '../../_services/notification.service';
     FullCalendarModule,
     HasRoleDirective,
     NgbTooltipModule,
-  ],
+    AdminStatsComponent,
+    VendorStatsComponent
+],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
@@ -30,40 +34,7 @@ export class DashboardComponent implements OnInit {
   private companyService = inject(CompanyService);
   private notificationService = inject(NotificationService);
 
-  adminTools = [
-    {
-      title: 'Manage Users',
-      icon: 'bi-people',
-      description: 'Create, update and delete users',
-      route: '/users',
-      stat: 128, // Example count
-      color: 'bg-primary',
-    },
-    {
-      title: 'Manage Roles',
-      icon: 'bi-person-badge',
-      description: 'Create, update and delete roles',
-      route: '/roles',
-      stat: 12,
-      color: 'bg-warning',
-    },
-    {
-      title: 'Manage Categories',
-      icon: 'bi-list-ul',
-      description: 'Create, update and delete categories',
-      route: '/categories',
-      stat: 24,
-      color: 'bg-success',
-    },
-    {
-      title: 'Manage Products',
-      icon: 'bi-box-seam',
-      description: 'Create, update and delete products',
-      route: '/products',
-      stat: 312,
-      color: 'bg-danger',
-    },
-  ];
+
 
   company: any = {};
   isLoadingCompany: boolean = true;
